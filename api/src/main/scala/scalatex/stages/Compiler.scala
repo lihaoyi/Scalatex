@@ -34,7 +34,7 @@ object Compiler{
     }
 
     def compileChain(code: String, parts: Seq[Ast.Chain.Sub], offset: Int): c.Tree = {
-
+//      println("compileChain " + code + "\t" + offset)
       val out = parts.foldLeft(incPosRec(c.parse(code), offset + 1)){
         case (curr, Ast.Chain.Prop(offset2, str)) =>
           incPos(q"$curr.${TermName(str)}", offset2 + 1)

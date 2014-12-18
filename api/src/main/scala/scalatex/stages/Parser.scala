@@ -45,7 +45,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   }
 
   def HeaderBlock: Rule1[Ast.Header] = rule{
-    push(cursor) ~ Header ~ zeroOrMore(capture(WL) ~ Header ~> (_ + _)) ~ runSubParser{new Parser(_, indent, cursor).Body0} ~> {
+    push(offsetCursor) ~ Header ~ zeroOrMore(capture(WL) ~ Header ~> (_ + _)) ~ runSubParser{new Parser(_, indent, offsetCursor).Body0} ~> {
       (i: Int, start: String, heads: Seq[String], body: Ast.Block) => Ast.Header(i, start + heads.mkString, body)
     }
   }
@@ -63,7 +63,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   def IndentBlock = rule{
     &("\n") ~
     test(cursorNextIndent() > indent) ~
-    runSubParser(new Parser(_, cursorNextIndent(), cursor).Body)
+    runSubParser(new Parser(_, cursorNextIndent(), offsetCursor).Body)
   }
   def IfHead = rule{ "@" ~ capture("if" ~ "(" ~ Expr ~ ")") }
   def IfElse1 = rule{

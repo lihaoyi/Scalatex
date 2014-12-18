@@ -32,6 +32,7 @@ object ParserTests extends utest.TestSuite{
          assert(trimmed == expected)
 
       }
+
       * - {
         val trimmed = wrap(stages.Trim.old(
           """
@@ -287,11 +288,11 @@ object ParserTests extends utest.TestSuite{
           Text(0, "\n"),
           Chain(1, "omg",Seq(Block(5, Seq(
             Text(5, "\n  "),
-            Chain(8, "wtf",Seq(Block(7, Seq(
-              Text(7, "\n    "),
-              Chain(12, "bbq",Seq(Block(9, Seq(
-                Text(9, "\n      "),
-                Chain(16, "lol",Seq())
+            Chain(8, "wtf",Seq(Block(12, Seq(
+              Text(12, "\n    "),
+              Chain(17, "bbq",Seq(Block(21, Seq(
+                Text(21, "\n      "),
+                Chain(28, "lol",Seq())
               ))))
             ))))
           ))))
@@ -405,6 +406,28 @@ object ParserTests extends utest.TestSuite{
             Seq()
           )
         ))
+      )
+      'nesting - check(
+        """
+          |lol
+          |omg
+          |wtf
+          |bbq
+          |@body
+          |  @div
+          |    @span
+          |      @lol""".stripMargin,
+        _.Body.run(),
+        Block(0,List(
+          Text(0,"\nlol\nomg\nwtf\nbbq\n"),
+          Chain(17,"body",Vector(
+            Block(22,List(Text(22,"\n  "),
+              Chain(25,"div",Vector(Block(29,List(Text(29, "\n    "),
+                Chain(34,"span",Vector(Block(39,List(Text(39, "\n      "),
+                  Chain(46,"lol",Vector())))
+                ))
+              ))
+              ))))))))
       )
     }
 //    'Test{

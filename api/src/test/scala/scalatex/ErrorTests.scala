@@ -370,13 +370,20 @@ object ErrorTests extends TestSuite{
       )
       'blocks - check(
         twRuntimeErrors("""
-          hello
-          @div
-            @span
-              @lol
+          lol
+          omg
+          wtf
+          bbq
+          @body
+            @div
+              @span
+                @lol
         """),
-        "",
-        ""
+        "not found: value lol",
+        """
+                @lol
+                ^
+        """
       )
     }
   }
