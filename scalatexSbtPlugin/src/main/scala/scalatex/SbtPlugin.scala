@@ -2,7 +2,8 @@ package scalatex
 
 import sbt.Keys._
 import sbt._
-object SbtPlugin extends sbt.Plugin{
+object SbtPlugin extends sbt.AutoPlugin{
+  val scalatexVersion = "0.1.0"
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",
@@ -43,9 +44,9 @@ object SbtPlugin extends sbt.Plugin{
       outputFiles
     }
   )
-  val scalatexSettings = inConfig(Test)(mySeq) ++ inConfig(Compile)(mySeq) ++ Seq(
+  override val projectSettings = inConfig(Test)(mySeq) ++ inConfig(Compile)(mySeq) ++ Seq(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatex-api" % "0.1.0",
+      "com.lihaoyi" %% "scalatex-api" % scalatexVersion,
       "com.scalatags" %% "scalatags" % "0.4.2"
     ),
     watchSources ++= ((scalatexDirectory in Compile).value ** "*.scalatex").get

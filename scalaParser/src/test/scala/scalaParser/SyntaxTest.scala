@@ -411,7 +411,6 @@ object SyntaxTest extends TestSuite{
     def checkFile(path: String) = check(io.Source.fromFile(path).mkString)
     'file{
 
-      * - checkFile("test.txt")
       * - checkFile("scalaParser/src/main/scala/scalaParser/syntax/Basic.scala")
       * - checkFile("scalaParser/src/main/scala/scalaParser/syntax/Identifiers.scala")
       * - checkFile("scalaParser/src/main/scala/scalaParser/syntax/Literals.scala")
@@ -420,17 +419,17 @@ object SyntaxTest extends TestSuite{
       * - checkFile("scalaParser/src/test/scala/scalaParser/SyntaxTest.scala")
 
 
-      * - checkFile("scalatexApi/src/main/scala/scalatex/stages/Compiler.scala")
-      * - checkFile("scalatexApi/src/main/scala/scalatex/stages/Parser.scala")
-      * - checkFile("scalatexApi/src/main/scala/scalatex/stages/Trim.scala")
-      * - checkFile("scalatexApi/src/main/scala/scalatex/package.scala")
+      * - checkFile("api/src/main/scala/scalatex/stages/Compiler.scala")
+      * - checkFile("api/src/main/scala/scalatex/stages/Parser.scala")
+      * - checkFile("api/src/main/scala/scalatex/stages/Trim.scala")
+      * - checkFile("api/src/main/scala/scalatex/package.scala")
 
-      * - checkFile("scalatexApi/src/test/scala/scalatex/ParserTests.scala")
-      * - checkFile("scalatexApi/src/test/scala/scalatex/BasicTests.scala")
-      * - checkFile("scalatexApi/src/test/scala/scalatex/ErrorTests.scala")
-      * - checkFile("scalatexApi/src/test/scala/scalatex/TestUtil.scala")
+      * - checkFile("api/src/test/scala/scalatex/ParserTests.scala")
+      * - checkFile("api/src/test/scala/scalatex/BasicTests.scala")
+      * - checkFile("api/src/test/scala/scalatex/ErrorTests.scala")
+      * - checkFile("api/src/test/scala/scalatex/TestUtil.scala")
 
-      * - checkFile("scalatexPlugin/src/main/scala/scalatex/ScalaTexPlugin.scala")
+      * - checkFile("scalatexSbtPlugin/src/main/scala/scalatex/ScalaTexPlugin.scala")
     }
 
 //    'omg{

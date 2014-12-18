@@ -1,5 +1,5 @@
 val sharedSettings = Seq(
-  version := "0.1.0",
+  version := scalatex.SbtPlugin.scalatexVersion,
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.10.4", "2.11.2"),
   scalaVersion := "2.11.4",
@@ -37,7 +37,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   sbtPlugin := true
 )
 
-lazy val tests = project.dependsOn(api).settings(scalatex.SbtPlugin.scalatexSettings:_*).settings(
+lazy val tests = project.settings(scalatex.SbtPlugin.projectSettings:_*).dependsOn(api).settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   libraryDependencies += "com.lihaoyi" %% "utest" % "0.2.4",
   scalaVersion := "2.11.4",
