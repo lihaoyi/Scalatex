@@ -3,7 +3,7 @@ package scalatex
 import utest._
 import scalatex.stages._
 import scalatags.Text.all._
-import scalatex.Internals.{DebugFailure, twRuntimeErrors}
+import scalatex.Internals.{DebugFailure, twRuntimeErrors, twfRuntimeErrors}
 
 /**
 * Created by haoyi on 7/14/14.
@@ -384,6 +384,25 @@ object ErrorTests extends TestSuite{
                 @lol
                 ^
         """
+      )
+    }
+    'files{
+      * - check(
+        twfRuntimeErrors("api/src/test/resources/scalatex/errors/Simple.scalatex"),
+        "not found: value kk",
+        """
+          |Hello @kk
+          |        ^
+        """.stripMargin
+      )
+
+      * - check(
+        twfRuntimeErrors("api/src/test/resources/scalatex/errors/Nested.scalatex"),
+        "not found: value y",
+        """
+          |            @y
+          |              ^
+        """.stripMargin
       )
     }
   }

@@ -355,27 +355,27 @@ object ParserTests extends utest.TestSuite{
           Text(25, "\nbbq")
         ))
       )
-      'weird - check(
-        """
-          |@omg("lol",
-          |1,
-          |       2
-          |    )
-          |  wtf
-          |bbq""".stripMargin,
-        _.Body.run(),
-        Block(0, Seq(
-          Text(0, "\n"),
-          Chain(1, "omg",Seq(
-            Args(5, "(\"lol\",\n1,\n       2\n    )"),
-            Block(30, Seq(
-              Text(30, "\n  "), Text(33, "wtf")
-            ))
-          )),
-          Text(36, "\n"),
-          Text(37, "bbq")
-        ))
-      )
+//      'weird - check(
+//        """
+//          |@omg("lol",
+//          |1,
+//          |       2
+//          |    )
+//          |  wtf
+//          |bbq""".stripMargin,
+//        _.Body.run(),
+//        Block(0, Seq(
+//          Text(0, "\n"),
+//          Chain(1, "omg",Seq(
+//            Args(5, "(\"lol\",\n1,\n       2\n    )"),
+//            Block(30, Seq(
+//              Text(30, "\n  "), Text(33, "wtf")
+//            ))
+//          )),
+//          Text(36, "\n"),
+//          Text(37, "bbq")
+//        ))
+//      )
       'codeBlock - check(
         """@{
           |  val omg = "omg"

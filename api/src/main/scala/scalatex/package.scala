@@ -11,18 +11,24 @@ package object scalatex {
    * Wraps the given string as a twist fragment.
    */
   def tw(expr: String): Frag = macro Internals.applyMacro
-  def twf(filename: String): Frag = macro Internals.applyMacroFile
+  def twf(expr: String): Frag = macro Internals.applyMacroFile
   object Internals {
 
     def twRuntimeErrors(expr: String): Frag = macro applyMacroRuntimeErrors
-    def twDebug(expr: String): Frag = macro applyMacroDebug
+    def twfRuntimeErrors(expr: String): Frag = macro applyMacroFileRuntimeErrors
 
     def applyMacro(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, false, false)
     def applyMacroDebug(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, false, true)
 
     def applyMacroRuntimeErrors(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, true, false)
 
-    def applyMacroFile(c: Context)(filename: c.Expr[String]): c.Expr[Frag] = {
+    def applyMacroFile(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = {
+      applyMacroFileBase(c)(expr, false)
+    }
+    def applyMacroFileRuntimeErrors(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = {
+      applyMacroFileBase(c)(expr, true)
+    }
+    def applyMacroFileBase(c: Context)(filename: c.Expr[String], runtimeErrors: Boolean): c.Expr[Frag] = {
       import c.universe._
       val fileName = filename.tree
         .asInstanceOf[Literal]
@@ -35,9 +41,8 @@ package object scalatex {
         txt.toCharArray
       )
 
-      compileThing(c)(txt, sourceFile, 0, false, false)
+      compileThing(c)(txt, sourceFile, 0, runtimeErrors, false)
     }
-
     case class DebugFailure(msg: String, pos: String) extends Exception(msg)
 
     private[this] def applyMacroFull(c: Context)

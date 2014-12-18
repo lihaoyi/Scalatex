@@ -463,6 +463,33 @@ object BasicTests extends TestSuite{
 //        )
 //      }
     }
+
+    'files{
+      * - check(
+        twf("api/src/test/resources/scalatex/success/Simple.scalatex"),
+        "Hello world!"
+      )
+      * - check(
+        twf("api/src/test/resources/scalatex/success/Nested.scalatex"),
+        """
+          <p>Hello Everyone!</p>
+          <div>
+            <h1>I am a cow</h1>
+            <p>
+              And so are you: 1
+              <img></img>
+            </p>
+            <p>
+              And so are you: 2
+              <img></img>
+            </p>
+            <p>
+              And so are you: 3
+              <img></img>
+            </p>
+          </div>"""
+      )
+    }
   }
 
 }
