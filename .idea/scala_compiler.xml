@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <plugins>
+      <plugin path="$USER_HOME$/.ivy2/cache/com.lihaoyi/acyclic_2.11/jars/acyclic_2.11-0.1.2.jar" />
+      <plugin path="$USER_HOME$/.ivy2/cache/com.lihaoyi/acyclic_2.10/jars/acyclic_2.10-0.1.2.jar" />
+    </plugins>
+  </component>
+</project>

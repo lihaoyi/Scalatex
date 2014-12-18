@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.lihaoyi</groupId>
+    <artifactId>scalatex-sbt-plugin</artifactId>
+    <packaging>jar</packaging>
+    <description>scalatex-sbt-plugin</description>
+    <version>0.1.0</version>
+    <name>scalatex-sbt-plugin</name>
+    <organization>
+        <name>com.lihaoyi</name>
+    </organization>
+    <properties>
+        <scalaVersion>2.10</scalaVersion>
+        <sbtVersion>0.13</sbtVersion>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.10.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-sbt</groupId>
+            <artifactId>sbt</artifactId>
+            <version>0.13.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.lihaoyi</groupId>
+            <artifactId>acyclic_2.10</artifactId>
+            <version>0.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

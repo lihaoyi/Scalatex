@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api.iml" filepath="$PROJECT_DIR$/.idea/modules/api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-build.iml" filepath="$PROJECT_DIR$/.idea/modules/api-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tests/project/.idea/modules/project.iml" filepath="$PROJECT_DIR$/tests/project/.idea/modules/project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tests/project/.idea/modules/project-build.iml" filepath="$PROJECT_DIR$/tests/project/.idea/modules/project-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalaParser.iml" filepath="$PROJECT_DIR$/.idea/modules/scalaParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalaParser-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scalaParser-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalatex.iml" filepath="$PROJECT_DIR$/.idea/modules/scalatex.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalatex-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scalatex-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalatexSbtPlugin.iml" filepath="$PROJECT_DIR$/.idea/modules/scalatexSbtPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/scalatexSbtPlugin-build.iml" filepath="$PROJECT_DIR$/.idea/modules/scalatexSbtPlugin-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tests.iml" filepath="$PROJECT_DIR$/.idea/modules/tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tests-build.iml" filepath="$PROJECT_DIR$/.idea/modules/tests-build.iml" />
+    </modules>
+  </component>
+</project>
