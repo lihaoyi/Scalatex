@@ -429,7 +429,7 @@ object SyntaxTest extends TestSuite{
       * - checkFile("api/src/test/scala/scalatex/ErrorTests.scala")
       * - checkFile("api/src/test/scala/scalatex/TestUtil.scala")
 
-      * - checkFile("scalatexSbtPlugin/src/main/scala/scalatex/ScalaTexPlugin.scala")
+      * - checkFile("scalatexSbtPlugin/src/main/scala/scalatex/SbtPlugin.scala")
     }
 
 //    'omg{

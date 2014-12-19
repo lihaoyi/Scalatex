@@ -37,9 +37,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   sbtPlugin := true
 )
 
-lazy val tests = project.settings(scalatex.SbtPlugin.projectSettings:_*).dependsOn(api).settings(
+lazy val readme = project.settings(scalatex.SbtPlugin.projectSettings:_*).dependsOn(api).settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
-  libraryDependencies += "com.lihaoyi" %% "utest" % "0.2.4",
-  scalaVersion := "2.11.4",
-  testFrameworks += new TestFramework("utest.runner.JvmFramework")
+  scalaVersion := "2.11.4"
 )

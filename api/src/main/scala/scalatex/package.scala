@@ -8,9 +8,12 @@ import acyclic.file
 
 package object scalatex {
   /**
-   * Wraps the given string as a twist fragment.
+   * Converts the given string literal into a Scalatex fragment.
    */
   def tw(expr: String): Frag = macro Internals.applyMacro
+  /**
+   * Converts the given file into a Scalatex fragment.
+   */
   def twf(expr: String): Frag = macro Internals.applyMacroFile
   object Internals {
 
@@ -18,16 +21,11 @@ package object scalatex {
     def twfRuntimeErrors(expr: String): Frag = macro applyMacroFileRuntimeErrors
 
     def applyMacro(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, false, false)
-    def applyMacroDebug(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, false, true)
-
     def applyMacroRuntimeErrors(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFull(c)(expr, true, false)
+    def applyMacroFile(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFileBase(c)(expr, false)
+    def applyMacroFileRuntimeErrors(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = applyMacroFileBase(c)(expr, true)
 
-    def applyMacroFile(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = {
-      applyMacroFileBase(c)(expr, false)
-    }
-    def applyMacroFileRuntimeErrors(c: Context)(expr: c.Expr[String]): c.Expr[Frag] = {
-      applyMacroFileBase(c)(expr, true)
-    }
+
     def applyMacroFileBase(c: Context)(filename: c.Expr[String], runtimeErrors: Boolean): c.Expr[Frag] = {
       import c.universe._
       val fileName = filename.tree
@@ -70,34 +68,32 @@ package object scalatex {
         debug
       )
     }
-  }
+    def compileThing(c: Context)
+                    (scalatexSource: String,
+                     source: SourceFile,
+                     point: Int,
+                     runtimeErrors: Boolean,
+                     debug: Boolean) = {
+      import c.universe._
+      def compile(s: String): c.Tree = {
+        val realPos = new OffsetPosition(source, point).asInstanceOf[c.universe.Position]
 
-  def compileThing(c: Context)
-                  (scalatexSource: String,
-                   source: SourceFile,
-                   point: Int,
-                   runtimeErrors: Boolean,
-                   debug: Boolean) = {
-    import c.universe._
-    def compile(s: String): c.Tree = {
-      val realPos = new OffsetPosition(source, point).asInstanceOf[c.universe.Position]
+        Compiler(c)(realPos, Parser.tupled(stages.Trim(s)))
+      }
 
-      Compiler(c)(realPos, Parser.tupled(stages.Trim(s)))
-    }
-
-    
-    import c.Position
-    try {
-      val compiled = compile(scalatexSource)
-      if (debug) println(compiled)
-      c.Expr[Frag](c.typeCheck(compiled))
-    } catch {
-      case e@TypecheckException(pos: Position, msg) =>
-        if (!runtimeErrors) c.abort(pos, msg)
-        else {
-          val posMsg = pos.lineContent + "\n" + (" " * pos.column) + "^"
-          c.Expr( q"""throw scalatex.Internals.DebugFailure($msg, $posMsg)""")
-        }
+      import c.Position
+      try {
+        val compiled = compile(scalatexSource)
+        if (debug) println(compiled)
+        c.Expr[Frag](c.typeCheck(compiled))
+      } catch {
+        case e@TypecheckException(pos: Position, msg) =>
+          if (!runtimeErrors) c.abort(pos, msg)
+          else {
+            val posMsg = pos.lineContent + "\n" + (" " * pos.column) + "^"
+            c.Expr( q"""throw scalatex.Internals.DebugFailure($msg, $posMsg)""")
+          }
+      }
     }
   }
 }

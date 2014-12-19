@@ -13,19 +13,7 @@ object BasicTests extends TestSuite{
 
   val tests = TestSuite{
 
-    'helloWorld{
-      object omg {
-        def wtf(s: Frag*): Frag = Seq[Frag]("|", s, "|")
-      }
-      def str = "hear me moo"
-      check(
-        tw("""
-          @omg.wtf
-            i @b{am} cow @str
-        """),
-        "|i<b>am</b>cowhearmemoo|"
-      )
-    }
+
     'interpolation{
       'chained-check(
         tw("omg @scala.math.pow(0.5, 3) wtf"),

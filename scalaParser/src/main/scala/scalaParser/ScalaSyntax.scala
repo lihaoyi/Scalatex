@@ -404,9 +404,7 @@ class ScalaSyntax(val input: ParserInput) extends Parser with Basic with Identif
   }
   def CompilationUnit: Rule1[String] = rule {
     capture(
-      pr("CompulationUnit 0") ~
       optional(Semis) ~
-      pr("CompulationUnit 1") ~
       (TopPackageSeq ~ optional(Semis ~ TopStatSeq) | TopStatSeq) ~
       optional(Semis) ~
       WL
