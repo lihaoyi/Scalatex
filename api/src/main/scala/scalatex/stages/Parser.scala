@@ -54,7 +54,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   def IndentSpaces = rule{ indent.times(' ') ~ zeroOrMore(' ') }
   def Indent = rule{ '\n' ~ IndentSpaces }
   def LoneScalaChain: Rule2[Ast.Block.Text, Ast.Chain] = rule {
-    (push(offsetCursor) ~ capture(Indent) ~> Ast.Block.Text) ~
+    (push(offsetCursor) ~ capture(Indent | test(cursor == 0)) ~> Ast.Block.Text) ~
     ScalaChain ~
     IndentBlock ~> {
       (chain: Ast.Chain, body: Ast.Block) => chain.copy(parts = chain.parts :+ body)
@@ -70,7 +70,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     push(offsetCursor) ~ IfHead ~ BraceBlock ~ optional("else" ~ (BraceBlock | IndentBlock))
   }
   def IfElse2 = rule{
-    Indent ~ push(offsetCursor) ~ IfHead ~ IndentBlock ~ optional(Indent ~ "@else" ~ (BraceBlock | IndentBlock))
+    (Indent| test(cursor == 0)) ~ push(offsetCursor) ~ IfHead ~ IndentBlock ~ optional(Indent ~ "@else" ~ (BraceBlock | IndentBlock))
   }
   def IfElse = rule{
     (IfElse1 | IfElse2) ~> Ast.Block.IfElse
@@ -84,7 +84,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     BraceBlock ~> Ast.Block.For
   }
   def LoneForLoop = rule{
-    (push(offsetCursor) ~ capture(Indent) ~> Ast.Block.Text) ~
+    (push(offsetCursor) ~ capture(Indent | test(cursor == 0)) ~> Ast.Block.Text) ~
     ForHead ~
     IndentBlock ~>
     Ast.Block.For

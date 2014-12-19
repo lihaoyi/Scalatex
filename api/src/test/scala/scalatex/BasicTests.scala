@@ -357,6 +357,7 @@ object BasicTests extends TestSuite{
           "lols<p></p>"
         )
 
+
         * - check(
           tw("""
             @div
@@ -369,8 +370,7 @@ object BasicTests extends TestSuite{
         )
 
         * - check(
-          tw("""
-            @div
+          tw("""@div
               @if(true)
                 Hello
               @else
