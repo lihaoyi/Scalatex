@@ -1,136 +1,127 @@
 
 @import Main._
-@html
-  @head
-    @link(rel:="stylesheet", href:="http://yui.yahooapis.com/pure/0.5.0/pure-min.css")
-    @link(rel:="stylesheet", href:="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/idea.min.css")
-    @script(src:="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js")
-    @script("hljs.initHighlightingOnLoad();")
-    @scalatags.Text.tags2.style
-      span.hljs-tag, span.hljs-symbol{
-          background: none;
-      }
-  @body(maxWidth:="768px", marginLeft:="auto", marginRight:="auto")
-    @sect{Scalatex 0.1.0}
-      @i{Programmable Documents in Scala}
+@import site._
 
-      @exampleRef("helloWorld", "scala html")
+@sect{Scalatex 0.1.0}
+  @i{Programmable Documents in Scala}
+
+  @exampleRef("helloWorld", "scala html")
+
+  @p
+    @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a Jade-like DSL which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @code{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
+
+  @p
+    Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This lets you use the full power of the Scala programming language to build your documents, avoiding the copy-and-paste duplication that often happens in less-powerful document-generation languages.
+
+  @sect{Getting Started}
+    @p
+      To get started with Scalatex, add the following to your @code{project/build.sbt}:
+
+    @pre
+      @code(cls:="scala")
+        addSbtPlugin("com.lihaoyi" %% "scalatex" % "0.1.0")
+
+    @p
+      And the following to your project in your @code{build.sbt}:
+    @pre
+      @code(cls:="scala")
+        project.settings(scalatex.SbtPlugin.projectSettings:_*)
+
+    @p
+      To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
+
+    @ref("readme/src/main/scalatex/scalatex/Hello.scalatex", Nil, Nil, "scala")
+
+    @p
+      Next, you can simply call
+
+    @ref("readme/src/main/scala/scalatex/Main.scala", Seq("Hello().render"), Seq(""), "scala")
+
+    @p
+      And it'll print out
+
+    @ref("readme/src/main/scala/scalatex/Main.scala", Seq("<div>"), Seq("\"\"\""), "html")
+
+
+    @p
+      There we have it, your first Scalatex document! You can put this on gh-pages, use it on a website, or where-ever you want.
+
+  @sect{What Scalatex Does}
+
+    @p
+      Scalatex converts every @code{.scalatex} file in its source folder into a corresponding Scala @code{object}. These objects have an @code{apply} method which returns a Scalatags @code{Frag}, which you can then call @code{.render} on to give you a HTML string. You can also do other things with the Scalatags @code{Frag}, but to learn more about it and Scalatags in general take a look at the Scalatags documentation.
+
+    @p
+      Inside each Scalatex file, @code{@@}-escaped things correspond to Scala keywords or names that are currently in scope. Apart from keywords, only @code{scalatags.Text.all._} is imported by default. This brings in all the HTML tags that we used above to build those HTML fragments. However, you can also @code{@@import} whatever other names you want, or refer to them fully qualified.
+
+  @sect{Exploring Scalatex}
+    @exampleRef("variousSyntaxes", "scala html")
+
+    @p
+      Superficially, Scalatex does a small number of translations to convert the @code{.scalatex} document into Scala code:
+
+    @ul
+      @li
+        @@-escapes followed by identation (like @code{@@div} above) are passed all the subsequently-indented lines as children.
+      @li
+        @@-escapes followed by curly braces (like @code{@@h2} above) are passed everything inside the curly braces as children
+      @li
+        @@-escapes followed by parentheses (like @code{@@h1} above) are passed the contents of the parentheses as a Scala expression.
+      @li
+        Everything outside of a set of parentheses, that isn't an @@-escape, is treated as a string.
+
+    @p
+      This accounts for the variation in syntax that you see above. In general, you almost always want to use identation-based blocks to delimit large sections of the document, only falling back to curly braces for one-line or one-word tags like @code{@@h2} or @code{@@b} above.
+
+    @sect{Loops}
+      @exampleRef("loops", "scala scala html")
 
       @p
-        @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a Jade-like DSL which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @code{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
+        Scalatex supports for-loops, as shown above. Again, everything inside the parentheses are an arbitrary Scala expression. Here we can see it binding the @code{x} value, which is then used in the body of the loop as @code{@@x} to splice it into the document.
+      @p
+        In general, there are always two contexts to keep track of:
+
+      @ul
+        @li
+          Scalatex: strings are raw @code{text}, but variables are escaped as @code{@@x}
+        @li
+          Scala: strings are enclosed e.g. @code{"text"}, but variables are raw @code{x}
 
       @p
-        Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This lets you use the full power of the Scala programming language to build your documents, avoiding the copy-and-paste duplication that often happens in less-powerful document-generation languages.
+        The value of strings or variables is completely identical in both contexts; it's only the syntax that differs.
 
-      @sect{Getting Started}
-        @p
-          To get started with Scalatex, add the following to your @code{project/build.sbt}:
+    @sect{Conditionals}
+      @exampleRef("conditionals", "scala html")
 
-        @pre
-          @code(cls:="scala")
-            addSbtPlugin("com.lihaoyi" %% "scalatex" % "0.1.0")
+      @p
+        Scalatex supports if-else statements, that behave as you'd expect. Here we're using one in conjunction with a loop to alternate the formatting of different items in a list.
 
-        @p
-          And the following to your project in your @code{build.sbt}:
-        @pre
-          @code(cls:="scala")
-            project.settings(scalatex.SbtPlugin.projectSettings:_*)
+    @sect{Functions}
+      @exampleRef("functions", "scala html")
 
-        @p
-          To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
+      @p
+        Apart from splicing values into the document, you can also call functions, such as @code{math.sqrt} here.
 
-        @ref("readme/src/main/scalatex/scalatex/Hello.scalatex", Nil, Nil, "scala")
+    @sect{Interpolations}
+      @exampleRef("simple", "scala scala html")
 
-        @p
-          Next, you can simply call
+      @p
+        You can also splice the result of arbitrary chunks of code within a Scalatex document. Using parens @code{()} lets you splice a single expression, whereas using curlies @code{{}} lets you splice a block which can contain multiple statements.
 
-        @ref("readme/src/main/scala/scalatex/Main.scala", Seq("Hello().render"), Seq(""), "scala")
+      @p
+        Blocks can span many lines:
 
-        @p
-          And it'll print out
+      @exampleRef("multiline", "scala html")
 
-        @ref("readme/src/main/scala/scalatex/Main.scala", Seq("<div>"), Seq("\"\"\""), "html")
+    @sect{External Definitions}
+      @p
+        You can use imports to bring things into scope, so you don't need to keep referring to them by their full name:
 
+      @exampleRef("imports", "scala html")
+      @p
+        Since you can splice the value of any Scala expressions, of course you can splice the values that you defined yourself somewhere else:
 
-        @p
-          There we have it, your first Scalatex document! You can put this on gh-pages, use it on a website, or where-ever you want.
-
-      @sect{What Scalatex Does}
-
-        @p
-          Scalatex converts every @code{.scalatex} file in its source folder into a corresponding Scala @code{object}. These objects have an @code{apply} method which returns a Scalatags @code{Frag}, which you can then call @code{.render} on to give you a HTML string. You can also do other things with the Scalatags @code{Frag}, but to learn more about it and Scalatags in general take a look at the Scalatags documentation.
-
-        @p
-          Inside each Scalatex file, @code{@@}-escaped things correspond to Scala keywords or names that are currently in scope. Apart from keywords, only @code{scalatags.Text.all._} is imported by default. This brings in all the HTML tags that we used above to build those HTML fragments. However, you can also @code{@@import} whatever other names you want, or refer to them fully qualified.
-
-      @sect{Exploring Scalatex}
-        @exampleRef("variousSyntaxes", "scala html")
-
-        @p
-          Superficially, Scalatex does a small number of translations to convert the @code{.scalatex} document into Scala code:
-
-        @ul
-          @li
-            @@-escapes followed by identation (like @code{@@div} above) are passed all the subsequently-indented lines as children.
-          @li
-            @@-escapes followed by curly braces (like @code{@@h2} above) are passed everything inside the curly braces as children
-          @li
-            @@-escapes followed by parentheses (like @code{@@h1} above) are passed the contents of the parentheses as a Scala expression.
-          @li
-            Everything outside of a set of parentheses, that isn't an @@-escape, is treated as a string.
-
-        @p
-          This accounts for the variation in syntax that you see above. In general, you almost always want to use identation-based blocks to delimit large sections of the document, only falling back to curly braces for one-line or one-word tags like @code{@@h2} or @code{@@b} above.
-
-        @sect{Loops}
-          @exampleRef("loops", "scala scala html")
-
-          @p
-            Scalatex supports for-loops, as shown above. Again, everything inside the parentheses are an arbitrary Scala expression. Here we can see it binding the @code{x} value, which is then used in the body of the loop as @code{@@x} to splice it into the document.
-          @p
-            In general, there are always two contexts to keep track of:
-
-          @ul
-            @li
-              Scalatex: strings are raw @code{text}, but variables are escaped as @code{@@x}
-            @li
-              Scala: strings are enclosed e.g. @code{"text"}, but variables are raw @code{x}
-
-          @p
-            The value of strings or variables is completely identical in both contexts; it's only the syntax that differs.
-
-        @sect{Conditionals}
-          @exampleRef("conditionals", "scala html")
-
-          @p
-            Scalatex supports if-else statements, that behave as you'd expect. Here we're using one in conjunction with a loop to alternate the formatting of different items in a list.
-
-        @sect{Functions}
-          @exampleRef("functions", "scala html")
-
-          @p
-            Apart from splicing values into the document, you can also call functions, such as @code{math.sqrt} here.
-
-        @sect{Interpolations}
-          @exampleRef("simple", "scala scala html")
-
-          @p
-            You can also splice the result of arbitrary chunks of code within a Scalatex document. Using parens @code{()} lets you splice a single expression, whereas using curlies @code{{}} lets you splice a block which can contain multiple statements.
-
-          @p
-            Blocks can span many lines:
-
-          @exampleRef("multiline", "scala html")
-
-        @sect{External Definitions}
-          @p
-            You can use imports to bring things into scope, so you don't need to keep referring to them by their full name:
-
-          @exampleRef("imports", "scala html")
-          @p
-            Since you can splice the value of any Scala expressions, of course you can splice the values that you defined yourself somewhere else:
-
-          @ref("api/src/test/scala/scalatex/ExampleTests.scala", Seq("object Stuff"), Seq("'externalDefinitions"), "scala")
+      @ref("api/src/test/scala/scalatex/ExampleTests.scala", Seq("object Stuff"), Seq("'externalDefinitions"), "scala")
 
 
-          @exampleRef("externalDefinitions2", "scala html")
+      @exampleRef("externalDefinitions2", "scala html")
