@@ -1,2 +1,2 @@
-[Documentation](lihaoyi.github.io/Scalatex)
+[Documentation](http://lihaoyi.github.io/Scalatex)
 
