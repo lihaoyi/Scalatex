@@ -2,10 +2,43 @@ package scalatex.site
 
 import scalatags.Text.all._
 
-
+/**
+ * Lets you instantiate a Highlighter object. This can be used to reference
+ * snippets of code from files within your project via the `.ref` method, often
+ * used via `hl.ref` where `hl` is a previously-instantiated Highlighter.
+ */
 trait Highlighter{
-  def pathMappings: Map[String, String]
+  /**
+   * A mapping of file-path-prefixes to URLs where the source
+   * can be accessed. e.g.
+   *
+   * Seq(
+   *   "clones/scala-js" -> "https://github.com/scala-js/scala-js/blob/master",
+   *   "" -> "https://github.com/lihaoyi/scalatex/blob/master"
+   * )
+   *
+   * Will link any code reference from clones/scala-js to the scala-js
+   * github repo, while all other paths will default to the scalatex
+   * github repo.
+   *
+   * If a path is not covered by any of these rules, no link is rendered
+   */
+  def pathMappings: Seq[(String, String)]
+
+  /**
+   * A mapping of file name suffixes to highlight.js classes.
+   * Usually something like:
+   *
+   * Map(
+   *   "scala" -> "scala",
+   *   "js" -> "javascript"
+   * )
+   */
   def suffixMappings: Map[String, String]
+
+  /**
+   * Highlight a short code snippet with the specified language
+   */
   def highlight(string: String, lang: String) = {
 
     val lines = string.split("\n", -1)
@@ -23,6 +56,19 @@ trait Highlighter{
     }
   }
 
+  /**
+   * Grab a snippet of code from the given filepath, and highlight it.
+   *
+   * @param filepath The file containing the code in question
+   * @param start Snippets used to navigate to the start of the snippet
+   *              you want, from the beginning of the file
+   * @param end Snippets used to navigate to the end of the snippet
+   *            you want, from the start of start of the snippet
+   * @param className An optional css class set on the rendered snippet
+   *                  to determine what language it gets highlighted as.
+   *                  If not given, it defaults to the class given in
+   *                  [[suffixMappings]]
+   */
   def ref(filepath: String,
           start: Seq[String] = Nil,
           end: Seq[String] = Nil,
@@ -61,8 +107,7 @@ trait Highlighter{
       if (endLine == -1) ""
       else s"#L$startLine-L$endLine"
 
-    val linkUrl =
-      s"$url/tree/master/${filepath.drop(prefix.length)}$hash"
+    val linkUrl = s"$url/${filepath.drop(prefix.length)}$hash"
     pre(
       code(cls:=lang + " highlight-me hljs", blob),
       a(

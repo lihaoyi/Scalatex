@@ -44,7 +44,7 @@ object Main {
   object sect extends site.Section()
 
   object hl extends site.Highlighter{
-    def pathMappings = Map(
+    def pathMappings = Seq(
       "" -> "https://github.com/lihaoyi/Scalatex/tree/master"
     )
 
