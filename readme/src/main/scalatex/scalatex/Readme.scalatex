@@ -30,17 +30,17 @@
     @p
       To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
 
-    @ref("readme/src/main/scalatex/scalatex/Hello.scalatex", Nil, Nil, "scala")
+    @hl.ref("readme/src/main/scalatex/scalatex/Hello.scalatex")
 
     @p
       Next, you can simply call
 
-    @ref("readme/src/main/scala/scalatex/Main.scala", Seq("Hello().render"), Seq(""), "scala")
+    @hl.ref("readme/src/main/scala/scalatex/Main.scala", Seq("Hello().render"), Seq(""), "scala")
 
     @p
       And it'll print out
 
-    @ref("readme/src/main/scala/scalatex/Main.scala", Seq("<div>"), Seq("\"\"\""), "html")
+    @hl.ref("readme/src/main/scala/scalatex/Main.scala", Seq("<div>"), Seq("\"\"\""), "html")
 
 
     @p
@@ -121,7 +121,6 @@
       @p
         Since you can splice the value of any Scala expressions, of course you can splice the values that you defined yourself somewhere else:
 
-      @ref("api/src/test/scala/scalatex/ExampleTests.scala", Seq("object Stuff"), Seq("'externalDefinitions"), "scala")
-
+      @hl.ref("api/src/test/scala/scalatex/ExampleTests.scala", Seq("object Stuff"), Seq("'externalDefinitions"), "scala")
 
       @exampleRef("externalDefinitions2", "scala html")

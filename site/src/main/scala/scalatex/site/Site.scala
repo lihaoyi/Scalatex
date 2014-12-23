@@ -70,7 +70,7 @@ trait Site{
   /**
    * The header of this site's HTML page
    */
-  def headFrag = head(
+  def headFrags = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     script(src:=scriptName),
@@ -80,14 +80,15 @@ trait Site{
   /**
    * The body of this site's HTML page
    */
-  def bodyFrag = body(maxWidth:="768px", marginLeft:="auto", marginRight:="auto")(
-    content
+  def bodyFrag(frag: Frag) = body(maxWidth:="768px", marginLeft:="auto", marginRight:="auto")(
+    frag
   )
 
   /**
    * The contents of this page
    */
-  def content: Frag
+  def content: Map[String, Frag]
+
   def bundleResources(outputRoot: String) = {
     val jsFiles = autoResources.filter(_.endsWith(".js")).toSet
     val cssFiles = autoResources.filter(_.endsWith(".css")).toSet
@@ -109,14 +110,17 @@ trait Site{
     }
   }
   def generateHtml(outputRoot: String) = {
-    val txt = html(
-      headFrag,
-      bodyFrag
-    ).render
-    Files.write(
-      Paths.get(outputRoot + "readme.html"),
-      txt.getBytes
-    )
+    for((path, frag) <- content){
+      val txt = html(
+        head(headFrags),
+        bodyFrag(frag)
+      ).render
+      Files.write(
+        Paths.get(outputRoot + path),
+        txt.getBytes
+      )
+    }
+
   }
   def renderTo(outputRoot: String) = {
     new java.io.File(outputRoot).mkdirs()
@@ -126,53 +130,3 @@ trait Site{
   }
 }
 
-trait HeaderStrategy{
-  def header(name: String, subname: String, anchor: Frag): ConcreteHtmlTag[String]
-  def content(frag: Frag): Frag
-}
-object HeaderStrategy{
-  def apply(h: (String, String, Frag) => ConcreteHtmlTag[String], c: Frag => Frag = f => f) = {
-    new HeaderStrategy {
-      def header(name: String, subname: String, anchor: Frag) = h(name, subname, anchor)
-      def content(frag: all.Frag) = c(frag)
-    }
-  }
-  implicit def TagToHeaderStrategy(t: ConcreteHtmlTag[String]): HeaderStrategy =
-    HeaderStrategy((name, subname, frag) => t(name, frag))
-}
-
-case class Tree[T](value: T, children: mutable.Buffer[Tree[T]])
-
-class Section{
-  var structure = Tree[String]("root", mutable.Buffer.empty)
-  var depth = 0
-  val headers: Seq[HeaderStrategy] = Seq(h1, h2, h3, h4, h5, h6)
-  def munge(name: String): String = name.replace(" ", "")
-  def headingAnchor(name: String) = a(
-    cls:="header-link",
-    href:=s"#${munge(name)}",
-    " ",
-    i(cls:="fa fa-link")
-  )
-  def apply(header: String, subHeader: String = "") = {
-    depth += 1
-    val newNode = Tree[String](header, mutable.Buffer.empty)
-    structure.children.append(newNode)
-    val prev = structure
-    structure = newNode
-    new SectionProxy(body => {
-      val hs = headers(depth - 1)
-      val munged = munge(header)
-      val res = Seq[Frag](
-        hs.header(header, subHeader, headingAnchor(munged))(id:=munged),
-        hs.content(body)
-      )
-      depth -= 1
-      structure = prev
-      res
-    })
-  }
-}
-class SectionProxy(func: Seq[Frag] => Frag){
-  def apply(body: Frag*) = func(body)
-}

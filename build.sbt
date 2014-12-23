@@ -38,13 +38,6 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   sbtPlugin := true
 )
 
-lazy val siteClient =
-  project.settings(scalaJSSettings ++ sharedSettings:_*).settings(
-    libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.2.5",
-    libraryDependencies += "org.scala-lang.modules.scalajs" %%% "scalajs-dom" % "0.6",
-    libraryDependencies += "com.scalatags" %%% "scalatags" % "0.4.2"
-  )
-
 lazy val site =
   project
     .dependsOn(api)
@@ -55,11 +48,7 @@ lazy val site =
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
-  ),
-  (resources in Compile) += {
-    (fullOptJS in (siteClient, Compile)).value
-    (artifactPath in (siteClient, Compile, fullOptJS)).value
-  }
+  )
 )
 
 lazy val readme = project

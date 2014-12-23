@@ -23,14 +23,18 @@ object Main {
       """
     )
 
-    new Site{def content = scalatex.Readme()}.renderTo("target/site/")
+    new Site{
+      def content = Map(
+        "readme.html" -> scalatex.Readme()
+      )
+    }.renderTo("target/site/")
   }
   def exampleRef(start: String, classes: String) = {
     val path = "api/src/test/scala/scalatex/ExampleTests.scala"
     val tq = "\"\"\""
     val classList = classes.split(" ")
     val chunks = for(i <- 0 until classList.length) yield {
-      site.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))(
+      hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))(
         width:="50%", float:="left"
       )
     }
@@ -39,5 +43,14 @@ object Main {
 
   object sect extends site.Section()
 
+  object hl extends site.Highlighter{
+    def pathMappings = Map(
+      "" -> "https://github.com/lihaoyi/Scalatex/tree/master"
+    )
 
+    def suffixMappings = Map(
+      "scalatex" -> "scala",
+      "scala" -> "scala"
+    )
+  }
 }
