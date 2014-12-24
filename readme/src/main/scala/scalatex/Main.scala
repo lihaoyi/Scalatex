@@ -6,22 +6,6 @@ import utest._
 import scalatags.Text.all._
 object Main {
   def main(args: Array[String]): Unit = {
-    def cmp(s1: String, s2: String) = {
-      val f1 = s1.filter(!_.isWhitespace).mkString
-      val f2 = s2.filter(!_.isWhitespace)
-      assert(f1 == f2)
-    }
-    cmp(
-      Hello().render
-      ,
-      """
-        <div>
-          Hello World
-
-          <h1>I am a cow!</h1>
-        </div>
-      """
-    )
 
     new Site{
       def content = Map(
@@ -41,16 +25,17 @@ object Main {
     div(chunks, div(clear:="both"))
   }
 
-  object sect extends site.Section()
 
-  object hl extends site.Highlighter{
-    def pathMappings = Seq(
-      "" -> "https://github.com/lihaoyi/Scalatex/tree/master"
-    )
+}
+object sect extends site.Section()
 
-    def suffixMappings = Map(
-      "scalatex" -> "scala",
-      "scala" -> "scala"
-    )
-  }
+object hl extends site.Highlighter{
+  override def pathMappings = Seq(
+    "" -> "https://github.com/lihaoyi/Scalatex/tree/master"
+  )
+
+  def suffixMappings = Map(
+    "scalatex" -> "scala",
+    "scala" -> "scala"
+  )
 }

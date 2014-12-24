@@ -1,0 +1,20 @@
+@object sect extends scalatex.site.Section{
+  override val headers: Seq[Header] =
+    Seq(b, u, i)
+}
+
+@sect{Plans for the Revolution}
+  @p
+    Hello World
+
+  @sect{Coup d'etat}
+    @p
+      I am Cow
+
+  @sect{New World Order}
+    @sect{Monetary Policy}
+      @p
+        I weigh twice as much as you
+    @sect{Conscription}
+      @p
+        And I look good on the barbecue

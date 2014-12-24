@@ -1,0 +1,19 @@
+@object sect extends scalatex.site.Section()
+
+@sect{Main Section}
+  @p
+    Hello World
+
+  @sect{Subsection A}
+    @p
+      I am Cow
+  @sect{Subsection B}
+    @p
+      Hear me moo
+  @sect{Subsection C}
+    @sect{Sub-sub-section C1}
+      @p
+        I weigh twice as much as you
+    @sect{Sub-sub-section C2}
+      @p
+        And I look good on the barbecue

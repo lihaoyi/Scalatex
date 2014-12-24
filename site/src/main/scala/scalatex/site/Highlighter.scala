@@ -23,7 +23,7 @@ trait Highlighter{
    *
    * If a path is not covered by any of these rules, no link is rendered
    */
-  def pathMappings: Seq[(String, String)]
+  def pathMappings: Seq[(String, String)] = Nil
 
   /**
    * A mapping of file name suffixes to highlight.js classes.
@@ -98,18 +98,16 @@ trait Highlighter{
       .orElse(suffixMappings.get(filepath.split('.').last))
       .getOrElse("")
 
-    val (prefix, url) =
+    val linkData =
       pathMappings.iterator
                   .find{case (prefix, path) => filepath.startsWith(prefix)}
-                  .get
 
-    val hash =
-      if (endLine == -1) ""
-      else s"#L$startLine-L$endLine"
+    val link = linkData.map{ case (prefix, url) =>
+      val hash =
+        if (endLine == -1) ""
+        else s"#L$startLine-L$endLine"
 
-    val linkUrl = s"$url/${filepath.drop(prefix.length)}$hash"
-    pre(
-      code(cls:=lang + " highlight-me hljs", blob),
+      val linkUrl = s"$url/${filepath.drop(prefix.length)}$hash"
       a(
         cls:="header-link",
         i(cls:="fa fa-link "),
@@ -121,6 +119,12 @@ trait Highlighter{
         href:=linkUrl,
         target:="_blank"
       )
+    }
+
+
+    pre(
+      code(cls:=lang + " highlight-me hljs", blob),
+      link
     )
   }
 }

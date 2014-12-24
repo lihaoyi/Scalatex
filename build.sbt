@@ -56,5 +56,9 @@ lazy val readme = project
   .dependsOn(api, site)
   .settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
+  libraryDependencies ++= Seq(
+    "com.lihaoyi" %% "utest" % "0.2.4"
+  ),
+  testFrameworks += new TestFramework("utest.runner.JvmFramework"),
   scalaVersion := "2.11.4"
 )

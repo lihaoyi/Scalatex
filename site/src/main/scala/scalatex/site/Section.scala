@@ -9,19 +9,19 @@ object Section{
   class Proxy(func: Seq[Frag] => Frag){
     def apply(body: Frag*) = func(body)
   }
-  trait HeaderStrategy{
+  trait Header{
     def header(name: String, subname: String, anchor: Frag): ConcreteHtmlTag[String]
     def content(frag: Frag): Frag
   }
-  object HeaderStrategy{
+  object Header{
     def apply(h: (String, String, Frag) => ConcreteHtmlTag[String], c: Frag => Frag = f => f) = {
-      new HeaderStrategy {
+      new Header {
         def header(name: String, subname: String, anchor: Frag) = h(name, subname, anchor)
         def content(frag: all.Frag) = c(frag)
       }
     }
-    implicit def TagToHeaderStrategy(t: ConcreteHtmlTag[String]): HeaderStrategy =
-      HeaderStrategy((name, subname, frag) => t(name, frag))
+    implicit def TagToHeaderStrategy(t: ConcreteHtmlTag[String]): Header =
+      Header((name, subname, frag) => t(name, frag))
   }
 
   case class Tree[T](value: T, children: mutable.Buffer[Tree[T]])
@@ -34,9 +34,11 @@ object Section{
  */
 class Section{
   import Section._
+  type Header = Section.Header
+  val Header = Section.Header
   var structure = Tree[String]("root", mutable.Buffer.empty)
   var depth = 0
-  val headers: Seq[HeaderStrategy] = Seq(h1, h2, h3, h4, h5, h6)
+  val headers: Seq[Header] = Seq(h1, h2, h3, h4, h5, h6)
   val usedRefs = mutable.Set.empty[String]
 
   def ref(s: String, txt: String = "") = {

@@ -30,17 +30,17 @@
     @p
       To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
 
-    @hl.ref("readme/src/main/scalatex/scalatex/Hello.scalatex")
+    @hl.ref("readme/src/test/scalatex/scalatex/Hello.scalatex")
 
     @p
       Next, you can simply call
 
-    @hl.ref("readme/src/main/scala/scalatex/Main.scala", Seq("Hello().render"), Seq(""), "scala")
+    @hl.ref("readme/src/test/scala/scalatex/Tests.scala", Seq("Hello().render"), Seq(""), "scala")
 
     @p
       And it'll print out
 
-    @hl.ref("readme/src/main/scala/scalatex/Main.scala", Seq("<div>"), Seq("\"\"\""), "html")
+    @hl.ref("readme/src/test/scala/scalatex/Tests.scala", Seq("<div>"), Seq("\"\"\""), "html")
 
 
     @p
@@ -62,13 +62,13 @@
 
     @ul
       @li
-        @@-escapes followed by identation (like @code{@@div} above) are passed all the subsequently-indented lines as children.
+        @code{@@}-escapes followed by identation (like @code{@@div} above) are passed all the subsequently-indented lines as children.
       @li
-        @@-escapes followed by curly braces (like @code{@@h2} above) are passed everything inside the curly braces as children
+        @code{@@}-escapes followed by curly braces (like @code{@@h2} above) are passed everything inside the curly braces as children
       @li
-        @@-escapes followed by parentheses (like @code{@@h1} above) are passed the contents of the parentheses as a Scala expression.
+        @code{@@}-escapes followed by parentheses (like @code{@@h1} above) are passed the contents of the parentheses as a Scala expression.
       @li
-        Everything outside of a set of parentheses, that isn't an @@-escape, is treated as a string.
+        Everything outside of a set of parentheses, that isn't an @code{@@}-escape, is treated as a string.
 
     @p
       This accounts for the variation in syntax that you see above. In general, you almost always want to use identation-based blocks to delimit large sections of the document, only falling back to curly braces for one-line or one-word tags like @code{@@h2} or @code{@@b} above.
@@ -124,3 +124,84 @@
       @hl.ref("api/src/test/scala/scalatex/ExampleTests.scala", Seq("object Stuff"), Seq("'externalDefinitions"), "scala")
 
       @exampleRef("externalDefinitions2", "scala html")
+
+  @sect{Scalatex Site}
+    @p
+      The core of Scalatex is a very small, superficial translation from the @code{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides
+However, there are a number of common utilities in
+
+    @pre
+      @code(cls:="scala")
+        addSbtPlugin("com.lihaoyi" %% "scalatex" % "0.1.0")
+
+    @p
+      Here are a number of them.
+
+    @sect{Section}
+      @p
+        One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatext provides the @code{scalatex.site.Section} helper that lets you do this easily:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/section/Example1.scalatex")
+      @hr
+      @section.Example1()
+      @hr
+
+      @p
+        As you can see, all the indented sections are automatically set to smaller headings. This is of course doable manually with @code{@@h1} @code{@@h2} @code{@@h3} tags etc., but then you have to manually keep track of how deep something is. With @code{Section}, this is kept track of for you.
+
+      @p
+        You can override the default rendering of @code{Section}s to e.g. use different headers:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/section/Example2.scalatex", Nil, Seq("@"))
+      @hr
+      @section.Example2()
+      @hr
+
+      @p
+        Above, you see it using bold, underlines and italics to delimit the boundaries between headers. You can also override things in more detail
+
+      @p
+        You can use @code{@@sect.ref} to link to another part of the document:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/section/Example3.scalatex")
+      @hr
+      @section.Example3()
+      @hr
+
+      @p
+        Any links created with @code{@@sect.ref} are stored in an @code{@@sect.usedRefs} property as a list. We also expose a @code{@@sect.structure} property which allows you to inspect the tree of sections.
+
+      @p
+        Here we're just stringifying the @code{Tree} structure and placing it as text on the page, but you can easily recurse over the @code{Tree} structure and use it to e.g. build a table of contents, or a navigation bar. You can also compare the two structures to validate the internal links and ensure that none of our @code{@@sect.ref}s are broken.
+
+    @sect{Highlighter}
+      @p
+        Scalatex Site provides a @code{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @code{Highlighter} object:
+
+      @hl.ref("readme/src/main/scala/scalatex/highlighter/hl.scala")
+      @p
+        Once you have done so, you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example1.scalatex")
+      @hr
+      @highlighter.Example1()
+      @hr
+      @p
+        From the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @code{lazy val api} to the next @code{lazy val}:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example2.scalatex")
+      @hr
+      @highlighter.Example2()
+      @hr
+      @p
+        Using multiple key-strings to navigate to a particular start- or end- line; here is the body of the unit test @code{scalatex.BasicTests.parenArgumentLists.attributes}, only from the @code{check} to the @code("}") closing that test.
+
+      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example3.scalatex")
+      @hr
+      @highlighter.Example3()
+      @hr
+
+      @p
+        Note the spaces before the @code("}"), which ensures that it doesn't grab the earlier @code("}") in the string-literal which is part of the test body.
+      @p
+        In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.

@@ -1,0 +1,19 @@
+@object sect extends scalatex.site.Section()
+
+@sect{Page with Refs}
+  @p
+    Hello World, look at @sect.ref{Sect A}
+
+  @sect{Sect A}
+    @p
+      I am Cow
+  @sect{Sect B}
+    @p
+      Hear me moo. Click @sect.ref{Page with Refs} to
+      go back to the top.
+
+
+@sect.structure.toString
+@br
+@br
+@sect.usedRefs.toString
