@@ -14,18 +14,18 @@ object ExampleTests extends TestSuite{
           @h1
             Hello World!
           @p
-            I am Cow
+            I am @b{Cow}
             Hear me moo
-            I weigh @b{twice} as much as you
+            I weigh twice as much as you
             And I look good on the barbecue
       """),
       """
         <div id="my-div">
           <h1>Hello World!</h1>
           <p>
-            I am Cow
+            I am <b>Cow</b>
             Hear me moo
-            I weigh <b>twice</b> as much as you
+            I weigh twice as much as you
             And I look good on the barbecue
           </p>
         </div>

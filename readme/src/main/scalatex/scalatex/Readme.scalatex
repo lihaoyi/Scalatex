@@ -203,5 +203,14 @@ However, there are a number of common utilities in
 
       @p
         Note the spaces before the @code("}"), which ensures that it doesn't grab the earlier @code("}") in the string-literal which is part of the test body.
+
+      @p
+        Lastly, you can define a @code{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the bottom right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
+
+      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example4.scalatex")
+      @hr
+      @highlighter.Example4()
+      @hr
+
       @p
         In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.

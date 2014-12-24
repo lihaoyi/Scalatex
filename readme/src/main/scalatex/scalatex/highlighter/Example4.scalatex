@@ -1,0 +1,14 @@
+@object hl extends scalatex.site.Highlighter{
+  def suffixMappings = Map(
+    "scala" -> "scala",
+    "sbt" -> "scala"
+  )
+  override def pathMappings = Seq(
+    "" -> "https://github.com/lihaoyi/Scalatex/blob/master/"
+  )
+}
+
+@hl.ref(
+  "api/src/test/scala/scalatex/BasicTests.scala",
+  start = Seq("parenArgumentLists", "attributes", "check"),
+  end = Seq("  }"))
