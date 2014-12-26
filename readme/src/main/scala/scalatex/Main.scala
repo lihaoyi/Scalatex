@@ -18,7 +18,7 @@ object Main {
     val tq = "\"\"\""
     val classList = classes.split(" ")
     val chunks = for(i <- 0 until classList.length) yield {
-      hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))(
+      hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i)).apply(
         width:="50%", float:="left"
       )
     }
@@ -37,4 +37,5 @@ object hl extends site.Highlighter{
     "scalatex" -> "scala",
     "scala" -> "scala"
   )
+  def scala(s: String) = this.highlight(s, "scala")
 }

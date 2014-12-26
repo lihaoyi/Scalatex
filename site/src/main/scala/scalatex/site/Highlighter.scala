@@ -43,7 +43,14 @@ trait Highlighter{
 
     val lines = string.split("\n", -1)
     if (lines.length == 1){
-      code(cls:=lang + " highlight-me", lines(0), padding:=0, display:="inline")
+      code(
+        cls:=lang + " highlight-me",
+        display:="inline",
+        padding:=0,
+        margin:=0,
+        lines(0)
+      )
+
     }else{
       val minIndent = lines.map(_.takeWhile(_ == ' ').length)
         .filter(_ > 0)
@@ -55,7 +62,7 @@ trait Highlighter{
       pre(code(cls:=lang + " highlight-me hljs", stripped))
     }
   }
-
+  import Highlighter._
   /**
    * Grab a snippet of code from the given filepath, and highlight it.
    *
@@ -69,9 +76,10 @@ trait Highlighter{
    *                  If not given, it defaults to the class given in
    *                  [[suffixMappings]]
    */
-  def ref(filepath: String,
-          start: Seq[String] = Nil,
-          end: Seq[String] = Nil,
+  def ref[S: RefPath, V: RefPath]
+         (filepath: String,
+          start: S = Nil,
+          end: V = Nil,
           className: String = null) = {
 
     val lang = Option(className)
@@ -81,7 +89,11 @@ trait Highlighter{
     val linkData =
       pathMappings.iterator
                   .find{case (prefix, path) => filepath.startsWith(prefix)}
-    val (startLine, endLine, blob) = referenceText(filepath, start, end)
+    val (startLine, endLine, blob) = referenceText(
+      filepath,
+      implicitly[RefPath[S]].apply(start),
+      implicitly[RefPath[V]].apply(end)
+    )
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
@@ -129,4 +141,21 @@ trait Highlighter{
     (startIndex, endIndex, lines.map(_.drop(margin)).mkString("\n"))
 
   }
+}
+object Highlighter{
+  trait RefPath[T]{
+    def apply(t: T): Seq[String]
+  }
+  object RefPath{
+    implicit object StringRefPath extends RefPath[String]{
+      def apply(t: String) = Seq(t)
+    }
+    implicit object SeqRefPath extends RefPath[Seq[String]]{
+      def apply(t: Seq[String]) = t
+    }
+    implicit object NilRefPath extends RefPath[Nil.type]{
+      def apply(t: Nil.type) = t
+    }
+  }
+
 }

@@ -72,7 +72,16 @@ trait Site{
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     script(src:=scriptName),
-    script("hljs.initHighlightingOnLoad();")
+    script("""
+      ['DOMContentLoaded', 'load'].forEach(function(ev){
+        addEventListener(ev, function(){
+          Array.prototype.forEach.call(
+            document.querySelectorAll('code.highlight-me'),
+            hljs.highlightBlock
+          );
+        })
+      })
+    """)
   )
 
   /**
