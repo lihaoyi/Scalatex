@@ -24,9 +24,8 @@ object Main {
     }
     div(chunks, div(clear:="both"))
   }
-
-
 }
+
 object sect extends site.Section()
 
 object hl extends site.Highlighter{

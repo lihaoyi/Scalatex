@@ -13,7 +13,7 @@ lazy val scalaParser = project.settings(sharedSettings:_*)
   .settings(
     name := "scala-parser-lite",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.2.4",
+      "com.lihaoyi" %% "utest" % "0.2.4" % "test",
       "org.parboiled" %% "parboiled" % "2.0.1"
     ),
     testFrameworks += new TestFramework("utest.runner.JvmFramework")
@@ -23,7 +23,7 @@ lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.2.4",
+      "com.lihaoyi" %% "utest" % "0.2.4" % "test",
       "com.scalatags" %% "scalatags" % "0.4.2",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.parboiled" %% "parboiled" % "2.0.1"
@@ -41,14 +41,18 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
 lazy val site =
   project
     .dependsOn(api)
+    .settings(scalatex.SbtPlugin.projectSettings:_*)
     .settings(sharedSettings:_*)
     .settings(
+  libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
   libraryDependencies ++= Seq(
+    "com.lihaoyi" %% "utest" % "0.2.4" % "test",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
-  )
+  ),
+  testFrameworks += new TestFramework("utest.runner.JvmFramework")
 )
 
 lazy val readme = project

@@ -30,17 +30,17 @@
     @p
       To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
 
-    @hl.ref("readme/src/test/scalatex/scalatex/Hello.scalatex")
+    @hl.ref("site/src/test/scalatex/scalatex/site/Hello.scalatex")
 
     @p
       Next, you can simply call
 
-    @hl.ref("readme/src/test/scala/scalatex/Tests.scala", Seq("Hello().render"), Seq(""), "scala")
+    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("Hello().render"), Seq(""), "scala")
 
     @p
       And it'll print out
 
-    @hl.ref("readme/src/test/scala/scalatex/Tests.scala", Seq("<div>"), Seq("\"\"\""), "html")
+    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("<div>"), Seq("\"\"\""), "html")
 
 
     @p
@@ -214,3 +214,20 @@ However, there are a number of common utilities in
 
       @p
         In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.
+
+  @sect{Site}
+    @p
+      Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @code{Site} trait which lets you do this easily:
+
+    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'simple", "val site"), Seq("def check"))
+
+    @p
+      This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
+
+    @p
+      Although @code{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @code{Site}. For example, here's a slightly more complex @code{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
+
+    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'overriding", "val site"), Seq("val page1"))
+
+    @p
+      There are several other things you to can override, for a full list, look at the source code of @code{Site}.

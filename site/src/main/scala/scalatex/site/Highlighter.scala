@@ -73,27 +73,7 @@ trait Highlighter{
           start: Seq[String] = Nil,
           end: Seq[String] = Nil,
           className: String = null) = {
-    val (startLine, endLine, blob) = {
-      val txt = io.Source.fromFile(filepath).getLines().toVector
-      var startIndex = 0
 
-      for(str <- start){
-        startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
-      }
-      val endIndex = if (end == Nil) txt.length
-      else {
-        var endIndex = startIndex
-        for (str <- end) {
-          endIndex = txt.indexWhere(_.contains(str), endIndex + 1)
-        }
-        endIndex
-      }
-
-      val lines = txt.slice(startIndex, endIndex)
-      println(startIndex + "\t" + endIndex)
-      val margin = lines.filter(_.trim != "").map(_.takeWhile(_ == ' ').length).min
-      (startIndex, endIndex, lines.map(_.drop(margin)).mkString("\n"))
-    }
     val lang = Option(className)
       .orElse(suffixMappings.get(filepath.split('.').last))
       .getOrElse("")
@@ -101,7 +81,7 @@ trait Highlighter{
     val linkData =
       pathMappings.iterator
                   .find{case (prefix, path) => filepath.startsWith(prefix)}
-
+    val (startLine, endLine, blob) = referenceText(filepath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
@@ -121,10 +101,32 @@ trait Highlighter{
       )
     }
 
-
     pre(
       code(cls:=lang + " highlight-me hljs", blob),
       link
     )
+  }
+  def referenceText(filepath: String, start: Seq[String], end: Seq[String]) = {
+
+    val txt = io.Source.fromFile(filepath).getLines().toVector
+    var startIndex = 0
+
+    for(str <- start){
+      startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
+    }
+    val endIndex = if (end == Nil) txt.length
+    else {
+      var endIndex = startIndex
+      for (str <- end) {
+        endIndex = txt.indexWhere(_.contains(str), endIndex + 1)
+      }
+      endIndex
+    }
+
+    val lines = txt.slice(startIndex, endIndex)
+    println(startIndex + "\t" + endIndex)
+    val margin = lines.filter(_.trim != "").map(_.takeWhile(_ == ' ').length).min
+    (startIndex, endIndex, lines.map(_.drop(margin)).mkString("\n"))
+
   }
 }

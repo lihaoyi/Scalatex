@@ -2,8 +2,6 @@ package scalatex.site
 
 import java.nio.file.{Paths, Files}
 
-import scala.collection.mutable
-import scalatags.Text.all
 import scalatags.Text.all._
 
 /**
@@ -109,6 +107,7 @@ trait Site{
       Files.copy(getClass.getResourceAsStream("/" + res), Paths.get(dest))
     }
   }
+
   def generateHtml(outputRoot: String) = {
     for((path, frag) <- content){
       val txt = html(
