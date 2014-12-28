@@ -9,7 +9,7 @@
   @exampleRef("helloWorld", "scala html")
 
   @p
-    @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a hierarchical DSL which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @hl.scala{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
+    @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a hierarchical structure which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @hl.scala{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
 
   @p
     Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This means that some things which require built-in support or are otherwise impossible in other document/static-site-generators are completely trivial with Scalatex, for example:
