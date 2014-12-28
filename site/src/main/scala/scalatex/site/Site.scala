@@ -68,7 +68,7 @@ trait Site{
   /**
    * The header of this site's HTML page
    */
-  def headFrags = Seq(
+  def headFrags: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     script(src:=scriptName),
@@ -87,7 +87,7 @@ trait Site{
   /**
    * The body of this site's HTML page
    */
-  def bodyFrag(frag: Frag) = body(
+  def bodyFrag(frag: Frag): Frag = body(
     maxWidth:="768px",
     marginLeft:="auto",
     marginRight:="auto",
