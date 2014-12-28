@@ -218,6 +218,16 @@ object ExampleTests extends TestSuite{
           """
         )
       }
+      'parensNewLine{
+        check(
+          tw("""
+            @div(
+              "hello"
+            )
+          """),
+          """<div>hello</div>"""
+        )
+      }
       'thingy {
         check(
           tw("""

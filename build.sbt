@@ -4,9 +4,31 @@ val sharedSettings = Seq(
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.10.4", "2.11.2"),
   scalaVersion := "2.11.4",
+  version := "0.1.0",
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.2" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2"),
-  autoCompilerPlugins := true
+  autoCompilerPlugins := true,
+  publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
+
+  pomExtra :=
+    <url>https://github.com/lihaoyi/Scalatex</url>
+      <licenses>
+        <license>
+          <name>MIT license</name>
+          <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+      </licenses>
+      <scm>
+        <url>git://github.com/lihaoyi/Scalatex.git</url>
+        <connection>scm:git://github.com/lihaoyi/Scalatex.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>lihaoyi</id>
+          <name>Li Haoyi</name>
+          <url>https://github.com/lihaoyi</url>
+        </developer>
+      </developers>
 )
 
 lazy val scalaParser = project.settings(sharedSettings:_*)
@@ -64,5 +86,7 @@ lazy val readme = project
     "com.lihaoyi" %% "utest" % "0.2.4"
   ),
   testFrameworks += new TestFramework("utest.runner.JvmFramework"),
-  scalaVersion := "2.11.4"
+  scalaVersion := "2.11.4",
+  publish := ()
 )
+publish := ()

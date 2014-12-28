@@ -105,7 +105,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   def ArgumentExprs2 = rule {
     '(' ~ Ws ~
     (optional(Exprs ~ ',' ~ Ws) ~ PostfixExpr ~ ':' ~ Ws ~ '_' ~ Ws ~ '*' ~ Ws | optional(Exprs) ) ~
-    ')'
+    Ws ~ ')'
   }
   def BlockExpr2: Rule0 = rule { '{' ~ Ws ~ (CaseClauses | Block) ~ Ws ~ '}' }
   def BraceBlock: Rule1[Ast.Block] = rule{ '{' ~ BodyNoBrace ~ '}' }
