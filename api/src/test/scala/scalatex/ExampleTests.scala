@@ -218,18 +218,19 @@ object ExampleTests extends TestSuite{
           """
         )
       }
+      'thingy {
+        check(
+          tw("""
+            @val x = {1}
+            @val y = {2}
 
-//      check(
-//        tw("""
-//          @val x = {1}
-//          @lazy val y = {2}
-//
-//          @x + @y is @(x + y)
-//        """),
-//        """
-//          1 + 2 is 3
-//        """
-//      )
+            @x + @y is @(x + y)
+          """),
+          """
+            1 + 2 is 3
+          """
+        )
+      }
     }
 
   }
