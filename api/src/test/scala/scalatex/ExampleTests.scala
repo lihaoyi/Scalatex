@@ -31,6 +31,16 @@ object ExampleTests extends TestSuite{
         </div>
       """
     )
+    'empty1 - check(
+      tw(
+        """
+        """),
+      ""
+    )
+    'empty2 - check(
+      tw(""""""),
+      ""
+    )
     'variousSyntaxes - check(
       tw("""
           @div
@@ -178,6 +188,33 @@ object ExampleTests extends TestSuite{
              """),
           """
             ...i <b>am</b> cow hear me moo...
+          """
+        )
+      }
+      'internalDefinitions{
+
+        check(
+          tw("""
+            @object Foo{
+              val const1 = 1337
+            }
+            @val const2 = 30000 + 1337
+
+            @p
+              @def wrap(s: Frag*) = span(u(s))
+
+              The first constant is @Foo.const1,
+              the second is @const2, and wrapping
+              looks like @wrap{hello @b{world}}
+              or @wrap("hello ", b("world"))
+          """),
+          """
+            <p>
+              The first constant is 1337, the second
+              is 31337, and wrapping looks like
+              <span><u>hello <b>world</b></u></span> or
+              <span><u>hello <b>world</b></u></span>
+            </p>
           """
         )
       }

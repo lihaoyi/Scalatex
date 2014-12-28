@@ -155,6 +155,14 @@
 
       @exampleRef("externalDefinitions2", "scala html")
 
+    @sect{Internal Definitions}
+
+      @p
+        You can also define things anywhere @i{inside} your Scalatex document. These definitions are only visible within the same document, and are scoped to any blocks they're defined within:
+
+      @exampleRef("internalDefinitions", "scala html")
+      @p
+        This is very useful for defining constants or functions which aren't needed anywhere else, but can help reduce repetition within the current document
   @sect{Scalatex Site}
     @p
       The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities in
