@@ -26,6 +26,24 @@
   @p
     All these things are trivial and elegant to perform with Scalatex, and difficult or messy to do with other static-site-generators. Although Scalatex generates HTML, you can easily build up whatever tags best describe what @i{you} want to do, and use those to build your document, rather than relying on the ad-hoc and messy set provided by browsers.
 
+  @{
+    late{
+      val ul2 = ul(marginTop:=0, marginBottom:=0)
+      def rec(t: Section.Tree[String]): Frag =
+        div(
+          a(t.value, href:=s"#${sect.munge(t.value)}"),
+          ul2(t.children.map(
+            c => li(rec(c))
+          ))
+        )
+
+      ul2(
+        sect.structure.children(0).children.map(
+          c => li(rec(c))
+        )
+      )
+    }
+  }
   @sect{Getting Started}
     @p
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
@@ -330,4 +348,7 @@
             @scalatex.advanced.TableOfContents()
 
       @p
-        As you can see, one short recursive function and is all that is necessary to transform the captured structure into a tree! If you wish you can trivially modify this function to e.g. generate different HTML/CSS, only show top-level or top-and-second-level headers, or all manner of other things.
+        As you can see, one short recursive function and is all that is necessary to transform the captured structure into a @hl.scala{ul} tree, with links to all the section headers! If you wish you can trivially modify this function to e.g. generate different HTML/CSS, only show top-level or top-and-second-level headers, or all manner of other things.
+
+      @p
+        Note the use of the @hl.scala{sect.munge} function. This is the function that converts the headings (with their spaces and other special characters) into a HTML element ID that can be used for the anchor link. By default, it simply removes spaces, but you can override it in the @hl.scala{Highlighter} object if you want some custom behavior.

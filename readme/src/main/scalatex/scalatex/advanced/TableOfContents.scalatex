@@ -2,21 +2,21 @@
 @import Section.Tree
 @object sect extends Section()
 
-@sect{Main Section}
+@sect{TOC Main Section}
   @p
     Hello World
 
-  @sect{Subsection A}
+  @sect{TOC Subsection A}
     @p
       I am Cow
-  @sect{Subsection B}
+  @sect{TOC Subsection B}
     @p
       Hear me moo
-  @sect{Subsection C}
-    @sect{Sub-sub-section C1}
+  @sect{TOC Subsection C}
+    @sect{TOC Sub-sub-section C1}
       @p
         I weigh twice as much as you
-    @sect{Sub-sub-section C2}
+    @sect{TOC Sub-sub-section C2}
       @p
         And I look good on
         the barbecue
@@ -24,17 +24,15 @@
 @hr
 @b{Table of Contents}
 @{
-  val allSections =
-    collection.mutable
-              .Buffer
-              .empty[String]
-  def rec(t: Tree[String]): Frag =
+  def rec(t: Tree[String]): Frag = {
+    val id =
+      "#" + sect.munge(t.value)
     div(
-      t.value,
+      a(t.value, href:=id),
       ul(t.children.map(
         c => li(rec(c))
       ))
     )
-
+  }
   sect.structure.children.map(rec)
 }

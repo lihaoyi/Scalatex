@@ -4,6 +4,9 @@ import java.nio.file.{Paths, Files}
 import _root_.scalatex.site.Site
 import utest._
 import scalatags.Text.all._
+import scalatags.generic
+import scalatags.text.Builder
+
 object Main {
   def main(args: Array[String]): Unit = {
 
@@ -24,6 +27,11 @@ object Main {
       hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))
     }
     pairs(chunks)
+  }
+  def late(frags: => Frag) = new Late(() => frags)
+  class Late(frags: () => Frag) extends scalatags.text.Frag{
+    def render: String = frags().render
+    def writeTo(strb: StringBuilder): Unit = strb.append(render)
   }
 }
 
