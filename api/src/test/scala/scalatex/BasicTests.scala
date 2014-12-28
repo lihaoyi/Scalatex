@@ -114,8 +114,8 @@ object BasicTests extends TestSuite{
               omg
           """),
           """
-            <divid="my-id">omg</div>
-            <divid="my-id">omg</div>
+            <div id="my-id">omg</div>
+            <div id="my-id">omg</div>
           """
         )
       }

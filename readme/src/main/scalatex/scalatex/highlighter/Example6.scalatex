@@ -1,0 +1,19 @@
+@def example(s: Seq[String],
+             cls: String) = {
+  val path =
+    "api/src/test/scala/"+
+    "scalatex/BasicTests.scala"
+  hl.ref(
+    path, s, Seq("\"\"\""), cls
+  )
+}
+
+@p
+  Compiling:
+
+@example(Seq("parenArgumentLists", "attributes", "@div"), "scala")
+
+@p
+  Gives you:
+
+@example(Seq("parenArgumentLists", "attributes", "<div"), "html")

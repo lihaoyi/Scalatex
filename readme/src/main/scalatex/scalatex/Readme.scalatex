@@ -234,7 +234,7 @@
             @highlighter.Example1()
 
       @p
-        From the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
+        Apart than referencing the whole file, you can also grab text from the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
 
       @pairs
         @half
@@ -253,9 +253,19 @@
           @exampleWrapper
             @highlighter.Example3()
 
-
       @p
         Note the spaces before the @hl.scala("}"), which ensures that it doesn't grab the earlier @hl.scala("}") in the string-literal which is part of the test body.
+      @p
+        Normally, the language used to highlight is inferred from the @hl.scala{suffixMappings} you defined when instantiating the @hl.scala{Highlighter}. You can override it manually by passing it in:
+
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example6.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example6()
+      @p
+        As you can see, this is especially useful from grabbing examples from unit tests. You can encapsulate the boilerplate in a function, and easily grab both the code and the expected output from the unit tests highlighted in their own particular way to include in the document.
 
       @p
         Lastly, you can define a @hl.scala{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the top right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
