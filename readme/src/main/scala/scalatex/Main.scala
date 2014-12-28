@@ -16,7 +16,15 @@ object Main {
       )
     }.renderTo("target/site/")
   }
-  def exampleWrapper(f: Frag*) = Seq(hr, div(opacity:="0.6", fontStyle.oblique)(f), hr)
+  def exampleWrapper(f: Frag*) = Seq(
+    hr,
+    div(
+      opacity:="0.6",
+      fontStyle.oblique,
+      f
+    ),
+    hr
+  )
   def pairs(frags: Frag*) = div(frags, div(clear:="both"))
   def half(frags: Frag*) = div(frags, width:="50%", float.left)
   def exampleRef(start: String, classes: String) = {

@@ -6,6 +6,7 @@
 }
 
 @p
-  I like going to @lnk{www.google.com}
-  or @lnk{https://www.facebook.com}
+  I always like going to either
+  @lnk{www.google.com} or
+  @lnk{https://www.facebook.com}
   in order to look for things.

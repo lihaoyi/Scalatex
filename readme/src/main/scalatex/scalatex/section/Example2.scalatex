@@ -1,7 +1,7 @@
 @import scalatex.site.Section
 @object sect extends Section{
   override val headers: Seq[Header] =
-    Seq(b, u, i)
+    Seq(b, u, s)
 }
 
 @sect{Plans for the Revolution}

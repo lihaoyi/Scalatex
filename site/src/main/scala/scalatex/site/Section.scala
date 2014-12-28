@@ -90,6 +90,7 @@ class Section{
       val res = Seq[Frag](
         hs.header(headingAnchor(munged), header, subHeader)(
           id:=munged,
+          display.block,
           new ClsModifier("scalatex-header scalatex-hover-container")
         ),
         hs.content(body)

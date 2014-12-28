@@ -190,7 +190,7 @@
             @section.Example2()
 
       @p
-        Above, you see it using bold, underlines and italics to delimit the boundaries between headers. You can also override things in more detail
+        Above, you see it using bold, underlines and strike-throughs to delimit the boundaries between headers. You can also override things in more detail using the @hl.scala{Section.Header} class instead of simple tags.
 
       @p
         You can use @hl.scala{@@sect.ref} to link to another part of the document:
@@ -259,7 +259,11 @@
 
 
       @p
-        In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.
+        You can customize the link to link to other places (bitbucket, local files, etc.) by changing the mapped URL. You can also pass in multiple @hl.scala{pathMappings} have links to files in different folders map to different base URLs, e.g. if you are referencing files in sub-repositories that have different public code
+
+      @hr
+      @p
+        In general, @hl.scala{Highlighter} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
 
     @sect{Site}
       @p

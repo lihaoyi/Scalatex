@@ -109,13 +109,13 @@ object BasicTests extends TestSuite{
       'attributes{
         check(
           tw("""
-          @div(id:="my-id"){ omg }
-          @div(id:="my-id")
-            omg
-              """),
+            @div(id:="my-id"){ omg }
+            @div(id:="my-id")
+              omg
+          """),
           """
-          <divid="my-id">omg</div>
-          <divid="my-id">omg</div>
+            <divid="my-id">omg</div>
+            <divid="my-id">omg</div>
           """
         )
       }

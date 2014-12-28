@@ -38,15 +38,15 @@ The content `<div>` is where all your content goes.
     color: #000;
 }
 
-.scalatex-hover-container:hover > .scalatex-header-link:hover > i{
+.scalatex-hover-container:hover .scalatex-header-link:hover > i{
     opacity: 1.0;
 }
 
-.scalatex-hover-container:hover > .scalatex-header-link > i:active{
+.scalatex-hover-container:hover .scalatex-header-link > i:active{
     opacity: 0.75;
 }
 
-.scalatex-hover-container:hover > .scalatex-header-link > i{
+.scalatex-hover-container:hover .scalatex-header-link > i{
     opacity: 0.5;
 }
 
