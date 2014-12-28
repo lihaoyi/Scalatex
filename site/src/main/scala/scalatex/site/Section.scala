@@ -3,7 +3,19 @@ package scalatex.site
 import scala.collection.mutable
 import scalatags.Text.all
 import scalatags.Text.all._
+import scalatags.text.Builder
 
+class ClsModifier(s: String) extends scalatags.Text.Modifier {
+  override def applyTo(t: Builder): Unit = {
+    val clsIndex = t.attrs.zipWithIndex.collectFirst{
+      case ((name, _), i) if name == "class" => i
+    }
+    clsIndex match{
+      case None => t.addAttr("class", s)
+      case Some(clsIndex) => t.attrs(clsIndex) = "class" -> (t.attrs(clsIndex)._2 + " " + s)
+    }
+  }
+}
 
 object Section{
   case class Proxy(func: Seq[Frag] => Frag){
@@ -39,13 +51,21 @@ class Section{
   var structure = Tree[String]("root", mutable.Buffer.empty)
   var depth = 0
   val headers: Seq[Header] = Seq(h1, h2, h3, h4, h5, h6)
-                                .map(_(cls:="scalatex-header scalatex-hover-container"): Header)
+
   val usedRefs = mutable.Set.empty[String]
 
   def ref(s: String, txt: String = "") = {
     usedRefs += s
     a(if (txt == "") s else txt, href:=s"#${munge(s)}")
   }
+
+  def headerSeq = {
+    def rec(t: Tree[String]): Iterator[String] = {
+      Iterator(t.value) ++ t.children.flatMap(rec)
+    }
+    rec(structure).toVector
+  }
+
   def munge(name: String): String = name.replace(" ", "")
 
   def headingAnchor(name: String) = a(
@@ -66,8 +86,12 @@ class Section{
     Proxy{body =>
       val hs = headers(depth - 1)
       val munged = munge(header)
+
       val res = Seq[Frag](
-        hs.header(headingAnchor(munged), header, subHeader)(id:=munged),
+        hs.header(headingAnchor(munged), header, subHeader)(
+          id:=munged,
+          new ClsModifier("scalatex-header scalatex-hover-container")
+        ),
         hs.content(body)
       )
       depth -= 1

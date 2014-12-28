@@ -1,1 +1,4 @@
-@hl.ref("build.sbt", start = Seq("lazy val api"), end = Seq("lazy val"))
+@hl.ref(
+  "build.sbt",
+  start = Seq("lazy val api"),
+  end = Seq("lazy val"))

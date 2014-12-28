@@ -44,7 +44,7 @@ trait Highlighter{
     val lines = string.split("\n", -1)
     if (lines.length == 1){
       code(
-        cls:=lang + " highlight-me",
+        cls:=lang + " scalatex-highlight-js",
         display:="inline",
         padding:=0,
         margin:=0,
@@ -59,7 +59,7 @@ trait Highlighter{
         .dropWhile(_ == "")
         .mkString("\n")
 
-      pre(code(cls:=lang + " highlight-me hljs", stripped))
+      pre(code(cls:=lang + " scalatex-highlight-js", stripped))
     }
   }
   import Highlighter._
@@ -101,7 +101,7 @@ trait Highlighter{
         i(cls:="fa fa-link "),
         position.absolute,
         right:="0.5em",
-        bottom:="0.5em",
+        top:="0.5em",
         display.block,
         fontSize:="24px",
         href:=linkUrl,
@@ -110,18 +110,21 @@ trait Highlighter{
     }
 
     pre(
-      cls:="scalatex-header-container",
-      code(cls:=lang + " scalatex-highlight-js", blob),
+      cls:="scalatex-hover-container",
+      code(cls:=lang + " scalatex-highlight-js hljs", blob),
       link
     )
   }
   def referenceText[S: RefPath, V: RefPath](filepath: String, start: S, end: V) = {
     val txt = io.Source.fromFile(filepath).getLines().toVector
-    var startIndex = 0
-
+    // Start from -1 so that searching for things on the first line of the file (-1 + 1 = 0)
+    var startIndex = -1
     for(str <- implicitly[RefPath[S]].apply(start)){
       startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
     }
+    // But if there are no selectors, start from 0 and not -1
+    startIndex = startIndex max 0
+
     val startIndent = txt(startIndex).takeWhile(_.isWhitespace).length
     val endQuery = implicitly[RefPath[V]].apply(end)
     val endIndex = if (endQuery == Nil) {

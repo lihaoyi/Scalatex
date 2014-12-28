@@ -2,6 +2,7 @@
 @import Main._
 @import site._
 
+
 @sect{Scalatex 0.1.0}
   @i{Programmable Documents in Scala}
 
@@ -14,13 +15,13 @@
     Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This means that some things which require built-in support or are otherwise impossible in other document/static-site-generators are completely trivial with Scalatex, for example:
   @ul
     @li
-      Extracting the structure of the document as a tree, which you can use to generate a navigation bar or table-of-contents
+      Extracting the structure of the document as a @sect.ref{Section}, which you can use to generate a navigation bar or @sect.ref{Generating a Table of Contents}
     @li
-      Enforcing that all internal links point to a valid document header, and all external links point to a valid URL (e.g. returns a 200-OK).
+      Enforcing that @sect.ref("Finding Dead Links", "all internal links point to a valid document header, and all external links point to a valid URL")
     @li
-      Fetching snippets of text from files on disk to e.g. use unit-test-code as examples in the docs
+      @sect.ref("Highlighter", "Fetching snippets of text from files on disk") to e.g. use unit-test-code as examples in the docs
     @li
-      Easily defining custom tags to encapsulate repetitive fragments of your document, e.g. an image-with-caption or code-snippet-with-link.
+      Easily defining @sect.ref{Custom Tags} to encapsulate repetitive fragments of your document, e.g. an image-with-caption or code-snippet-with-link.
 
   @p
     All these things are trivial and elegant to perform with Scalatex, and difficult or messy to do with other static-site-generators. Although Scalatex generates HTML, you can easily build up whatever tags best describe what @i{you} want to do, and use those to build your document, rather than relying on the ad-hoc and messy set provided by browsers.
@@ -150,10 +151,12 @@
       @p
         One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatext provides the @hl.scala{scalatex.site.Section} helper that lets you do this easily:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/section/Example1.scalatex")
-      @hr
-      @section.Example1()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/section/Example1.scalatex")
+        @half
+          @exampleWrapper
+            @section.Example1()
 
       @p
         As you can see, all the indented sections are automatically set to smaller headings. This is of course doable manually with @hl.scala{@@h1} @hl.scala{@@h2} @hl.scala{@@h3} tags etc., but then you have to manually keep track of how deep something is. With @hl.scala{Section}, this is kept track of for you.
@@ -161,10 +164,12 @@
       @p
         You can override the default rendering of @hl.scala{Section}s to e.g. use different headers:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/section/Example2.scalatex", Nil, "@")
-      @hr
-      @section.Example2()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/section/Example2.scalatex", Nil, "@sect")
+        @half
+          @exampleWrapper
+            @section.Example2()
 
       @p
         Above, you see it using bold, underlines and italics to delimit the boundaries between headers. You can also override things in more detail
@@ -172,10 +177,12 @@
       @p
         You can use @hl.scala{@@sect.ref} to link to another part of the document:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/section/Example3.scalatex")
-      @hr
-      @section.Example3()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/section/Example3.scalatex")
+        @half
+          @exampleWrapper
+            @section.Example3()
 
       @p
         Any links created with @hl.scala{@@sect.ref} are stored in an @hl.scala{@@sect.usedRefs} property as a list. We also expose a @hl.scala{@@sect.structure} property which allows you to inspect the tree of sections.
@@ -191,35 +198,47 @@
       @p
         Once you have done so, you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example1.scalatex")
-      @hr
-      @highlighter.Example1()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example1.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example1()
+
       @p
         From the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example2.scalatex")
-      @hr
-      @highlighter.Example2()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example2.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example2()
+
       @p
         Using multiple key-strings to navigate to a particular start- or end- line; here is the body of the unit test @hl.scala{scalatex.BasicTests.parenArgumentLists.attributes}, only from the @hl.scala{check} to the @hl.scala("}") closing that test.
 
-      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example3.scalatex")
-      @hr
-      @highlighter.Example3()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example3.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example3()
+
 
       @p
         Note the spaces before the @hl.scala("}"), which ensures that it doesn't grab the earlier @hl.scala("}") in the string-literal which is part of the test body.
 
       @p
-        Lastly, you can define a @hl.scala{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the bottom right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
+        Lastly, you can define a @hl.scala{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the top right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
 
-      @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example4.scalatex")
-      @hr
-      @highlighter.Example4()
-      @hr
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example4.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example4()
+
 
       @p
         In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.
@@ -241,3 +260,74 @@
       @p
         There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
 
+  @sect{Advanced Techniques}
+    @p
+      This section goes through a number of things which are not part of Scalatex by default, but are easily doable by extending Scalatex with snippets of Scala code. In general, all of these are probably sufficiently ad-hoc that the exact implementation would vary from project to project and so a built-in implementation wouldn't make sense.
+    @sect{Custom Tags}
+      @p
+        Since tags are just functions, it is easy to define custom tags just by defining your own function that returns a Scalatags fragment. For example, auto-linking URL-looking-text isn't built in as part of Scalatex, but here's a custom tag that adds the capability:
+
+
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/advanced/CustomTags1.scalatex")
+        @half
+          @exampleWrapper
+            @scalatex.advanced.CustomTags1()
+
+
+      @p
+        Again, if you are using the @hl.scala{@@def} in multiple files you can define it in Scala code and import it, but if you're only using it in one @code{.scalatex} file you can simply define it locally.
+
+      @p
+        Note how we check for the @code{://} inside the URL and default it to @code{http://} if it's missing; this is just plain-old-Scala, since the tag is just a Scala function.
+
+    @sect{Finding Dead Links}
+      @p
+        Because a tag is just a function, it is trivial to add additional capabilities to it. For example, here is a version which keeps track of links that you used in the document:
+
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/advanced/CustomTags2.scalatex")
+        @half
+          @exampleWrapper
+            @scalatex.advanced.CustomTags2()
+
+
+      @p
+        This makes it very easy to aggregate the list of all-external-links in the application. For example, if you wished to check for dead out-going links, it is trivial to loop over these URLs, since a HTTP request to each one, and verify that they all return 200s.
+
+      @p
+        For internal links, i.e. references between different sections of your document, this is even easier: you have all the data needed to decide if a ref is invalid right away! Scalatex's @hl.scala{Section} objects automatically aggregate all internal links defined using @hl.scala("@sect.ref{...}"), all sections defined using @hl.scala("@sect{...}"), and you can easily compare them:
+
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/advanced/DeadSectRefs.scalatex")
+        @half
+          @exampleWrapper
+            @scalatex.advanced.DeadSectRefs()
+
+      @p
+        Note how the typo @code{Page with Ref} instead of @code{Page with Refs} was immediately picked up. This example simply prints it to the page, but you could add an assert if you really wanted to ensure it didn't happen.
+
+    @sect{Generating a Table of Contents}
+      @p
+        Generating a TOC has also traditionally been a pain point for documents. There are two common scenarios:
+
+      @ul
+        @li
+          The TOC is kept and maintained manually, separate from the document. This gives you full flexibility to customize it, at the cost of it easily falling out of date if the document changes.
+        @li
+          The TOC is auto-generated from the document with a tool that makes it difficult to customize. This often results in a TOC with is hard to customize, which you can only do using some clunky configuration language.
+      @p
+        With Scalatex, generating a TOC from the document is both easy and customizable. Here is a trivial example:
+
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/advanced/TableOfContents.scalatex")
+        @half
+          @exampleWrapper
+            @scalatex.advanced.TableOfContents()
+
+      @p
+        As you can see, one short recursive function and is all that is necessary to transform the captured structure into a tree! If you wish you can trivially modify this function to e.g. generate different HTML/CSS, only show top-level or top-and-second-level headers, or all manner of other things.

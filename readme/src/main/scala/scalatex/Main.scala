@@ -13,16 +13,17 @@ object Main {
       )
     }.renderTo("target/site/")
   }
+  def exampleWrapper(f: Frag*) = Seq(hr, div(opacity:="0.6", fontStyle.oblique)(f), hr)
+  def pairs(frags: Frag*) = div(frags, div(clear:="both"))
+  def half(frags: Frag*) = div(frags, width:="50%", float.left)
   def exampleRef(start: String, classes: String) = {
     val path = "api/src/test/scala/scalatex/ExampleTests.scala"
     val tq = "\"\"\""
     val classList = classes.split(" ")
-    val chunks = for(i <- 0 until classList.length) yield {
-      hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i)).apply(
-        width:="50%", float:="left"
-      )
+    val chunks = for(i <- 0 until classList.length) yield half{
+      hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))
     }
-    div(chunks, div(clear:="both"))
+    pairs(chunks)
   }
 }
 

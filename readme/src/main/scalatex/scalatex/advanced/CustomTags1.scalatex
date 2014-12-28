@@ -1,0 +1,11 @@
+@def lnk(url: String) = {
+  if(url.contains("://"))
+    a(url, href:=url)
+  else
+    a(url, href:=s"http://$url")
+}
+
+@p
+  I like going to @lnk{www.google.com}
+  or @lnk{https://www.facebook.com}
+  in order to look for things.

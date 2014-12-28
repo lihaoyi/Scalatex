@@ -1,4 +1,5 @@
-@object sect extends scalatex.site.Section()
+@import scalatex.site.Section
+@object sect extends Section()
 
 @sect{Page with Refs}
   @p
@@ -9,7 +10,8 @@
       I am Cow
   @sect{Sect B}
     @p
-      Hear me moo. Click @sect.ref{Page with Refs} to
+      Hear me moo. Click
+      @sect.ref{Page with Refs} to
       go back to the top.
 
 

@@ -1,0 +1,22 @@
+@import collection.mutable
+@val usedUrls = mutable.Buffer.empty[String]
+@def lnk(url: String) = {
+  val finalUrl =
+    if(url.contains("://")) url
+    else s"http://$url"
+  usedUrls.append(finalUrl)
+  a(url, href:=finalUrl)
+}
+
+@p
+  I like going to @lnk{www.google.com}
+  or @lnk{https://www.facebook.com}
+  in order to look for things.
+
+@p
+  Used Links:
+
+@ul
+  @for(url <- usedUrls)
+    @li
+      @url

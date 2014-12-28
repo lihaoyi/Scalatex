@@ -31,47 +31,69 @@ object Tests extends TestSuite{
     }
 
     'Section{
-      object sect extends Section
-      val txt = sect("Main")(
-        sect("SectionA")(
-          "Hello World"
-        ),
-        sect("SectionB0")(
-          sect("SectionB1")(
-            "Lols", sect.ref("Main")
+      'Basic {
+        object sect extends Section
+        val txt = sect("Main")(
+          sect("SectionA")(
+            "Hello World"
           ),
-          sect("SectionB2")(
-            "Hai", sect.ref("SectionA")
+          sect("SectionB0")(
+            sect("SectionB1")(
+              "Lols", sect.ref("Main")
+            ),
+            sect("SectionB2")(
+              "Hai", sect.ref("SectionA")
+            )
           )
+        ).render
+        assert(sect.usedRefs.forall(sect.headerSeq.contains))
+        // 1s are raw-text, 3s are titles, and 5s are
+        // titles which are linked to somewhere
+        val expectedTokens = Seq(
+          "Main" -> 5,
+          "SectionA" -> 5,
+          "Hello World" -> 1,
+          "SectionB0" -> 3,
+          "SectionB1" -> 3,
+          "SectionB2" -> 3,
+          "Lols" -> 1,
+          "Hai" -> 1
         )
-      ).render
-      // 1s are raw-text, 3s are titles, and 5s are
-      // titles which are linked to somewhere
-      val expectedTokens = Seq(
-        "Main" -> 5,
-        "SectionA" -> 5,
-        "Hello World" -> 1,
-        "SectionB0" -> 3,
-        "SectionB1" -> 3,
-        "SectionB2" -> 3,
-        "Lols" -> 1,
-        "Hai" -> 1
-      )
-      for ((token, count) <- expectedTokens){
-        assert(token.r.findAllIn(txt).length == count)
-      }
-      val expectedTree =Tree[String]("root", mutable.Buffer(
-        Tree[String]("Main", mutable.Buffer(
-          Tree[String]("SectionA", mutable.Buffer()),
-          Tree[String]("SectionB0", mutable.Buffer(
-            Tree[String]("SectionB1", mutable.Buffer()),
-            Tree[String]("SectionB2", mutable.Buffer())
+        for ((token, count) <- expectedTokens) {
+          assert(token.r.findAllIn(txt).length == count)
+        }
+        val expectedTree = Tree[String]("root", mutable.Buffer(
+          Tree[String]("Main", mutable.Buffer(
+            Tree[String]("SectionA", mutable.Buffer()),
+            Tree[String]("SectionB0", mutable.Buffer(
+              Tree[String]("SectionB1", mutable.Buffer()),
+              Tree[String]("SectionB2", mutable.Buffer())
+            ))
           ))
         ))
-      ))
-      val struct = sect.structure
-      assert(struct == expectedTree)
-      assert(sect.usedRefs == Set("Main", "SectionA"))
+        val struct = sect.structure
+        assert(struct == expectedTree)
+        assert(sect.usedRefs == Set("Main", "SectionA"))
+      }
+      'Failure{
+        object sect extends Section
+        val txt = sect("Main")(
+          sect("SectionA")(
+            "Hello World"
+          ),
+          sect("SectionB0")(
+            sect("SectionB1")(
+              "Lols", sect.ref("Mani")
+            ),
+            sect("SectionB2")(
+              "Hai", sect.ref("SectionA")
+            )
+          )
+        ).render
+        intercept[AssertionError](
+          assert(sect.usedRefs.forall(sect.headerSeq.contains))
+        )
+      }
     }
     'Highlighter{
       object hl extends Highlighter {
