@@ -1,8 +1,9 @@
 @hl.ref(
-   "api/src/test/scala/" +
-   "scalatex/BasicTests.scala",
-   start = Seq(
-      "parenArgumentLists",
-      "attributes", "check"
-   ),
-   end = Seq("  }"))
+  "api/src/test/scala/" +
+  "scalatex/BasicTests.scala",
+  start = Seq(
+    "parenArgumentLists",
+    "attributes", "check"
+  ),
+  end = Seq("  }")
+)

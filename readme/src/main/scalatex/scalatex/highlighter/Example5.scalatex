@@ -1,0 +1,15 @@
+@div
+  @hl.highlight(
+    "<div><b>Some</b> HTML</div>",
+    "xml"
+  )
+@div
+  @hl.highlight(
+    "f = function(x){return x+1}",
+    "javascript"
+  )
+@div
+  @hl.highlight(
+    "val f = (x) => { x + 1 }",
+    "scala"
+  )

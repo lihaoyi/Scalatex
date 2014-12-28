@@ -213,8 +213,18 @@
         Scalatex Site provides a @hl.scala{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @hl.scala{Highlighter} object:
 
       @hl.ref("readme/src/main/scala/scalatex/highlighter/hl.scala")
+
       @p
-        Once you have done so, you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
+        Once you have done so, you can highlight individual code snippets:
+      @pairs
+        @half
+          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example5.scalatex")
+        @half
+          @exampleWrapper
+            @highlighter.Example5()
+
+      @p
+        Or you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
 
       @pairs
         @half
@@ -263,7 +273,7 @@
 
       @hr
       @p
-        In general, @hl.scala{Highlighter} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
+        In general, @hl.scala{Highlighter.ref} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter.ref}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
 
     @sect{Site}
       @p

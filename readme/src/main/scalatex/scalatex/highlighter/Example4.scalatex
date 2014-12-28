@@ -18,4 +18,5 @@
     "parenArgumentLists",
     "attributes", "check"
   ),
-  end = Seq("  }"))
+  end = Seq("  }")
+)
