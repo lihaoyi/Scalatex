@@ -8,10 +8,22 @@
   @exampleRef("helloWorld", "scala html")
 
   @p
-    @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a Jade-like DSL which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @hl.scala{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
+    @a("Scalatex", href:="https://github.com/lihaoyi/Scalatex") is a language for generating rich HTML documents in Scala. It lets you write your HTML in a hierarchical DSL which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @hl.scala{@@} sign. These correspond to HTML tags (provided by @a("Scalatags", href:="https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
 
   @p
-    Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This lets you use the full power of the Scala programming language to build your documents, avoiding the copy-and-paste duplication that often happens in less-powerful document-generation languages.
+    Scalatex allows you to DRY up your documents the same way you DRY your code. Unlike most templating languages, Scalatex is a thin shim on top of the Scala programming language. This means that some things which require built-in support or are otherwise impossible in other document/static-site-generators are completely trivial with Scalatex, for example:
+  @ul
+    @li
+      Extracting the structure of the document as a tree, which you can use to generate a navigation bar or table-of-contents
+    @li
+      Enforcing that all internal links point to a valid document header, and all external links point to a valid URL (e.g. returns a 200-OK).
+    @li
+      Fetching snippets of text from files on disk to e.g. use unit-test-code as examples in the docs
+    @li
+      Easily defining custom tags to encapsulate repetitive fragments of your document, e.g. an image-with-caption or code-snippet-with-link.
+
+  @p
+    All these things are trivial and elegant to perform with Scalatex, and difficult or messy to do with other static-site-generators. Although Scalatex generates HTML, you can easily build up whatever tags best describe what @i{you} want to do, and use those to build your document, rather than relying on the ad-hoc and messy set provided by browsers.
 
   @sect{Getting Started}
     @p
@@ -126,8 +138,7 @@
 
   @sect{Scalatex Site}
     @p
-      The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides
-However, there are a number of common utilities in
+      The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities in
 
     @hl.scala
       addSbtPlugin("com.lihaoyi" %% "scalatex-site" % "0.1.0")
@@ -213,19 +224,20 @@ However, there are a number of common utilities in
       @p
         In general, this is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document.
 
-  @sect{Site}
-    @p
-      Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @hl.scala{Site} trait which lets you do this easily:
+    @sect{Site}
+      @p
+        Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @hl.scala{Site} trait which lets you do this easily:
 
-    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
+      @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
 
-    @p
-      This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
+      @p
+        This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
 
-    @p
-      Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
+      @p
+        Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
 
-    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
+      @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
 
-    @p
-      There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
+      @p
+        There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
+

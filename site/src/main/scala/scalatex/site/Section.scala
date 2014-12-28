@@ -6,22 +6,22 @@ import scalatags.Text.all._
 
 
 object Section{
-  class Proxy(func: Seq[Frag] => Frag){
+  case class Proxy(func: Seq[Frag] => Frag){
     def apply(body: Frag*) = func(body)
   }
   trait Header{
-    def header(name: String, subname: String, anchor: Frag): ConcreteHtmlTag[String]
+    def header(anchor: Frag, name: String, subname: String): ConcreteHtmlTag[String]
     def content(frag: Frag): Frag
   }
   object Header{
-    def apply(h: (String, String, Frag) => ConcreteHtmlTag[String], c: Frag => Frag = f => f) = {
+    def apply(h: (Frag, String, String) => ConcreteHtmlTag[String], c: Frag => Frag = f => f) = {
       new Header {
-        def header(name: String, subname: String, anchor: Frag) = h(name, subname, anchor)
+        def header(anchor: Frag, name: String, subname: String) = h(anchor, name, subname)
         def content(frag: all.Frag) = c(frag)
       }
     }
     implicit def TagToHeaderStrategy(t: ConcreteHtmlTag[String]): Header =
-      Header((name, subname, frag) => t(name, frag))
+      Header((frag, name, subname) => t(frag, name))
   }
 
   case class Tree[T](value: T, children: mutable.Buffer[Tree[T]])
@@ -39,6 +39,7 @@ class Section{
   var structure = Tree[String]("root", mutable.Buffer.empty)
   var depth = 0
   val headers: Seq[Header] = Seq(h1, h2, h3, h4, h5, h6)
+                                .map(_(cls:="scalatex-header scalatex-hover-container"): Header)
   val usedRefs = mutable.Set.empty[String]
 
   def ref(s: String, txt: String = "") = {
@@ -48,11 +49,13 @@ class Section{
   def munge(name: String): String = name.replace(" ", "")
 
   def headingAnchor(name: String) = a(
-    cls:="header-link",
+    cls:="scalatex-header-link",
     href:=s"#${munge(name)}",
-    " ",
-    i(cls:="fa fa-link")
+    i(cls:="fa fa-link"),
+    position.absolute,
+    right:=0
   )
+
 
   def apply(header: String, subHeader: String = "") = {
     depth += 1
@@ -60,16 +63,16 @@ class Section{
     structure.children.append(newNode)
     val prev = structure
     structure = newNode
-    new Proxy(body => {
+    Proxy{body =>
       val hs = headers(depth - 1)
       val munged = munge(header)
       val res = Seq[Frag](
-        hs.header(header, subHeader, headingAnchor(munged))(id:=munged),
+        hs.header(headingAnchor(munged), header, subHeader)(id:=munged),
         hs.content(body)
       )
       depth -= 1
       structure = prev
       res
-    })
+    }
   }
 }

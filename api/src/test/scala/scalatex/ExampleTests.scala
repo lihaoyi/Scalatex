@@ -37,8 +37,8 @@ object ExampleTests extends TestSuite{
             @h1("Hello World")
             @h2{I am Cow}
             @p
-              Hear me moo
-              I weigh @b{twice} as much as you
+              Hear me @b{moo}
+              I weigh twice as much as you
               And I look good on the barbecue
          """),
       """
@@ -46,8 +46,8 @@ object ExampleTests extends TestSuite{
             <h1>Hello World</h1>
             <h2>I am Cow</h2>
             <p>
-              Hear me moo
-              I weigh <b>twice</b> as much as you
+              Hear me <b>moo</b>
+              I weigh twice as much as you
               And I look good on the barbecue
             </p>
           </div>
@@ -98,11 +98,14 @@ object ExampleTests extends TestSuite{
 
       'functions - check(
         tw("""
-            @span
-              The square root of 9.0 is @math.sqrt(9.0)
-           """),
+          @span
+            The square root of 9.0
+            is @math.sqrt(9.0)
+        """),
         """
-            <span>The square root of 9.0 is 3.0</span>
+          <span>
+            The square root of 9.0 is 3.0
+          </span>
         """
       )
 

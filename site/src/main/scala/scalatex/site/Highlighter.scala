@@ -101,7 +101,7 @@ trait Highlighter{
 
       val linkUrl = s"$url/${filepath.drop(prefix.length)}$hash"
       a(
-        cls:="header-link",
+        cls:="scalatex-header-link",
         i(cls:="fa fa-link "),
         position.absolute,
         right:="0.5em",
@@ -114,12 +114,12 @@ trait Highlighter{
     }
 
     pre(
-      code(cls:=lang + " highlight-me hljs", blob),
+      cls:="scalatex-header-container",
+      code(cls:=lang + " scalatex-highlight-js", blob),
       link
     )
   }
   def referenceText(filepath: String, start: Seq[String], end: Seq[String]) = {
-
     val txt = io.Source.fromFile(filepath).getLines().toVector
     var startIndex = 0
 
@@ -136,13 +136,20 @@ trait Highlighter{
     }
 
     val lines = txt.slice(startIndex, endIndex)
-    println(startIndex + "\t" + endIndex)
-    val margin = lines.filter(_.trim != "").map(_.takeWhile(_ == ' ').length).min
+
+    val margin = lines.filter(_.trim != "")
+                      .map(_.takeWhile(_ == ' ').length)
+                      .min
     (startIndex, endIndex, lines.map(_.drop(margin)).mkString("\n"))
 
   }
 }
 object Highlighter{
+
+  /**
+   * A context bound used to ensure you pass a `String`
+   * or `Seq[String]` to the `@hl.ref` function
+   */
   trait RefPath[T]{
     def apply(t: T): Seq[String]
   }

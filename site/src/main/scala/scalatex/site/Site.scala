@@ -76,7 +76,7 @@ trait Site{
       ['DOMContentLoaded', 'load'].forEach(function(ev){
         addEventListener(ev, function(){
           Array.prototype.forEach.call(
-            document.querySelectorAll('code.highlight-me'),
+            document.querySelectorAll('code.scalatex-highlight-js'),
             hljs.highlightBlock
           );
         })
@@ -87,7 +87,11 @@ trait Site{
   /**
    * The body of this site's HTML page
    */
-  def bodyFrag(frag: Frag) = body(maxWidth:="768px", marginLeft:="auto", marginRight:="auto")(
+  def bodyFrag(frag: Frag) = body(
+    maxWidth:="768px",
+    marginLeft:="auto",
+    marginRight:="auto",
+    cls:="scalatex-content",
     frag
   )
 
