@@ -89,11 +89,7 @@ trait Highlighter{
     val linkData =
       pathMappings.iterator
                   .find{case (prefix, path) => filepath.startsWith(prefix)}
-    val (startLine, endLine, blob) = referenceText(
-      filepath,
-      implicitly[RefPath[S]].apply(start),
-      implicitly[RefPath[V]].apply(end)
-    )
+    val (startLine, endLine, blob) = referenceText(filepath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
@@ -119,28 +115,37 @@ trait Highlighter{
       link
     )
   }
-  def referenceText(filepath: String, start: Seq[String], end: Seq[String]) = {
+  def referenceText[S: RefPath, V: RefPath](filepath: String, start: S, end: V) = {
     val txt = io.Source.fromFile(filepath).getLines().toVector
     var startIndex = 0
 
-    for(str <- start){
+    for(str <- implicitly[RefPath[S]].apply(start)){
       startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
     }
-    val endIndex = if (end == Nil) txt.length
-    else {
+    val startIndent = txt(startIndex).takeWhile(_.isWhitespace).length
+    val endQuery = implicitly[RefPath[V]].apply(end)
+    val endIndex = if (endQuery == Nil) {
+      val next = txt.drop(startIndex).takeWhile{ line =>
+        line.trim == "" || line.takeWhile(_.isWhitespace).length >= startIndent
+      }
+      startIndex + next.length
+    } else {
       var endIndex = startIndex
-      for (str <- end) {
+      for (str <- endQuery) {
         endIndex = txt.indexWhere(_.contains(str), endIndex + 1)
       }
+
       endIndex
     }
 
+    val margin = txt(startIndex).takeWhile(_.isWhitespace).length
     val lines = txt.slice(startIndex, endIndex)
+                   .map(_.drop(margin))
+                   .reverse
+                   .dropWhile(_.trim == "")
+                   .reverse
 
-    val margin = lines.filter(_.trim != "")
-                      .map(_.takeWhile(_ == ' ').length)
-                      .min
-    (startIndex, endIndex, lines.map(_.drop(margin)).mkString("\n"))
+    (startIndex, endIndex, lines.mkString("\n"))
 
   }
 }

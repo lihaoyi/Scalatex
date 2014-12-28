@@ -104,6 +104,44 @@ object Tests extends TestSuite{
           """
         cmp(txt, expected)
       }
+      'trimBlanks{
+        // Make sure that indentaton and trailing blank lines get removed
+
+        // trimBlanks start
+
+        // trimBlanks content
+
+        // trimBlanks end
+        val (start, end, txt) = hl.referenceText(
+          "site/src/test/scala/scalatex/site/Tests.scala",
+          "trimBlanks start",
+          "trimBlanks end"
+        )
+        val expected =
+          """// trimBlanks start
+            |
+            |// trimBlanks content""".stripMargin
+        assert(txt == expected)
+      }
+      'dedentEnd{
+        // Make sure any dedentation from the starting line ends
+        // the snippet, even if no explicit ending is specified.
+        val test = {
+          Seq("Hello! ",
+            "I am a cow"
+          )
+        }
+        val (start, end, txt) = hl.referenceText(
+          "site/src/test/scala/scalatex/site/Tests.scala",
+          Seq("dedentEnd", "val test", "Hello!"),
+          Nil
+        )
+        val expected =
+          """Seq("Hello! ",
+            |  "I am a cow"
+            |)""".stripMargin
+        assert(txt == expected)
+      }
     }
     'Site{
       def delete(file: java.io.File): Array[(String, Boolean)] = {
