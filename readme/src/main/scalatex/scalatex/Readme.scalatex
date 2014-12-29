@@ -57,7 +57,9 @@
       And the following to your project in your @code{build.sbt}:
 
     @hl.scala
-      project.settings(scalatex.SbtPlugin.projectSettings:_*)
+      scalatex.SbtPlugin.projectSettings
+
+      scalaVersion := "2.11.4"
 
     @p
       To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
