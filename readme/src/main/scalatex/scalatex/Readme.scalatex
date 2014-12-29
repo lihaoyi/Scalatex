@@ -51,7 +51,7 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" %% "scalatex" % "0.1.0")
+      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.1.0")
 
     @p
       And the following to your project in your @code{build.sbt}:
@@ -386,3 +386,148 @@
 
       @p
         Note the use of the @hl.scala{sect.munge} function. This is the function that converts the headings (with their spaces and other special characters) into a HTML element ID that can be used for the anchor link. By default, it simply removes spaces, but you can override it in the @hl.scala{Highlighter} object if you want some custom behavior.
+  @sect{Why Scalatex}
+    @p
+      Scalatex requires that you learn a new syntax for doing things, which is incompatible with @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown"),  @a("Textile", href:="http://en.wikipedia.org/wiki/Textile_(markup_language)"), and any other markup language you previously learned. Apart from that, Scalatex itself was the culmination of quite a lot of work to implement. Why did I do this?
+    @p
+      In general, Scalatex aims to make eliminating repetition and C&P sufficiently easy and elegant. Most template processors (with the exception of Twirl) start from text, and apply a series of transformations that turn the document into the HTML that you want. This ends up implementing a custom programming language with a custom syntax right inside your templates, often with
+
+    @ul
+      @li
+        Unclear semantics and interactions
+      @li
+        A buggy parser
+      @li
+        No spec
+      @li
+        Lots of space for XSS vulnerabilities
+
+    @p
+      This is not great, but it always happens given a sufficiently complex document. For example, here's a sample of "real world" markdown taken from the Scala.js website, the render a relatively simple page:
+
+    @pre
+      @code
+        ---
+        layout: page
+        title: Passing basic types to JavaScript
+        ---
+        {% include JB/setup %}
+
+        ## Problem
+
+        You need to pass simple types (String, Int, Boolean) to
+        JavaScript functions.
+
+        ## Solution
+
+        Let us illustrate the case by writing some functions on the host-page.
+
+        Edit `index-dev.html` and add the following function:
+
+        {% highlight scala %}
+        function happyNew(name, year) {
+          alert("Hey " + name + ", happy new " + year + "!");
+        }
+        {% endhighlight %}
+
+        As we saw in the recipe of [accessing the global scope][1],
+        we need to make the following import:
+
+        {% highlight scala %}
+        import scala.scalajs.js
+        import js.Dynamic.{ global => g }
+        {% endhighlight %}
+
+        Now on the Scala side you can call it like this:
+
+        {% highlight scala %}
+        def main(): Unit = {
+          g.happyNew("Martin", 2014)
+        }
+        {% endhighlight %}
+
+        Which will result in the values being used and the corresponding
+        alert being shown.
+
+        [1]: ./accessing-global-scope.html
+    @p
+      Note how we have:
+    @ul
+      @li
+        @a("YAML", href:="http://en.wikipedia.org/wiki/YAML") mixed in at the top of the file, ad-hoc separated from the rest via @code{---}s.
+      @li
+        A mix of @a("Markdown", href:="commonmark.org") @code{##}s and @code{``}s and @a("Jekyll", href:="http://en.wikipedia.org/wiki/Jekyll_(software)") @code("{% %}")s to actually mark things up
+      @li
+        Custom imports at the top of the page @code("{% include JB/setup %}")
+    @p
+      This is a markdown document, but the same fate ends up befalling any complex document written in any existing document generation system: you end up with a chimera of 3 different languages spliced together using regexes. Scalatex fixes this not by making custom-logic unnecessary, but by making custom-logic so @sect.ref("Custom Tags", "easy and standardized") such that you never need to fall back to hacky regex manipulation.
+    @p
+      Furthermore, by leveraging the Scala compiler, Scalatex also provides many things that other markup languages do note:
+    @ul
+      @li
+        @b{Precise error messages}: if you make a typo in a tag name, you get a compilation error telling you exactly where it went wrong
+      @li
+        @b{Type-safety}: this is what turns those typos into compile errors (instead of runtime mis-formats) in the first place
+      @li
+        @b{Incremental compilation}: Only recompile what you need to, so in a large (@a("100s of pages", href:="aoyi.github.io/hands-on-scala-js/")) document, you don't end up recompiling the world every change.
+
+    @p
+      These are things that virtually no markup generators provide, but Scalatex does. Here are a few more detailed comparisons between Scalatex and alternatives.
+
+    @sect{Why Not: Markdown}
+      @p
+        @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown") is a lightweight format for writing rich text that has gained popularity recently. It has advantages of being extremely readable in plain-text: Markdown documents are formatted often exactly as someone would format emails or chat.
+      @p
+        Markdown has the advantages of being:
+
+      @ul
+        @li
+          @b{Much more lightweight than Scalatex}: @code{`hello`} rather than @code{@@code{hello}}, @code{[link](url)} rather than @code{@@a("link", href:="url")}
+        @li
+          @b{Be much more popularly supported}: @a("Github", href:="https://help.github.com/articles/github-flavored-markdown/"), @a("Stackoverflow", href:="http://stackoverflow.com/editing-help") and many others already use semi-compatible implementations of it
+
+      @p
+        However, it also has some downsides:
+      @ul
+        @li
+          @b{Completely non-customizable by default}: in Markdown, you have @code{`code`} for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have @code{[link](url)} for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: @hl.scala("@hl.scala{code}") to highlight Scala code, @hl.scala("@hl.javascript{code}") for Javascript, @hl.scala("@hl.html{code}") to highlight HTML. Similarly, you can easily define a @sect.ref{Custom Tags} that distinguish internal links from external links, giving them different CSS, markup of assertions.
+        @li
+          @b{Messy, ad-hoc extensions}: @a("Python Markdown", href:="https://pythonhosted.org/Markdown/extensions/") provides a list of extensions. @a("CommonMark.org", href:="commonmark.org") does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is "Who knows?" and to the second "Regexes". Naturally, this makes people hesitant to implement extensions: they'd rather C&P markup than deal with crazy regex transforms. Is highlight code done using @code{```scala} or @code("{% highlight scala %}")? With Scalatex, defining @sect.ref{Custom Tags} is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.
+        @li
+          @b{Unclear semantics}. For example, for rendering a link with parentheses in the URL, there are a @a("dozen different work-arounds", href:="http://meta.stackexchange.com/questions/13501/links-to-urls-containing-parentheses") that make it work in increasingly roundabout ways, all stemming from the fact that Markdown doesn't have a good, standard way of expressing escape-characters. With Scalatex, the semantics are much more regular: you can put anything in a @hl.scala{@@("string")} to escape it, and always fall back to Scala-strings with Scala-string-escapes. And their semantics behave exactly as you'd expect.
+        @li
+          @b{Unsafe}: What happens if you fat-finger some special characters in Markdown? You get another, perfectly valid markdown document, that you did not want. If you fat-finger a tag in Scalatex, you get a compilation error telling you where you made a mistake.
+      @p
+        In general, Markdown is far more concise than Scalatex, and probably better for writing small documents like comments or chat boxes. For anything larger, you probaby do want to define larger, re-usable components to deal with, rather than working directly with the fixed set of primitives markdown provides. Instead of working with fenced-code-snippets, links, and headers, you're working with references to your unit test code, or document sections that automatically provide the correct sized headers.
+
+      @p
+        This makes large-scale documents much more pleasant, to the extent that you can perform large-scale refactorings of your Scalatex document without worrying about broken intra-document links or a stale table-of-contents.
+
+    @sect{Why Not: Twirl}
+      @p
+        @a("Twirl", href:="https://github.com/playframework/twirl#twirl") is the templating engine used by the @a("Play framework", href:="https://www.playframework.com/documentation/2.3.x/ScalaTemplates"). It provides a Scala-based syntax (and implementation!) very similar to Scalatex.
+      @p
+        In general, Scalatex is heavily inspired by Twirl: the original implementation started off as a fork of the Twirl source code, and though it has now diverged, the similarities are obvious. Scalatex has attempted to clean up a lot of unnecessary or ad-hoc cruft in the Twirl language, in an attempt to make something cleaner and nicer to use. For example:
+
+      @ul
+        @li
+          @b{Scalatex has dropped Twirl's XML syntax}: using tags like @hl.scala{<div>} are redundant when you can use tags like @hl.scala("@div"), and so the latter is now the only way to do things.
+        @li
+          @b{Scalatex has regularized the Twirl grammar substantially}: Twirl only allows function definitions to occur in templates at the top-level, which Scalatex allows @hl.scala{object}s, @hl.scala{class}es, @hl.scala{def}s, @hl.scala{val}s anywhere with your document with proper lexical scoping. This makes working with large documents much easier, as you aren't restricted by the ad-hoc "only-top-level" constraint when trying to remove duplication within your document.
+        @li
+          @b{Scalatex has made indentation significant}, thus greatly reducing the need for curly brackets in large documents.
+        @li
+          @b{Scalatex has a greatly simplified implementation} that gives you incremental compilation, proper error messages, etc. all for free without the @a("crazy contortions", href:="https://github.com/playframework/twirl/blob/master/sbt-twirl/src/main/scala/play/twirl/sbt/TemplateProblem.scala") that the Play team have gone through to get them working with their source-generation model.
+      @p
+        Scalatex is still missing a few features:
+      @ul
+        @li
+          Being able to parametrize an entire template as a function
+        @li
+          Being able to define @hl.scala{def}s using Scalatex syntax; Scalatex @hl.scala{def}s have to be defined using Scala syntax
+      @p
+        In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @a("I have", href:="lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
+      @p
+        The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
+
+

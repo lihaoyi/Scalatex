@@ -24,7 +24,7 @@ object Main {
         Seq(ghLink, super.bodyFrag(frag))
       }
       def content = Map(
-        "readme.html" -> scalatex.Readme()
+        "index.html" -> scalatex.Readme()
       )
     }.renderTo("target/site/")
   }
