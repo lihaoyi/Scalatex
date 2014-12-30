@@ -172,7 +172,7 @@
       The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities in
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" %% "scalatex-site" % "0.1.0")
+     libraryDepdencies += "com.lihaoyi" %% "scalatex-site" % "0.1.0"
 
     @p
       Here are a number of them.

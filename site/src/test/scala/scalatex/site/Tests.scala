@@ -32,6 +32,7 @@ object Tests extends TestSuite{
 
     'Section{
       'Basic {
+        import scalatex.site.Section
         object sect extends Section
         val txt = sect("Main")(
           sect("SectionA")(
@@ -76,6 +77,7 @@ object Tests extends TestSuite{
         assert(sect.usedRefs == Set("Main", "SectionA"))
       }
       'Failure{
+        import scalatex.site.Section
         object sect extends Section
         val txt = sect("Main")(
           sect("SectionA")(
@@ -96,6 +98,7 @@ object Tests extends TestSuite{
       }
     }
     'Highlighter{
+      import scalatex.site.Highlighter
       object hl extends Highlighter {
         def suffixMappings = Map("scala" -> "scala")
       }
@@ -172,7 +175,7 @@ object Tests extends TestSuite{
           .getOrElse(Array()) :+ (file.getPath -> file.delete)
       }
       'simple {
-        val site = new Site {
+        val site = new scalatex.site.Site {
           def content = Map("index.html" -> Hello())
         }
         site.renderTo("site/target/output/")
@@ -202,7 +205,7 @@ object Tests extends TestSuite{
       'overriding{
         delete(new java.io.File("site/target/output2"))
         assert(!new java.io.File("site/target/output2").exists())
-        val site = new Site {
+        val site = new scalatex.site.Site {
           def content = Map(
             "page1.html" -> Hello(),
             "page2.html" -> About()
