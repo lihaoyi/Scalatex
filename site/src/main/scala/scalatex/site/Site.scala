@@ -109,7 +109,7 @@ trait Site{
       }
 
       Files.write(
-        Paths.get(outputRoot + dest),
+        Paths.get(outputRoot, dest),
         blobs.mkString("\n").getBytes
       )
     }
@@ -127,8 +127,10 @@ trait Site{
         head(headFrags),
         bodyFrag(frag)
       ).render
+      val outputPath = Paths.get(outputRoot, path)
+      outputPath.getParent.toFile.mkdirs
       Files.write(
-        Paths.get(outputRoot + path),
+        outputPath,
         txt.getBytes
       )
     }
