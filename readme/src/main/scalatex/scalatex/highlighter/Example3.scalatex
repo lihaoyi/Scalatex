@@ -1,6 +1,6 @@
-@import Main._
+@import ammonite.all._
 @hl.ref(
-  wd/'api/'src/'test/'scala/
+  'api/'src/'test/'scala/
   'scalatex/"BasicTests.scala",
   start = Seq(
     "parenArgumentLists",

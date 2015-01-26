@@ -1,7 +1,5 @@
-
 @import Main._
 @import site._
-
 
 @sect{Scalatex 0.1.0}
   @i{Programmable Documents in Scala}
@@ -244,6 +242,9 @@
         @half
           @exampleWrapper
             @highlighter.Example1()
+
+      @p
+        Note here we are using @a("Ammonite", href:="https://github.com/lihaoyi/Ammonite) to construct a path to pass to @hl.scala{@@hl.ref}; this path takes a working directory which you'll need to define yourself (here imported from @hl.scala{Main}) via @hl.scala{val wd = ammonite.all.proessWorkingDir}.
 
       @p
         Apart than referencing the whole file, you can also grab text from the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:

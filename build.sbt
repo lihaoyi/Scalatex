@@ -2,7 +2,7 @@
 val sharedSettings = Seq(
   version := scalatex.SbtPlugin.scalatexVersion,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq("2.10.4", "2.11.2"),
+  crossScalaVersions:= Seq("2.10.4", "2.11.4"),
   scalaVersion := "2.11.4",
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.2" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2"),

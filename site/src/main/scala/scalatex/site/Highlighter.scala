@@ -1,6 +1,6 @@
 package scalatex.site
 
-import ammonite.ops.Path
+import ammonite.ops.{RelPath, Path}
 
 import scalatags.Text.all._
 import ammonite.all._
@@ -68,7 +68,7 @@ trait Highlighter{
   /**
    * Grab a snippet of code from the given filepath, and highlight it.
    *
-   * @param filepath The file containing the code in question
+   * @param filePath The file containing the code in question
    * @param start Snippets used to navigate to the start of the snippet
    *              you want, from the beginning of the file
    * @param end Snippets used to navigate to the end of the snippet
@@ -79,25 +79,28 @@ trait Highlighter{
    *                  [[suffixMappings]]
    */
   def ref[S: RefPath, V: RefPath]
-         (filepath: Path,
+         (filePath: ammonite.ops.BasePath[_],
           start: S = Nil,
           end: V = Nil,
           className: String = null) = {
-
+    val absPath = filePath match{
+      case p: Path => p
+      case p: RelPath => processWorkingDir/p
+    }
     val lang = Option(className)
-      .orElse(suffixMappings.get(filepath.ext))
+      .orElse(suffixMappings.get(filePath.ext))
       .getOrElse("")
 
     val linkData =
       pathMappings.iterator
-                  .find{case (prefix, path) => filepath > prefix}
-    val (startLine, endLine, blob) = referenceText(filepath, start, end)
+                  .find{case (prefix, path) => absPath > prefix}
+    val (startLine, endLine, blob) = referenceText(absPath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
         else s"#L$startLine-L$endLine"
 
-      val linkUrl = s"$url/${filepath - prefix}$hash"
+      val linkUrl = s"$url/${absPath - prefix}$hash"
       a(
         cls:="scalatex-header-link",
         i(cls:="fa fa-link "),
@@ -155,8 +158,8 @@ trait Highlighter{
 
   }
 }
-object Highlighter{
 
+object Highlighter{
   /**
    * A context bound used to ensure you pass a `String`
    * or `Seq[String]` to the `@hl.ref` function

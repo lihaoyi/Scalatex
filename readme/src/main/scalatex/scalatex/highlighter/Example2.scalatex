@@ -1,4 +1,5 @@
-@import Main._
+@import Main.wd
+
 @hl.ref(
   wd/"build.sbt",
   start = "lazy val api",
