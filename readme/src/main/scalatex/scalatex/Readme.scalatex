@@ -1,7 +1,7 @@
 @import Main._
 @import site._
 
-@sect{Scalatex 0.1.0}
+@sect{Scalatex 0.1.1}
   @i{Programmable Documents in Scala}
 
   @exampleRef("helloWorld", "scala html")
@@ -49,7 +49,7 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.1.0")
+      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.1.1")
 
     @p
       And the following to your project in your @code{build.sbt}:
@@ -170,7 +170,7 @@
       The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities in
 
     @hl.scala
-     libraryDependencies += "com.lihaoyi" %% "scalatex-site" % "0.1.0"
+     libraryDependencies += "com.lihaoyi" %% "scalatex-site" % "0.1.1"
 
     @p
       Here are a number of them.
@@ -244,7 +244,7 @@
             @highlighter.Example1()
 
       @p
-        Note here we are using @a("Ammonite", href:="https://github.com/lihaoyi/Ammonite) to construct a path to pass to @hl.scala{@@hl.ref}; this path takes a working directory which you'll need to define yourself (here imported from @hl.scala{Main}) via @hl.scala{val wd = ammonite.all.proessWorkingDir}.
+        Note here we are using @a("Ammonite", href:="https://github.com/lihaoyi/Ammonite") to construct a path to pass to @hl.scala{@@hl.ref}; this path takes a working directory which you'll need to define yourself (here imported from @hl.scala{Main}) via @hl.scala{val wd = ammonite.all.proessWorkingDir}.
 
       @p
         Apart than referencing the whole file, you can also grab text from the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
