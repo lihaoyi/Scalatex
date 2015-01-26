@@ -122,6 +122,7 @@ trait Site{
         head(headFrags),
         bodyFrag(frag)
       ).render
+
       write.over! outputRoot/path ! txt
     }
   }
