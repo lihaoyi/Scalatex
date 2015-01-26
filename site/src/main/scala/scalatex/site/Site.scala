@@ -107,8 +107,8 @@ trait Site{
   def content: Map[String, Frag]
 
   def bundleResources(outputRoot: Path) = {
-    for((ext, dest) <- Seq(".js" -> scriptName, ".css" -> stylesName)) {
-      autoResources |? (_.last.endsWith(ext)) | read.resource |> write.over! outputRoot/dest
+    for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
+      autoResources |? (_.ext == ext) | read.resource |> write.over! outputRoot/dest
     }
 
     for(res <- manualResources) {
