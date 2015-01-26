@@ -9,7 +9,6 @@ import scala.util.{Failure, Success}
 
 object SyntaxTest extends TestSuite{
   def check[T](input: String) = {
-    println("Checking...")
     new ScalaSyntax(input).CompilationUnit.run() match{
       case Failure(f: ParseError) =>
         println(f.position)

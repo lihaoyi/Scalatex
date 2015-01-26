@@ -1,1 +1,2 @@
-@hl.ref("project/build.sbt")
+@import Main._
+@hl.ref(wd/'project/"build.sbt")

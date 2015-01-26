@@ -64,17 +64,17 @@
     @p
       To begin with, let's create a file in @code{src/main/scalatex/Hello.scalatex}
 
-    @hl.ref("site/src/test/scalatex/scalatex/site/Hello.scalatex")
+    @hl.ref(wd/'site/'src/'test/'scalatex/'scalatex/'site/"Hello.scalatex")
 
     @p
       Next, you can simply call
 
-    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("Hello().render"), Seq(""), "scala")
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("Hello().render"), Seq(""), "scala")
 
     @p
       And it'll print out
 
-    @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("<div>"), Seq("\"\"\""), "html")
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("<div>"), Seq("\"\"\""), "html")
 
 
     @p
@@ -155,7 +155,7 @@
       @p
         Since you can splice the value of any Scala expressions, of course you can splice the values that you defined yourself somewhere else:
 
-      @hl.ref("api/src/test/scala/scalatex/ExampleTests.scala", "object Stuff", "'externalDefinitions", "scala")
+      @hl.ref(wd/'api/'src/'test/'scala/'scalatex/"ExampleTests.scala", "object Stuff", "'externalDefinitions", "scala")
 
       @exampleRef("externalDefinitions2", "scala html")
 
@@ -183,7 +183,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/section/Example1.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example1.scalatex")
         @half
           @exampleWrapper
             @section.Example1()
@@ -196,7 +196,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/section/Example2.scalatex", Nil, "@sect")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example2.scalatex", Nil, "@sect")
         @half
           @exampleWrapper
             @section.Example2()
@@ -209,7 +209,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/section/Example3.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example3.scalatex")
         @half
           @exampleWrapper
             @section.Example3()
@@ -224,13 +224,13 @@
       @p
         Scalatex Site provides a @hl.scala{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @hl.scala{Highlighter} object:
 
-      @hl.ref("readme/src/main/scala/scalatex/highlighter/hl.scala")
+      @hl.ref(wd/'readme/'src/'main/'scala/'scalatex/'highlighter/"hl.scala")
 
       @p
         Once you have done so, you can highlight individual code snippets:
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example5.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example5.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example5()
@@ -240,7 +240,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example1.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example1.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example1()
@@ -250,7 +250,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example2.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example2.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example2()
@@ -260,7 +260,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example3.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example3.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example3()
@@ -272,7 +272,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example6.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example6.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example6()
@@ -284,7 +284,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/highlighter/Example4.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example4.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example4()
@@ -301,7 +301,7 @@
       @p
         Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @hl.scala{Site} trait which lets you do this easily:
 
-      @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
+      @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
 
       @p
         This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
@@ -309,7 +309,7 @@
       @p
         Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
 
-      @hl.ref("site/src/test/scala/scalatex/site/Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
+      @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
 
       @p
         There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
@@ -324,7 +324,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/advanced/CustomTags1.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"CustomTags1.scalatex")
         @half
           @exampleWrapper
             @scalatex.advanced.CustomTags1()
@@ -342,7 +342,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/advanced/CustomTags2.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"CustomTags2.scalatex")
         @half
           @exampleWrapper
             @scalatex.advanced.CustomTags2()
@@ -356,7 +356,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/advanced/DeadSectRefs.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"DeadSectRefs.scalatex")
         @half
           @exampleWrapper
             @scalatex.advanced.DeadSectRefs()
@@ -378,7 +378,7 @@
 
       @pairs
         @half
-          @hl.ref("readme/src/main/scalatex/scalatex/advanced/TableOfContents.scalatex")
+          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"TableOfContents.scalatex")
         @half
           @exampleWrapper
             @scalatex.advanced.TableOfContents()

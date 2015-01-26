@@ -8,13 +8,14 @@ import scalatags.Text.all
 import scalatags.Text.all._
 
 import scalatex.site.Section.Tree
-
+import ammonite.all._
 object Tests extends TestSuite{
   def cmp(s1: String, s2: String) = {
     val f1 = s1.filter(!_.isWhitespace).mkString
     val f2 = s2.filter(!_.isWhitespace)
     assert(f1 == f2)
   }
+  val wd = processWorkingDir
   val tests = TestSuite{
     'Hello{
       cmp(
@@ -104,11 +105,11 @@ object Tests extends TestSuite{
       }
       'wholeFile {
         val (start, end, txt) = hl.referenceText(
-          "site/src/test/scala/scalatex/site/Tests.scala",
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
           Nil,
           Nil
         )
-        val expected = io.Source.fromFile("site/src/test/scala/scalatex/site/Tests.scala").mkString
+        val expected = read! wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala"
         cmp(txt, expected)
       }
       'selectors {
@@ -116,7 +117,7 @@ object Tests extends TestSuite{
          * Comment I'm trawling for
          */
         val (start, end, txt) = hl.referenceText(
-          "site/src/test/scala/scalatex/site/Tests.scala",
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
           Seq("Highlighter", "selectors", "/**"),
           Seq("*/", "val")
         )
@@ -138,7 +139,7 @@ object Tests extends TestSuite{
 
         // trimBlanks end
         val (start, end, txt) = hl.referenceText(
-          "site/src/test/scala/scalatex/site/Tests.scala",
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
           "trimBlanks start",
           "trimBlanks end"
         )
@@ -157,7 +158,7 @@ object Tests extends TestSuite{
           )
         }
         val (start, end, txt) = hl.referenceText(
-          "site/src/test/scala/scalatex/site/Tests.scala",
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
           Seq("dedentEnd", "val test", "Hello!"),
           Nil
         )
@@ -169,42 +170,38 @@ object Tests extends TestSuite{
       }
     }
     'Site{
-      def delete(file: java.io.File): Array[(String, Boolean)] = {
-        Option(file.listFiles)
-          .map(_.flatMap(f => delete(f)))
-          .getOrElse(Array()) :+ (file.getPath -> file.delete)
-      }
       'simple {
+        rm! wd/'site/'target/'output
         val site = new scalatex.site.Site {
           def content = Map("index.html" -> Hello())
         }
-        site.renderTo("site/target/output/")
+        site.renderTo(wd/'site/'target/'output)
 
         def check() = {
-          val readText = io.Source.fromFile("site/target/output/index.html").mkString
+          val readText = read! wd/'site/'target/'output/"index.html"
           assert(
             readText.contains("Hello World"),
             readText.contains("I am a cow!"),
             readText.contains("<div>"),
             readText.contains("<h1>"),
-            Files.exists(Paths.get("site/target/output/scripts.js")),
-            Files.exists(Paths.get("site/target/output/styles.css"))
+            exists(wd/'site/'target/'output/"scripts.js"),
+            exists(wd/'site/'target/'output/"styles.css")
           )
         }
         check()
         // re-rendering works
-        site.renderTo("site/target/output/")
+        site.renderTo(wd/'site/'target/'output)
 
         // deleting and re-rendering works too
 
-        delete(new java.io.File("site/target/output"))
-        assert(!new java.io.File("site/target/output").exists())
-        site.renderTo("site/target/output/")
+        rm! wd/'site/'target/'output
+        assert(!exists(wd/'site/'target/'output))
+        site.renderTo(wd/'site/'target/'output)
         check()
       }
       'overriding{
-        delete(new java.io.File("site/target/output2"))
-        assert(!new java.io.File("site/target/output2").exists())
+        rm! wd/'site/'target/'output2
+        assert(!exists(wd/'site/'target/'output2))
         val site = new scalatex.site.Site {
           def content = Map(
             "page1.html" -> Hello(),
@@ -216,9 +213,9 @@ object Tests extends TestSuite{
             script("console.log('Hi!')")
           )
         }
-        site.renderTo("site/target/output2/")
-        val page1 = io.Source.fromFile("site/target/output2/page1.html").mkString
-        val page2 = io.Source.fromFile("site/target/output2/page2.html").mkString
+        site.renderTo(wd/'site/'target/'output2)
+        val page1 = read! wd/'site/'target/'output2/"page1.html"
+        val page2 = read! wd/'site/'target/'output2/"page2.html"
 
         assert(
           page1.contains("Hello World"),
@@ -226,8 +223,8 @@ object Tests extends TestSuite{
           page1.contains("<div>"),
           page1.contains("<h1>"),
           page2.contains("Hear me moo"),
-          Files.exists(Paths.get("site/target/output2/custom.js")),
-          Files.exists(Paths.get("site/target/output2/custom.css"))
+          exists(wd/'site/'target/'output2/"custom.js"),
+          exists(wd/'site/'target/'output2/"custom.css")
         )
       }
     }

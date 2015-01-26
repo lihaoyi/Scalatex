@@ -2,6 +2,8 @@ package scalatex.site
 
 import java.nio.file.{Paths, Files}
 
+import ammonite.ops.Path
+import ammonite.all.{rel => _, _}
 import scalatags.Text.all._
 
 /**
@@ -11,51 +13,55 @@ import scalatags.Text.all._
  * if you wish to customize things.
  */
 trait Site{
+
+  def webjars = root/"META-INF"/'resources/'webjars
+  def highlightJs = webjars/'highlightjs/"8.2-1"
+  def fontAwesome = webjars/"font-awesome"/"4.2.0"
   /**
    * Resources related to the highlight.js library
    */
-  def highlightJsResources = Set(
-    "META-INF/resources/webjars/highlightjs/8.2-1/highlight.min.js",
-    "META-INF/resources/webjars/highlightjs/8.2-1/styles/idea.min.css",
-    "META-INF/resources/webjars/highlightjs/8.2-1/languages/scala.min.js",
-    "META-INF/resources/webjars/highlightjs/8.2-1/languages/javascript.min.js",
-    "META-INF/resources/webjars/highlightjs/8.2-1/languages/bash.min.js",
-    "META-INF/resources/webjars/highlightjs/8.2-1/languages/diff.min.js",
-    "META-INF/resources/webjars/highlightjs/8.2-1/languages/xml.min.js"
+  def highlightJsResources = Seq(
+    highlightJs/"highlight.min.js",
+    highlightJs/'styles/"idea.min.css",
+    highlightJs/'languages/"scala.min.js",
+    highlightJs/'languages/"javascript.min.js",
+    highlightJs/'languages/"bash.min.js",
+    highlightJs/'languages/"diff.min.js",
+    highlightJs/'languages/"xml.min.js"
   )
   /**
    * Resources related to the pure-css library
    */
-  def pureCss = Set(
-    "META-INF/resources/webjars/pure/0.5.0/pure-min.css"
+  def pureCss = Seq(
+    webjars/'pure/"0.5.0"/"pure-min.css"
   )
   /**
    * Resources related to the font awesome library
    */
-  def fontAwesome = Set(
-    "META-INF/resources/webjars/font-awesome/4.2.0/fonts/FontAwesome.otf",
-    "META-INF/resources/webjars/font-awesome/4.2.0/fonts/fontawesome-webfont.eot",
-    "META-INF/resources/webjars/font-awesome/4.2.0/fonts/fontawesome-webfont.svg",
-    "META-INF/resources/webjars/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf",
-    "META-INF/resources/webjars/font-awesome/4.2.0/fonts/fontawesome-webfont.woff",
-    "META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css"
+  def fontAwesomeResources = Seq(
+    fontAwesome/'fonts/"FontAwesome.otf",
+    fontAwesome/'fonts/"fontawesome-webfont.eot",
+    fontAwesome/'fonts/"fontawesome-webfont.svg",
+    fontAwesome/'fonts/"fontawesome-webfont.ttf",
+    fontAwesome/'fonts/"fontawesome-webfont.woff",
+    fontAwesome/'css/"font-awesome.min.css"
   )
   /**
    * Resources custom-provided for this particular site
    */
   def siteCss = Set(
-    "scalatex/site/styles.css"
+    root/'scalatex/'site/"styles.css"
   )
 
   /**
    * Resources that get automatically included in the bundled js or css file
    */
-  def autoResources = highlightJsResources | pureCss | siteCss
+  def autoResources = highlightJsResources ++ pureCss ++ siteCss
 
   /**
    * Resources copied to the output folder but not included on the page by default
    */
-  def manualResources = fontAwesome
+  def manualResources = fontAwesomeResources
   /**
    * The name of the javascript file that all javascript resources get bundled into
    */
@@ -100,42 +106,26 @@ trait Site{
    */
   def content: Map[String, Frag]
 
-  def bundleResources(outputRoot: String) = {
-    val jsFiles = autoResources.filter(_.endsWith(".js")).toSet
-    val cssFiles = autoResources.filter(_.endsWith(".css")).toSet
-    for((resources, dest) <- Seq(jsFiles -> scriptName, cssFiles -> stylesName)) {
-      val blobs = for(res <- resources.iterator) yield {
-        io.Source.fromInputStream(getClass.getResourceAsStream("/"+res)).mkString
-      }
-
-      Files.write(
-        Paths.get(outputRoot + dest),
-        blobs.mkString("\n").getBytes
-      )
+  def bundleResources(outputRoot: Path) = {
+    for((ext, dest) <- Seq(".js" -> scriptName, ".css" -> stylesName)) {
+      autoResources |? (_.last.endsWith(ext)) | read.resource |> write.over! outputRoot/dest
     }
+
     for(res <- manualResources) {
-      val dest = outputRoot + res
-      Paths.get(dest).toFile.getParentFile.mkdirs()
-      Files.deleteIfExists(Paths.get(dest))
-      Files.copy(getClass.getResourceAsStream("/" + res), Paths.get(dest))
+      read.resource.bytes! res |> write.over! outputRoot/(res - root)
     }
   }
 
-  def generateHtml(outputRoot: String) = {
+  def generateHtml(outputRoot: Path) = {
     for((path, frag) <- content){
       val txt = html(
         head(headFrags),
         bodyFrag(frag)
       ).render
-      Files.write(
-        Paths.get(outputRoot + path),
-        txt.getBytes
-      )
+      write.over! outputRoot/path ! txt
     }
-
   }
-  def renderTo(outputRoot: String) = {
-    new java.io.File(outputRoot).mkdirs()
+  def renderTo(outputRoot: Path) = {
     bundleResources(outputRoot)
     generateHtml(outputRoot)
 

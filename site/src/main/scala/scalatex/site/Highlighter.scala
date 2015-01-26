@@ -1,7 +1,9 @@
 package scalatex.site
 
-import scalatags.Text.all._
+import ammonite.ops.Path
 
+import scalatags.Text.all._
+import ammonite.all._
 /**
  * Lets you instantiate a Highlighter object. This can be used to reference
  * snippets of code from files within your project via the `.ref` method, often
@@ -23,7 +25,7 @@ trait Highlighter{
    *
    * If a path is not covered by any of these rules, no link is rendered
    */
-  def pathMappings: Seq[(String, String)] = Nil
+  def pathMappings: Seq[(Path, String)] = Nil
 
   /**
    * A mapping of file name suffixes to highlight.js classes.
@@ -77,25 +79,25 @@ trait Highlighter{
    *                  [[suffixMappings]]
    */
   def ref[S: RefPath, V: RefPath]
-         (filepath: String,
+         (filepath: Path,
           start: S = Nil,
           end: V = Nil,
           className: String = null) = {
 
     val lang = Option(className)
-      .orElse(suffixMappings.get(filepath.split('.').last))
+      .orElse(suffixMappings.get(filepath.ext))
       .getOrElse("")
 
     val linkData =
       pathMappings.iterator
-                  .find{case (prefix, path) => filepath.startsWith(prefix)}
+                  .find{case (prefix, path) => filepath > prefix}
     val (startLine, endLine, blob) = referenceText(filepath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
         else s"#L$startLine-L$endLine"
 
-      val linkUrl = s"$url/${filepath.drop(prefix.length)}$hash"
+      val linkUrl = s"$url/${filepath - prefix}$hash"
       a(
         cls:="scalatex-header-link",
         i(cls:="fa fa-link "),
@@ -115,8 +117,9 @@ trait Highlighter{
       link
     )
   }
-  def referenceText[S: RefPath, V: RefPath](filepath: String, start: S, end: V) = {
-    val txt = io.Source.fromFile(filepath).getLines().toVector
+
+  def referenceText[S: RefPath, V: RefPath](filepath: Path, start: S, end: V) = {
+    val txt = read.lines! filepath
     // Start from -1 so that searching for things on the first line of the file (-1 + 1 = 0)
     var startIndex = -1
     for(str <- implicitly[RefPath[S]].apply(start)){

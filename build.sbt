@@ -1,15 +1,13 @@
-import scala.scalajs.sbtplugin.ScalaJSPlugin.ScalaJSKeys._
+
 val sharedSettings = Seq(
   version := scalatex.SbtPlugin.scalatexVersion,
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.10.4", "2.11.2"),
   scalaVersion := "2.11.4",
-  version := "0.1.0",
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.2" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2"),
   autoCompilerPlugins := true,
   publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
-
   pomExtra :=
     <url>https://github.com/lihaoyi/Scalatex</url>
       <licenses>
@@ -70,6 +68,7 @@ lazy val site =
   name := "scalatex-site",
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "utest" % "0.2.4" % "test",
+    "com.lihaoyi" %% "ammonite" % "0.1.4",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
@@ -83,10 +82,12 @@ lazy val readme = project
   .settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   libraryDependencies ++= Seq(
+    "com.lihaoyi" %% "ammonite" % "0.1.4",
     "com.lihaoyi" %% "utest" % "0.2.4"
   ),
   testFrameworks += new TestFramework("utest.runner.JvmFramework"),
   scalaVersion := "2.11.4",
   publish := ()
 )
+
 publish := ()

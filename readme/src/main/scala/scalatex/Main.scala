@@ -1,13 +1,16 @@
 package scalatex
 
 import java.nio.file.{Paths, Files}
-import _root_.scalatex.site.Site
+import site.Site
 import utest._
 import scalatags.Text.all._
 import scalatags.generic
 import scalatags.text.Builder
+import ammonite._
+import ammonite.all._
 
 object Main {
+  val wd = processWorkingDir
   def main(args: Array[String]): Unit = {
     val ghLink = a(
       href:="https://github.com/lihaoyi/scalatex",
@@ -26,7 +29,7 @@ object Main {
       def content = Map(
         "index.html" -> scalatex.Readme()
       )
-    }.renderTo("target/site/")
+    }.renderTo(wd/'target/'site)
   }
   def exampleWrapper(f: Frag*) = Seq(
     hr,
@@ -40,7 +43,7 @@ object Main {
   def pairs(frags: Frag*) = div(frags, div(clear:="both"))
   def half(frags: Frag*) = div(frags, width:="50%", float.left)
   def exampleRef(start: String, classes: String) = {
-    val path = "api/src/test/scala/scalatex/ExampleTests.scala"
+    val path = wd/'api/'src/'test/'scala/'scalatex/"ExampleTests.scala"
     val tq = "\"\"\""
     val classList = classes.split(" ")
     val chunks = for(i <- 0 until classList.length) yield half{
@@ -59,7 +62,7 @@ object sect extends site.Section()
 
 object hl extends site.Highlighter{
   override def pathMappings = Seq(
-    "" -> "https://github.com/lihaoyi/Scalatex/tree/master"
+    Main.wd -> "https://github.com/lihaoyi/Scalatex/tree/master"
   )
 
   def suffixMappings = Map(
