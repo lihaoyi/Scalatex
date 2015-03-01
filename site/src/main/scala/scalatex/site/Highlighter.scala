@@ -54,8 +54,7 @@ trait Highlighter{
       )
 
     }else{
-      val minIndent = lines.map(_.takeWhile(_ == ' ').length)
-        .filter(_ > 0)
+      val minIndent = lines.filter(_.trim.length > 0).map(_.takeWhile(_ == ' ').length)
         .min
       val stripped = lines.map(_.drop(minIndent))
         .dropWhile(_ == "")
