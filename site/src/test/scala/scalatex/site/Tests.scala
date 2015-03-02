@@ -8,14 +8,14 @@ import scalatags.Text.all
 import scalatags.Text.all._
 
 import scalatex.site.Section.Tree
-import ammonite.all._
+import ammonite.ops._
 object Tests extends TestSuite{
   def cmp(s1: String, s2: String) = {
     val f1 = s1.filter(!_.isWhitespace).mkString
     val f2 = s2.filter(!_.isWhitespace)
     assert(f1 == f2)
   }
-  val wd = processWorkingDir
+  val wd = ammonite.ops.processWorkingDir
   val tests = TestSuite{
     'Hello{
       cmp(

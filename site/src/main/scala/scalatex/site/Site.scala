@@ -3,7 +3,7 @@ package scalatex.site
 import java.nio.file.{Paths, Files}
 
 import ammonite.ops.Path
-import ammonite.all.{rel => _, _}
+import ammonite.ops._
 import scalatags.Text.all._
 
 /**

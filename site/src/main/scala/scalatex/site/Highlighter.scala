@@ -3,7 +3,7 @@ package scalatex.site
 import ammonite.ops.{RelPath, Path}
 
 import scalatags.Text.all._
-import ammonite.all._
+import ammonite.ops._
 /**
  * Lets you instantiate a Highlighter object. This can be used to reference
  * snippets of code from files within your project via the `.ref` method, often

@@ -29,26 +29,17 @@ val sharedSettings = Seq(
       </developers>
 )
 
-lazy val scalaParser = project.settings(sharedSettings:_*)
-  .settings(
-    name := "scala-parser-lite",
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.2.4" % "test",
-      "org.parboiled" %% "parboiled" % "2.0.1"
-    ),
-    testFrameworks += new TestFramework("utest.runner.JvmFramework")
-  )
 lazy val api = project.settings(sharedSettings:_*)
-  .dependsOn(scalaParser)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.2.4" % "test",
-      "com.scalatags" %% "scalatags" % "0.4.2",
+      "com.lihaoyi" %% "utest" % "0.3.0" % "test",
+      "com.lihaoyi" %% "scala-parser" % "0.1.1",
+      "com.lihaoyi" %% "scalatags" % "0.4.5",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.parboiled" %% "parboiled" % "2.0.1"
+      "org.parboiled" %% "parboiled" % "2.1.0"
     ),
-    testFrameworks += new TestFramework("utest.runner.JvmFramework")
+    testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
 lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
@@ -67,13 +58,13 @@ lazy val site =
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "utest" % "0.2.4" % "test",
-    "com.lihaoyi" %% "ammonite" % "0.1.4",
+    "com.lihaoyi" %% "utest" % "0.3.0" % "test",
+    "com.lihaoyi" %% "ammonite-ops" % "0.2.3",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
   ),
-  testFrameworks += new TestFramework("utest.runner.JvmFramework")
+  testFrameworks += new TestFramework("utest.runner.Framework")
 )
 
 lazy val readme = project
@@ -82,10 +73,10 @@ lazy val readme = project
   .settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "ammonite" % "0.1.4",
-    "com.lihaoyi" %% "utest" % "0.2.4"
+    "com.lihaoyi" %% "ammonite-ops" % "0.2.3",
+    "com.lihaoyi" %% "utest" % "0.3.0"
   ),
-  testFrameworks += new TestFramework("utest.runner.JvmFramework"),
+  testFrameworks += new TestFramework("utest.runner.Framework"),
   scalaVersion := "2.11.4",
   publish := ()
 )

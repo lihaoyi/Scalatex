@@ -2,7 +2,7 @@ package scalatex
 package stages
 import acyclic.file
 import org.parboiled2._
-import scalaParser.ScalaSyntax
+import scalaParser.Scala
 
 /**
  * Parses the input text into a roughly-structured AST. This AST
@@ -15,7 +15,7 @@ object Parser extends ((String, Int) => Ast.Block){
     new Parser(input, offset).Body0.run().get
   }
 }
-class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scalaParser.ScalaSyntax(input) {
+class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scalaParser.Scala(input) {
   def offsetCursor = offset + cursor
   val txt = input.sliceString(0, input.length)
   val indentTable = txt.split('\n').map{ s =>
@@ -41,7 +41,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     "@" ~ capture(Identifiers.Id | BlockExpr2 | ('(' ~ optional(Exprs) ~ ')'))
   }
   def Header = rule {
-    "@" ~ capture(Def | Import)
+    "@" ~ capture(BlockDef | Import)
   }
 
   def HeaderBlock: Rule1[Ast.Header] = rule{
@@ -65,9 +65,9 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     test(cursorNextIndent() > indent) ~
     runSubParser(new Parser(_, cursorNextIndent(), offsetCursor).Body)
   }
-  def IfHead = rule{ "@" ~ capture("if" ~ "(" ~ Expr ~ ")") }
+  def IfHead = rule{ "@" ~ capture(`if` ~ "(" ~ ExprCtx.Expr ~ ")") }
   def IfElse1 = rule{
-    push(offsetCursor) ~ IfHead ~ BraceBlock ~ optional("else" ~ (BraceBlock | IndentBlock))
+    push(offsetCursor) ~ IfHead ~ BraceBlock ~ optional(`else` ~ (BraceBlock | IndentBlock))
   }
   def IfElse2 = rule{
     (Indent| test(cursor == 0)) ~ push(offsetCursor) ~ IfHead ~ IndentBlock ~ optional(Indent ~ "@else" ~ (BraceBlock | IndentBlock))
@@ -76,8 +76,9 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     (IfElse1 | IfElse2) ~> Ast.Block.IfElse
   }
 
-  def ForHead = rule{
-    push(offsetCursor) ~ "@" ~ capture("for" ~ '(' ~ Enumerators ~ ')')
+  def ForHead = {
+    def Body = rule( '(' ~ ExprCtx.Enumerators ~ ')' | '{' ~ StatCtx.Enumerators ~ '}' )
+    rule( push(offsetCursor) ~ "@" ~ capture(`for` ~ Body) )
   }
   def ForLoop = rule{
     ForHead ~
@@ -104,13 +105,13 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   def TypeArgs2 = rule { '[' ~ Ws ~ Types ~ ']' }
   def ArgumentExprs2 = rule {
     '(' ~ Ws ~
-    (optional(Exprs ~ ',' ~ Ws) ~ PostfixExpr ~ ':' ~ Ws ~ '_' ~ Ws ~ '*' ~ Ws | optional(Exprs) ) ~
+    (optional(Exprs ~ ',' ~ Ws) ~ ExprCtx.PostfixExpr ~ ':' ~ Ws ~ '_' ~ Ws ~ '*' ~ Ws | optional(Exprs) ) ~
     Ws ~ ')'
   }
   def BlockExpr2: Rule0 = rule { '{' ~ Ws ~ (CaseClauses | Block) ~ Ws ~ '}' }
   def BraceBlock: Rule1[Ast.Block] = rule{ '{' ~ BodyNoBrace ~ '}' }
 
-  def BodyItem(exclusions: String): Rule1[Seq[Ast.Block.Sub]] = rule{
+  def BodyItem(exclusions: String) : Rule1[Seq[Ast.Block.Sub]]  = rule{
     ForLoop ~> (Seq(_)) |
     LoneForLoop ~> (Seq(_, _)) |
     IfElse ~> (Seq(_)) |
