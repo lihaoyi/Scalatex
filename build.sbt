@@ -59,7 +59,7 @@ lazy val site =
   name := "scalatex-site",
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "utest" % "0.3.0" % "test",
-    "com.lihaoyi" %% "ammonite-ops" % "0.2.3",
+    "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
@@ -73,7 +73,7 @@ lazy val readme = project
   .settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "ammonite-ops" % "0.2.3",
+    "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "com.lihaoyi" %% "utest" % "0.3.0"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),

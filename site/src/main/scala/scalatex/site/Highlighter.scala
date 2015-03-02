@@ -84,10 +84,10 @@ trait Highlighter{
           className: String = null) = {
     val absPath = filePath match{
       case p: Path => p
-      case p: RelPath => processWorkingDir/p
+      case p: RelPath => cwd/p
     }
     val lang = Option(className)
-      .orElse(suffixMappings.get(filePath.ext))
+      .orElse(suffixMappings.get(absPath.ext))
       .getOrElse("")
 
     val linkData =

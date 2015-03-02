@@ -130,7 +130,7 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
     }
   }
   def Body0 = rule{
-    push(offsetCursor) ~ zeroOrMore(BodyItem("")) ~> {(i, x) =>
+    push(offsetCursor) ~ zeroOrMore(BodyItem("")) ~ EOI ~> {(i, x) =>
       Ast.Block(i, flattenText(x.flatten))
     }
   }
