@@ -1,3 +1,4 @@
+import scala.io.Codec
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
 import scala.reflect.macros.{TypecheckException, Context}
@@ -33,7 +34,7 @@ package object scalatex {
         .value
         .value
         .asInstanceOf[String]
-      val txt = io.Source.fromFile(fileName).mkString
+      val txt = io.Source.fromFile(fileName)(Codec.UTF8).mkString
       val sourceFile = new BatchSourceFile(
         new PlainFile(fileName),
         txt.toCharArray
