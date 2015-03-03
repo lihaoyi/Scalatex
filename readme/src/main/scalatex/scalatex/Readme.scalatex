@@ -529,7 +529,7 @@
         @li
           Being able to define @hl.scala{def}s using Scalatex syntax; Scalatex @hl.scala{def}s have to be defined using Scala syntax
       @p
-        In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @a("I have", href:="lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
+        In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @a("I have", href:="http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
       @p
         The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
