@@ -12,7 +12,11 @@ import scalaParser.Scala
  */
 object Parser extends ((String, Int) => Ast.Block){
   def apply(input: String, offset: Int = 0): Ast.Block = {
-    new Parser(input, offset).Body0.run().get
+    val p = new Parser(input, offset)
+    val res = p.Body0.run()
+
+    println(p.cursor + " : " + input.length)
+    res.get
   }
 }
 class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scalaParser.Scala(input) {
@@ -125,13 +129,13 @@ class Parser(input: ParserInput, indent: Int = 0, offset: Int = 0) extends scala
   def Body = rule{ BodyEx() }
   def BodyNoBrace = rule{ BodyEx("}") }
   def BodyEx(exclusions: String = "") = rule{
-    push(offsetCursor) ~ oneOrMore(BodyItem(exclusions)) ~> {(i, x) =>
+    push(offsetCursor) ~ zeroOrMore(BodyItem(exclusions)) ~> {(i, x) =>
       Ast.Block(i, flattenText(x.flatten))
     }
   }
   def Body0 = rule{
-    push(offsetCursor) ~ zeroOrMore(BodyItem("")) ~ EOI ~> {(i, x) =>
-      Ast.Block(i, flattenText(x.flatten))
+    push(offsetCursor) ~ zeroOrMore(BodyItem("")) ~ Text.? ~ EOI ~> {(i, x, t) =>
+      Ast.Block(i, flattenText(x.flatten) ++ t)
     }
   }
   def flattenText(seq: Seq[Ast.Block.Sub]) = {

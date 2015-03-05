@@ -430,13 +430,6 @@ object ParserTests extends utest.TestSuite{
               ))))))))
       )
     }
-//    'Test{
-//      check(
-//        "@{() => ()}",
-//        _.Code.run(),
-//        ""
-//      )
-//    }
   }
 }
 

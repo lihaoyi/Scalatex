@@ -11,16 +11,18 @@ import acyclic.file
  */
 object Trim extends (String => (String, Int)){
   def apply(str: String) = {
-    val lines = str.split("\n", -1)
+    val lines = str.lines.toSeq
     val nonEmptyLines = lines.iterator.filter(_.trim != "")
     val offset =
       if (nonEmptyLines.hasNext)
         nonEmptyLines.next().takeWhile(_ == ' ').length
       else
         0
+
     val res = lines.iterator
                    .map(_.replaceFirst("\\s+$", ""))
                    .mkString("\n")
+
     (res, offset)
   }
   def old(str: String) = {

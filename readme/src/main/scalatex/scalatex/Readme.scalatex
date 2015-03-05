@@ -1,7 +1,9 @@
 @import Main._
 @import site._
+@import ammonite.ops._
 
 @sect{Scalatex 0.1.2}
+
   @i{Programmable Documents in Scala}
 
   @exampleRef("helloWorld", "scala html")

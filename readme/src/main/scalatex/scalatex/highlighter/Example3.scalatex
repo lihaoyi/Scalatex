@@ -1,10 +1,12 @@
 @import ammonite.ops._
-@hl.ref(
-  'api/'src/'test/'scala/
-  'scalatex/"BasicTests.scala",
-  start = Seq(
-    "parenArgumentLists",
-    "attributes", "check"
-  ),
-  end = Seq("  }")
-)
+@div
+  @val path = 'api/'src/'test/'scala/'scalatex/"BasicTests.scala"
+  @hl.ref(
+    path,
+    start = Seq(
+      "parenArgumentLists",
+      "attributes", "check"
+    ),
+    end = Seq("  }")
+  )
+  @i{end}

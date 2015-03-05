@@ -1,3 +1,5 @@
+import org.parboiled2.ParseError
+
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
 import scala.reflect.macros.{TypecheckException, Context}
@@ -77,10 +79,20 @@ package object scalatex {
       import c.universe._
       def compile(s: String): c.Tree = {
         val realPos = new OffsetPosition(source, point).asInstanceOf[c.universe.Position]
+        val trimmed = stages.Trim(s)
+        println("TRIMMED")
+        println(trimmed)
+        val parsed = try {
+          Parser.tupled(trimmed)
+        }catch{case e: ParseError =>
+          println(e.traces(0))
+          throw e
+        }
+        Compiler(c)(realPos, parsed)
 
-        Compiler(c)(realPos, Parser.tupled(stages.Trim(s)))
       }
-
+      println("SCALATEX SOURCE")
+      println(scalatexSource)
       import c.Position
       try {
         val compiled = compile(scalatexSource)
