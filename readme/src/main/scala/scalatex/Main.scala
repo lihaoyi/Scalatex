@@ -2,15 +2,12 @@ package scalatex
 
 import java.nio.file.{Paths, Files}
 import site.Site
-import utest._
 import scalatags.Text.all._
-import scalatags.generic
-import scalatags.text.Builder
-import ammonite._
-import ammonite.all._
+
+import ammonite.ops._
 
 object Main {
-  val wd = processWorkingDir
+  val wd = ammonite.ops.cwd
   def main(args: Array[String]): Unit = {
     val ghLink = a(
       href:="https://github.com/lihaoyi/scalatex",
