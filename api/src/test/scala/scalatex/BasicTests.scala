@@ -119,23 +119,23 @@ object BasicTests extends TestSuite{
           """
         )
       }
-//      'multiline{
-//
-//        check(
-//          tw("""
-//          @div(
-//            h1("Hello World"),
-//            p("I am a ", b{"cow"})
-//          )
-//          """),
-//          """
-//          <div>
-//            <h1>Hello World</h1>
-//            <p>I am a <b>cow</b></p>
-//          </div>
-//          """
-//        )
-//      }
+      'multiline{
+
+        check(
+          tw("""
+          @div(
+            h1("Hello World"),
+            p("I am a ", b{"cow"})
+          )
+          """),
+          """
+          <div>
+            <h1>Hello World</h1>
+            <p>I am a <b>cow</b></p>
+          </div>
+          """
+        )
+      }
     }
     'grouping{
       'negative{
