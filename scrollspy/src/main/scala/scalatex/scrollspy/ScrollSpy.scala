@@ -27,7 +27,6 @@ object ScrollSpy extends StyleSheet{
     backgroundColor := "",
     color := "#999"
   )
-
 }
 
 case class Cls(clses: Seq[String]) extends Modifier{
@@ -49,13 +48,12 @@ class StyleSheet{
     val body = Option(el.getAttribute("style")).getOrElse("")
 
     val txt = s"""
-      * > .$className {
+      .$className {
         $body
       }
     """
     dom.console.log(txt)
-    sheet.insertRule(txt, 0)
-
+    styleTag.textContent = styleTag.textContent + "\n" + txt
     val seq = collection.mutable.Buffer.empty[String]
     seq.append(className)
     for(i <- 0 until el.classList.length){

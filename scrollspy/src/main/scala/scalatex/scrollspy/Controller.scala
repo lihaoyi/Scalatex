@@ -47,23 +47,22 @@ object Controller{
       color := "white",
       padding := "15px 10px"
     ).render
-    val expandLink =
-      a(
-        expandIcon,
-        href := "javascript:",
-        marginLeft := "0px",
-        paddingLeft := "15px",
-        paddingRight := "15px",
-        position.absolute,
-        top := "0px",
-        right := "0px",
-        cls := "pure-menu-selected",
-        onclick := { (e: dom.Event) =>
-          expandIcon.classList.toggle("fa-caret-down")
-          expandIcon.classList.toggle("fa-caret-up")
-          scrollSpy.toggleOpen()
-        }
-      ).render
+    val expandLink = a(
+      expandIcon,
+      href := "javascript:",
+      marginLeft := "0px",
+      paddingLeft := "15px",
+      paddingRight := "15px",
+      position.absolute,
+      top := "0px",
+      right := "0px",
+      cls := "pure-menu-selected",
+      onclick := { (e: dom.Event) =>
+        expandIcon.classList.toggle("fa-caret-down")
+        expandIcon.classList.toggle("fa-caret-up")
+        scrollSpy.toggleOpen()
+      }
+    ).render
 
 
     menu.appendChild(
