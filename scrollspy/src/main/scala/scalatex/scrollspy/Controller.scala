@@ -34,12 +34,19 @@ object Controller{
     snippets.foreach(js.Dynamic.global.hljs.highlightBlock(_))
 
     val scrollSpy = new ScrollSpy(structure)
-    val list = ul(cls := "menu-item-list")(
+    val list = ul(
+      cls := "menu-item-list",
+      margin := 0,
+      padding := 0,
       scrollSpy.domTrees.value.frag
     ).render
 
     def updateScroll() = scrollSpy()
-    val expandIcon = i(cls := "fa fa-caret-down").render
+    val expandIcon = i(
+      cls := "fa fa-caret-down",
+      color := "white",
+      padding := "15px 10px"
+    ).render
     val expandLink =
       a(
         expandIcon,
@@ -54,10 +61,7 @@ object Controller{
         onclick := { (e: dom.Event) =>
           expandIcon.classList.toggle("fa-caret-down")
           expandIcon.classList.toggle("fa-caret-up")
-//          list.classList.toggle("collapsed")
-//          list.classList.toggle("expanded")
           scrollSpy.toggleOpen()
-          //          updateScroll()
         }
       ).render
 
@@ -68,12 +72,6 @@ object Controller{
         expandLink
       ).render
     )
-
-    menuLink.onclick = (e: dom.MouseEvent) => {
-//      layout.classList.toggle("active")
-//      menu.classList.toggle("active")
-//      menuLink.classList.toggle("active")
-    }
 
     dom.addEventListener("scroll", (e: dom.UIEvent) => updateScroll())
     updateScroll()

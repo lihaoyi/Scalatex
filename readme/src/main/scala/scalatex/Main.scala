@@ -24,21 +24,20 @@ object Main {
       override def bodyFrag(frag: Frag) = {
         Seq(
           ghLink,
-          super.bodyFrag(Seq(
-            div(
-              position.fixed,
-              overflow.scroll,
-              backgroundColor := "#191818",
-              height := "100%",
-              width := 250,
-              left := 0,
-              a(href:="#menu", id:="menu-link", cls:="menu-link")(
-                span
-              ),
-              div(id:="menu")
+          div(
+            position.fixed,
+            overflow.scroll,
+            backgroundColor := "#191818",
+            height := "100%",
+            width := 250,
+            left := 0,
+            top := 0,
+            a(href:="#menu", id:="menu-link", cls:="menu-link")(
+              span
             ),
-            frag
-          )),
+            div(id:="menu")
+          ),
+          super.bodyFrag(frag),
           script(raw(s"""
             scalatex.scrollspy.Controller().main(
               ${upickle.write(sect.structure.children(0))},

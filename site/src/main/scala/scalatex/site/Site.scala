@@ -93,7 +93,7 @@ trait Site{
   /**
    * The body of this site's HTML page
    */
-  def bodyFrag(frag: Frag): Frag = body(
+  def bodyFrag(frag: Frag): Frag = div(
     maxWidth:="768px",
     marginLeft:="auto",
     marginRight:="auto",
@@ -120,7 +120,7 @@ trait Site{
     for((path, frag) <- content){
       val txt = html(
         head(headFrags),
-        bodyFrag(frag)
+        body(bodyFrag(frag))
       ).render
 
       write.over! outputRoot/path ! txt

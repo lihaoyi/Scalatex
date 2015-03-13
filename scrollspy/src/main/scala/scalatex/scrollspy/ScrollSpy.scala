@@ -1,14 +1,29 @@
 package scalatex.scrollspy
 
 import org.scalajs.dom
-import org.scalajs.dom
-import dom.html
 import org.scalajs.dom.ext._
 import org.scalajs.dom.html
-import scala.scalajs.js
-import scalajs.js
 import scalatags.JsDom.all._
-import scalatags.JsDom.all._
+object ScrollSpy{
+  def set(el: dom.Element)(m: Modifier*): Unit ={
+    m.foreach(_.applyTo(el))
+  }
+  val all = Seq(
+    height := 44,
+    lineHeight := "44px",
+    borderBottom := "1px solid #444"
+  )
+  val selected = all ++ Seq(
+    backgroundColor := "#1f8dd6",
+    color := "white"
+  )
+
+  val fragStyle = all ++ Seq(
+    backgroundColor := "",
+    color := "#999"
+  )
+}
+
 
 
 case class Tree[T](value: T, children: Vector[Tree[T]])
@@ -26,12 +41,15 @@ case class MenuNode(frag: html.Element,
  * Lots of sketchy imperative code in order to maximize performance.
  */
 class ScrollSpy(structure: Tree[String]){
+  import ScrollSpy._
   lazy val domTrees = {
     var i = -1
     def recurse(t: Tree[String], depth: Int): Tree[MenuNode] = {
       val link = a(
         t.value,
         display.block,
+        textDecoration.none,
+        paddingLeft := 15,
         href:="#"+Controller.munge(t.value),
         cls:="menu-item"
       ).render
@@ -113,22 +131,22 @@ class ScrollSpy(structure: Tree[String]){
     def close(tree: Tree[MenuNode]): Unit = {
       tree.value.list.style.maxHeight = if (!open) "0px" else "none"
       tree.value.frag.style.borderLeft = ""
-      tree.value.link.style.borderLeft = ""
       tree.children.foreach(close)
+      set(tree.value.link)(fragStyle)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
+      val epsilon = 10
       setFullHeight(tree.value)
       for((child, idx) <- tree.children.zipWithIndex) {
-        if(offset(child.value.header) <= scrollTop) {
+        if(offset(child.value.header) <= scrollTop + epsilon) {
 
-          if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop) {
+          if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
+            set(child.value.link)(selected)
             walk(child)
-            child.value.link.style.borderLeft = "1px solid red"
             child.value.frag.style.borderLeft = ""
           }else {
             close(child)
-            child.value.frag.style.borderLeft = "1px solid red"
-            child.value.link.style.borderLeft = ""
+            child.value.frag.style.borderLeft = "2px solid white"
           }
         }else{
           child.value.frag.style.borderLeft = ""
@@ -136,7 +154,7 @@ class ScrollSpy(structure: Tree[String]){
         }
       }
     }
-
+    set(domTrees.value.link)(selected)
     walk(domTrees)
   }
 }
