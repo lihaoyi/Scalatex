@@ -37,7 +37,10 @@ object Main {
             ),
             div(id:="menu")
           ),
-          super.bodyFrag(frag),
+          div(
+            marginLeft := 250,
+            super.bodyFrag(frag)
+          ),
           script(raw(s"""
             scalatex.scrollspy.Controller().main(
               ${upickle.write(sect.structure.children(0))},

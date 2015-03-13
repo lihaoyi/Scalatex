@@ -2,26 +2,67 @@ package scalatex.scrollspy
 
 import org.scalajs.dom
 import org.scalajs.dom.ext._
-import org.scalajs.dom.html
+import org.scalajs.dom.{Element, css, html}
 import scalatags.JsDom.all._
-object ScrollSpy{
+import scalatags.JsDom.tags2
+import scalatags.generic.StylePair
+
+object ScrollSpy extends StyleSheet{
   def set(el: dom.Element)(m: Modifier*): Unit ={
     m.foreach(_.applyTo(el))
   }
-  val all = Seq(
+
+  val all = *(
     height := 44,
     lineHeight := "44px",
     borderBottom := "1px solid #444"
   )
-  val selected = all ++ Seq(
+
+  val selected = *(
     backgroundColor := "#1f8dd6",
     color := "white"
   )
 
-  val fragStyle = all ++ Seq(
+  val closed = *(
     backgroundColor := "",
     color := "#999"
   )
+
+}
+
+case class Cls(clses: Seq[String]) extends Modifier{
+  def applyTo(t: Element) = clses.foreach(t.classList.add)
+  def add(t: Element) = clses.foreach(t.classList.add)
+  def toggle(t: Element) = clses.foreach(t.classList.toggle)
+  def remove(t: Element) = clses.foreach(t.classList.remove)
+}
+
+class StyleSheet{
+  lazy val styleTag = tags2.style.render
+  
+  dom.document.head.appendChild(styleTag)
+  val sheet = styleTag.sheet.asInstanceOf[css.StyleSheet]
+  protected def *(styles: Modifier*) = {
+    val className = "cls" + (math.random * 100).toInt
+    val el = div.render
+    styles.foreach{_.applyTo(el)}
+    val body = Option(el.getAttribute("style")).getOrElse("")
+
+    val txt = s"""
+      * > .$className {
+        $body
+      }
+    """
+    dom.console.log(txt)
+    sheet.insertRule(txt, 0)
+
+    val seq = collection.mutable.Buffer.empty[String]
+    seq.append(className)
+    for(i <- 0 until el.classList.length){
+      seq.append(el.classList.apply(i))
+    }
+    Cls(seq)
+  }
 }
 
 
@@ -51,7 +92,8 @@ class ScrollSpy(structure: Tree[String]){
         textDecoration.none,
         paddingLeft := 15,
         href:="#"+Controller.munge(t.value),
-        cls:="menu-item"
+        cls:="menu-item",
+        all
       ).render
       val originalI = i
       val children = t.children.map(recurse(_, depth + 1))
@@ -132,17 +174,19 @@ class ScrollSpy(structure: Tree[String]){
       tree.value.list.style.maxHeight = if (!open) "0px" else "none"
       tree.value.frag.style.borderLeft = ""
       tree.children.foreach(close)
-      set(tree.value.link)(fragStyle)
+      closed.add(tree.value.link)
+      selected.remove(tree.value.link)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
       val epsilon = 10
       setFullHeight(tree.value)
       for((child, idx) <- tree.children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
-
           if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
-            set(child.value.link)(selected)
+            closed.remove(child.value.link)
+            selected.add(child.value.link)
             walk(child)
+
             child.value.frag.style.borderLeft = ""
           }else {
             close(child)
