@@ -2,8 +2,8 @@
 val sharedSettings = Seq(
   version := scalatex.SbtPlugin.scalatexVersion,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq("2.10.4", "2.11.4"),
-  scalaVersion := "2.11.4",
+  crossScalaVersions:= Seq("2.10.4", "2.11.6"),
+  scalaVersion := "2.11.6",
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.2" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2"),
   autoCompilerPlugins := true,
@@ -58,13 +58,19 @@ lazy val site =
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "utest" % "0.3.0" % "test",
+    "com.lihaoyi" %% "utest" % "0.3.1" % "test",
     "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
     "org.webjars" % "pure" % "0.5.0"
   ),
-  testFrameworks += new TestFramework("utest.runner.Framework")
+  testFrameworks += new TestFramework("utest.runner.Framework"),
+  (managedResources in Compile) += {
+    val file = (resourceManaged in Compile).value/"scalatex"/"scrollspy"/"scrollspy.js"
+    val js = (fastOptJS in (scrollspy, Compile)).value.data
+    sbt.IO.copyFile(js, file)
+    file
+  }
 )
 
 lazy val readme = project
@@ -74,11 +80,22 @@ lazy val readme = project
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
-    "com.lihaoyi" %% "utest" % "0.3.0"
+    "com.lihaoyi" %% "utest" % "0.3.1",
+    "com.lihaoyi" %% "upickle" % "0.2.7"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
-  scalaVersion := "2.11.4",
+  scalaVersion := "2.11.6",
   publish := ()
 )
 
+lazy val scrollspy = project
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    scalaVersion := "2.11.6",
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %%% "upickle" % "0.2.7",
+      "org.scala-js" %%% "scalajs-dom" % "0.8.0",
+      "com.lihaoyi" %%% "scalatags" % "0.4.6"
+    )
+  )
 publish := ()

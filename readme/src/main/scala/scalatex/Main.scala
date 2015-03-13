@@ -20,8 +20,32 @@ object Main {
     )
 
     new Site{
+      override def autoResources = super.autoResources ++ Seq(root/'scalatex/'scrollspy/"scrollspy.js")
       override def bodyFrag(frag: Frag) = {
-        Seq(ghLink, super.bodyFrag(frag))
+        Seq(
+          ghLink,
+          super.bodyFrag(Seq(
+            div(
+              position.fixed,
+              overflow.scroll,
+              backgroundColor := "#191818",
+              height := "100%",
+              width := 250,
+              left := 0,
+              a(href:="#menu", id:="menu-link", cls:="menu-link")(
+                span
+              ),
+              div(id:="menu")
+            ),
+            frag
+          )),
+          script(raw(s"""
+            scalatex.scrollspy.Controller().main(
+              ${upickle.write(sect.structure.children(0))},
+              document.getElementById("menu"),
+              document.getElementById("menu-link")
+            )"""))
+        )
       }
       def content = Map(
         "index.html" -> scalatex.Readme()

@@ -26,24 +26,6 @@
   @p
     Scalatex is currently used to generate it's own readme (@a("here", href:="https://github.com/lihaoyi/scalatex/blob/master/readme/src/main/scalatex/scalatex/Readme.scalatex")) as well as the e-book @a("Hands-on Scala.js", href:="http://lihaoyi.github.io/hands-on-scala-js"). It is only published for Scala 2.11.x for the time being.
 
-  @{
-    late{
-      val ul2 = ul(marginTop:=0, marginBottom:=0)
-      def rec(t: Section.Tree[String]): Frag =
-        div(
-          a(t.value, href:=s"#${sect.munge(t.value)}"),
-          ul2(t.children.map(
-            c => li(rec(c))
-          ))
-        )
-
-      ul2(
-        sect.structure.children(0).children.map(
-          c => li(rec(c))
-        )
-      )
-    }
-  }
   @sect{Getting Started}
     @p
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
