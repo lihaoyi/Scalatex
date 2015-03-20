@@ -5,17 +5,6 @@ import scalatags.Text.all
 import scalatags.Text.all._
 import scalatags.text.Builder
 
-class ClsModifier(s: String) extends scalatags.Text.Modifier {
-  override def applyTo(t: Builder): Unit = {
-    val clsIndex = t.attrs.zipWithIndex.collectFirst{
-      case ((name, _), i) if name == "class" => i
-    }
-    clsIndex match{
-      case None => t.addAttr("class", s)
-      case Some(clsIndex) => t.attrs(clsIndex) = "class" -> (t.attrs(clsIndex)._2 + " " + s)
-    }
-  }
-}
 
 object Section{
   case class Proxy(func: Seq[Frag] => Frag){
@@ -91,7 +80,8 @@ class Section{
         hs.header(headingAnchor(munged), header, subHeader)(
           id:=munged,
           display.block,
-          new ClsModifier("scalatex-header scalatex-hover-container")
+          Styles.hoverContainer,
+          Styles.headerTag
         ),
         hs.content(body)
       )

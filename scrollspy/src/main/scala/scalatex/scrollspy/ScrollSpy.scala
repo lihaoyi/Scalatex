@@ -7,63 +7,6 @@ import scalatags.JsDom.all._
 import scalatags.JsDom.tags2
 import scalatags.generic.StylePair
 
-object ScrollSpy extends StyleSheet{
-  def set(el: dom.Element)(m: Modifier*): Unit ={
-    m.foreach(_.applyTo(el))
-  }
-
-  val all = *(
-    height := 44,
-    lineHeight := "44px",
-    borderBottom := "1px solid #444"
-  )
-
-  val selected = *(
-    backgroundColor := "#1f8dd6",
-    color := "white"
-  )
-
-  val closed = *(
-    backgroundColor := "",
-    color := "#999"
-  )
-}
-
-case class Cls(clses: Seq[String]) extends Modifier{
-  def applyTo(t: Element) = clses.foreach(t.classList.add)
-  def add(t: Element) = clses.foreach(t.classList.add)
-  def toggle(t: Element) = clses.foreach(t.classList.toggle)
-  def remove(t: Element) = clses.foreach(t.classList.remove)
-}
-
-class StyleSheet{
-  lazy val styleTag = tags2.style.render
-  
-  dom.document.head.appendChild(styleTag)
-  val sheet = styleTag.sheet.asInstanceOf[css.StyleSheet]
-  protected def *(styles: Modifier*) = {
-    val className = "cls" + (math.random * 100).toInt
-    val el = div.render
-    styles.foreach{_.applyTo(el)}
-    val body = Option(el.getAttribute("style")).getOrElse("")
-
-    val txt = s"""
-      .$className {
-        $body
-      }
-    """
-    dom.console.log(txt)
-    styleTag.textContent = styleTag.textContent + "\n" + txt
-    val seq = collection.mutable.Buffer.empty[String]
-    seq.append(className)
-    for(i <- 0 until el.classList.length){
-      seq.append(el.classList.apply(i))
-    }
-    Cls(seq)
-  }
-}
-
-
 
 case class Tree[T](value: T, children: Vector[Tree[T]])
 
@@ -80,30 +23,21 @@ case class MenuNode(frag: html.Element,
  * Lots of sketchy imperative code in order to maximize performance.
  */
 class ScrollSpy(structure: Tree[String]){
-  import ScrollSpy._
+  import ScrollSpyStyleSheet._
   lazy val domTrees = {
     var i = -1
     def recurse(t: Tree[String], depth: Int): Tree[MenuNode] = {
       val link = a(
         t.value,
-        display.block,
-        textDecoration.none,
-        paddingLeft := 15,
         href:="#"+Controller.munge(t.value),
         cls:="menu-item",
-        all
+        menuItem
       ).render
       val originalI = i
       val children = t.children.map(recurse(_, depth + 1))
 
       val list = ul(
-        paddingLeft := "15px",
-        margin := 0,
-        overflow.hidden,
-        position.relative,
-        display.block,
-        left := 0,
-        top := 0,
+        menuList,
         children.map(_.value.frag)
       ).render
 
@@ -112,8 +46,6 @@ class ScrollSpy(structure: Tree[String]){
         link,
         list
       ).render
-
-
 
       i += 1
 
@@ -169,11 +101,13 @@ class ScrollSpy(structure: Tree[String]){
     val scrollTop = dom.document.body.scrollTop
 
     def close(tree: Tree[MenuNode]): Unit = {
-      tree.value.list.style.maxHeight = if (!open) "0px" else "none"
-      tree.value.frag.style.borderLeft = ""
+      if (!open) tree.value.list.style.maxHeight = "0px"
+      else setFullHeight(tree.value)
+      tree.value.frag.classList.remove(pathed.name)
+
       tree.children.foreach(close)
-      closed.add(tree.value.link)
-      selected.remove(tree.value.link)
+      tree.value.link.classList.add(closed.name)
+      tree.value.link.classList.remove(selected.name)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
       val epsilon = 10
@@ -181,22 +115,21 @@ class ScrollSpy(structure: Tree[String]){
       for((child, idx) <- tree.children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
           if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
-            closed.remove(child.value.link)
-            selected.add(child.value.link)
+            child.value.link.classList.remove(closed.name)
+            child.value.link.classList.add(selected.name)
             walk(child)
-
-            child.value.frag.style.borderLeft = ""
+            child.value.frag.classList.remove(pathed.name)
           }else {
             close(child)
-            child.value.frag.style.borderLeft = "2px solid white"
+            child.value.frag.classList.add(pathed.name)
           }
         }else{
-          child.value.frag.style.borderLeft = ""
+          child.value.frag.classList.remove(pathed.name)
           close(child)
         }
       }
     }
-    set(domTrees.value.link)(selected)
+    domTrees.value.link.classList.add(selected.name)
     walk(domTrees)
   }
 }

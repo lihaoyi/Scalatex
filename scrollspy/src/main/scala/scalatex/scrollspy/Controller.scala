@@ -1,18 +1,12 @@
 package scalatex.scrollspy
 
 import org.scalajs.dom
-import org.scalajs.dom
-import dom.html
 import org.scalajs.dom.ext._
 import org.scalajs.dom.html
 
-import scala.scalajs.js
-import scala.scalajs.js.annotation.JSExport
 import scalajs.js
 import scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
-import scalatags.JsDom.all._
-import upickle._
 
 @JSExport
 object Controller{
@@ -47,6 +41,7 @@ object Controller{
       color := "white",
       padding := "15px 10px"
     ).render
+
     val expandLink = a(
       expandIcon,
       href := "javascript:",
