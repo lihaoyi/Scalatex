@@ -46,7 +46,7 @@ object Main {
               ${upickle.write(sect.structure.children(0))},
               document.getElementById("menu"),
               document.getElementById("menu-link")
-            )"""))
+          )"""))
         )
       }
       def content = Map(
