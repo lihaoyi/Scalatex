@@ -121,7 +121,7 @@ class ScrollSpy(structure: Tree[String]){
             walk(child)
             child.value.frag.classList.remove(Styles.pathed.name)
           }else {
-            println(child.value.frag.clientTop)
+
             close(child)
             child.value.frag.classList.add(Styles.pathed.name)
           }
