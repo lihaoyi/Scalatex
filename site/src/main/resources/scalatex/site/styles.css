@@ -6,9 +6,9 @@
     text-align: justify;
 }
 
-/*
-The content `<div>` is where all your content goes.
-*/
+
+/*The content `<div>` is where all your content goes.*/
+
 .scalatex-content {
     margin: 0 auto;
     padding: 0 1em;
@@ -18,7 +18,7 @@ The content `<div>` is where all your content goes.
     color: #777;
 }
 
-/* Custom Stuff */
+ /*Custom Stuff*/
 .scalatex-content a:link {
     color: #37a;
     text-decoration: none;

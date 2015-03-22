@@ -5,6 +5,7 @@ import java.nio.file.{Paths, Files}
 import ammonite.ops.Path
 import ammonite.ops._
 import scalatags.Text.all._
+import scalatags.Text.tags2
 
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
@@ -77,6 +78,7 @@ trait Site{
   def headFrags: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
+    tags2.style(raw(Styles.styleSheetText)),
     script(src:=scriptName),
     script("""
       ['DOMContentLoaded', 'load'].forEach(function(ev){
@@ -97,7 +99,7 @@ trait Site{
     maxWidth:="768px",
     marginLeft:="auto",
     marginRight:="auto",
-    cls:="scalatex-content",
+    Styles().content,
     frag
   )
 

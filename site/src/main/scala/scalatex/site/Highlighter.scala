@@ -102,7 +102,7 @@ trait Highlighter{
 
       val linkUrl = s"$url/${absPath - prefix}$hash"
       a(
-        cls:="scalatex-header-link",
+        Styles.headerLink,
         i(cls:="fa fa-link "),
         position.absolute,
         right:="0.5em",
@@ -115,7 +115,7 @@ trait Highlighter{
     }
 
     pre(
-      cls:="scalatex-hover-container",
+      Styles.hoverContainer,
       code(cls:=lang + " scalatex-highlight-js hljs", blob),
       link
     )

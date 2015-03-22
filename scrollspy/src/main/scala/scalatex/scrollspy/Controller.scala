@@ -7,9 +7,13 @@ import org.scalajs.dom.html
 import scalajs.js
 import scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
+import scalatags.JsDom.tags2
 
 @JSExport
 object Controller{
+  lazy val styleTag = tags2.style.render
+  dom.document.head.appendChild(styleTag)
+  styleTag.textContent += Styles.styleSheetText
 
   def munge(name: String) = {
     name.replace(" ", "")

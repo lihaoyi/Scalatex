@@ -82,7 +82,8 @@ lazy val readme = project
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "com.lihaoyi" %% "utest" % "0.3.1",
-    "com.lihaoyi" %% "upickle" % "0.2.7"
+    "com.lihaoyi" %% "upickle" % "0.2.7",
+    "com.lihaoyi" %% "scalatags" % "0.4.7"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
   scalaVersion := "2.11.6",

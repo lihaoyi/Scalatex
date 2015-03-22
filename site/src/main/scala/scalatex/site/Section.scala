@@ -58,7 +58,7 @@ class Section{
   def munge(name: String): String = name.replace(" ", "")
 
   def headingAnchor(name: String) = a(
-    cls:="scalatex-header-link",
+    Styles.headerLink,
     href:=s"#${munge(name)}",
     i(cls:="fa fa-link"),
     position.absolute,

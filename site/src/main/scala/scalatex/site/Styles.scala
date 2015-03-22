@@ -1,23 +1,33 @@
 package scalatex.site
 import scalatags.Text.all._
-object Styles extends scalatags.stylesheet.CascadingStyleSheet {
-  val headerLink = *(
+import scalatags.stylesheet.{CascadingStyleSheet, Sheet}
+
+object Styles extends Sheet[Styles]
+trait Styles extends CascadingStyleSheet {
+
+  def headerLink = cls(
     color := "#777",
     opacity := 0.05,
     textDecoration := "none"
   )
-  val headerTag = *()
 
-  val hoverContainer = *hover(
+  def headerTag = cls()
+
+  def hoverContainer = cls.hover(
     headerLink(
-      &hover(i(opacity := 1.0)),
-      i(&active(opacity := 0.75)),
-      i(opacity := 0.5)
+      headerLink.splice,
+      &.hover(
+        opacity := 1.0
+      ),
+      &.active(opacity := 0.75),
+      opacity := 0.5
     )
-
   )
-  val content = *(
-    position.relative,
+
+  def content = cls(
+    *(
+      position.relative
+    ),
     margin := "0 auto",
     padding := "0 1em",
     maxWidth := 800,
@@ -49,7 +59,7 @@ object Styles extends scalatags.stylesheet.CascadingStyleSheet {
     )
 
   )
-  styleSheetText +=
+  override def styleSheetText = super.styleSheetText +
     """
       |/*Workaround for bug in highlight.js IDEA theme*/
       |span.hljs-tag, span.hljs-symbol{

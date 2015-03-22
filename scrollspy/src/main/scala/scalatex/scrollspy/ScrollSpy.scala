@@ -23,7 +23,7 @@ case class MenuNode(frag: html.Element,
  * Lots of sketchy imperative code in order to maximize performance.
  */
 class ScrollSpy(structure: Tree[String]){
-  import ScrollSpyStyleSheet._
+
   lazy val domTrees = {
     var i = -1
     def recurse(t: Tree[String], depth: Int): Tree[MenuNode] = {
@@ -31,13 +31,13 @@ class ScrollSpy(structure: Tree[String]){
         t.value,
         href:="#"+Controller.munge(t.value),
         cls:="menu-item",
-        menuItem
+        Styles.menuItem
       ).render
       val originalI = i
       val children = t.children.map(recurse(_, depth + 1))
 
       val list = ul(
-        menuList,
+        Styles.menuList,
         children.map(_.value.frag)
       ).render
 
@@ -103,11 +103,11 @@ class ScrollSpy(structure: Tree[String]){
     def close(tree: Tree[MenuNode]): Unit = {
       if (!open) tree.value.list.style.maxHeight = "0px"
       else setFullHeight(tree.value)
-      tree.value.frag.classList.remove(pathed.name)
+      tree.value.frag.classList.remove(Styles.pathed.name)
 
       tree.children.foreach(close)
-      tree.value.link.classList.add(closed.name)
-      tree.value.link.classList.remove(selected.name)
+      tree.value.link.classList.add(Styles.closed.name)
+      tree.value.link.classList.remove(Styles.selected.name)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
       val epsilon = 10
@@ -115,21 +115,23 @@ class ScrollSpy(structure: Tree[String]){
       for((child, idx) <- tree.children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
           if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
-            child.value.link.classList.remove(closed.name)
-            child.value.link.classList.add(selected.name)
+            child.value.link.classList.remove(Styles.closed.name)
+            child.value.link.classList.add(Styles.selected.name)
+//            child.value.link.classList.add(Styles.pathed.name)
             walk(child)
-            child.value.frag.classList.remove(pathed.name)
+            child.value.frag.classList.remove(Styles.pathed.name)
           }else {
+            println(child.value.frag.clientTop)
             close(child)
-            child.value.frag.classList.add(pathed.name)
+            child.value.frag.classList.add(Styles.pathed.name)
           }
         }else{
-          child.value.frag.classList.remove(pathed.name)
+          child.value.frag.classList.remove(Styles.pathed.name)
           close(child)
         }
       }
     }
-    domTrees.value.link.classList.add(selected.name)
+    domTrees.value.link.classList.add(Styles.selected.name)
     walk(domTrees)
   }
 }

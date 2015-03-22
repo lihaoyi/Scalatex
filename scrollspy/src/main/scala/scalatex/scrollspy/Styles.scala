@@ -5,9 +5,12 @@ import org.scalajs.dom.css
 
 import scalatags.JsDom.all._
 import scalatags.JsDom.tags2
+import scalatags.jsdom.AutoStyleSheet
+import scalatags.stylesheet.{Sheet, StyleSheet}
 
-object ScrollSpyStyleSheet extends scalatags.stylesheet.StyleSheet{
-  val menuItem = *(
+object Styles extends Sheet[Styles]
+trait Styles extends StyleSheet{
+  def menuItem = cls(
     &hover(
       opacity := 0.9
     ),
@@ -21,7 +24,7 @@ object ScrollSpyStyleSheet extends scalatags.stylesheet.StyleSheet{
     lineHeight := "44px",
     borderBottom := "1px solid #444"
   )
-  val menuList = *(
+  def menuList = cls(
     paddingLeft := "15px",
     margin := 0,
     overflow.hidden,
@@ -32,16 +35,13 @@ object ScrollSpyStyleSheet extends scalatags.stylesheet.StyleSheet{
     "transition".style := "maxHeight 0.2s ease-out"
   )
 
-  val selected = *(
+  def selected = cls(
     backgroundColor := "#1f8dd6",
     color := "white"
   )
 
-  val closed = *(color := "#999")
+  def closed = cls(color := "#999")
 
-  val pathed = *(borderLeft := "2px solid white")
+  def pathed = cls(borderLeft := "2px solid white")
 
-  lazy val styleTag = tags2.style.render
-  dom.document.head.appendChild(styleTag)
-  styleTag.textContent += this.styleSheetText
 }
