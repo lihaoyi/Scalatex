@@ -1,14 +1,11 @@
 package scalatex.scrollspy
 
-import org.scalajs.dom
-import org.scalajs.dom.css
-
 import scalatags.JsDom.all._
-import scalatags.JsDom.tags2
-import scalatags.jsdom.AutoStyleSheet
 import scalatags.stylesheet.{Sheet, StyleSheet}
 
-object Styles extends Sheet[Styles]
+object Styles{
+  val css = Sheet[Styles]
+}
 trait Styles extends StyleSheet{
   def menuItem = cls(
     &hover(

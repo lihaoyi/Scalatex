@@ -2,7 +2,9 @@ package scalatex.site
 import scalatags.Text.all._
 import scalatags.stylesheet.{CascadingStyleSheet, Sheet}
 
-object Styles extends Sheet[Styles]
+object Styles{
+  val css = Sheet[Styles]
+}
 trait Styles extends CascadingStyleSheet {
 
   def headerLink = cls(

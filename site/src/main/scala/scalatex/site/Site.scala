@@ -6,7 +6,7 @@ import ammonite.ops.Path
 import ammonite.ops._
 import scalatags.Text.all._
 import scalatags.Text.tags2
-
+import Styles.css
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -78,7 +78,7 @@ trait Site{
   def headFrags: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
-    tags2.style(raw(Styles.styleSheetText)),
+    tags2.style(raw(css.styleSheetText)),
     script(src:=scriptName),
     script("""
       ['DOMContentLoaded', 'load'].forEach(function(ev){
@@ -99,7 +99,7 @@ trait Site{
     maxWidth:="768px",
     marginLeft:="auto",
     marginRight:="auto",
-    Styles().content,
+    css.content,
     frag
   )
 

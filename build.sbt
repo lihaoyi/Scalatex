@@ -35,7 +35,7 @@ lazy val api = project.settings(sharedSettings:_*)
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "utest" % "0.3.0" % "test",
       "com.lihaoyi" %% "scala-parser" % "0.1.1",
-      "com.lihaoyi" %% "scalatags" % "0.4.7",
+      "com.lihaoyi" %% "scalatags" % "0.5.0",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.parboiled" %% "parboiled" % "2.1.0"
     ),
@@ -62,7 +62,7 @@ lazy val site =
     "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
-    "com.lihaoyi" %% "scalatags" % "0.4.7",
+    "com.lihaoyi" %% "scalatags" % "0.5.0",
     "org.webjars" % "pure" % "0.5.0"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
@@ -83,7 +83,7 @@ lazy val readme = project
     "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
     "com.lihaoyi" %% "utest" % "0.3.1",
     "com.lihaoyi" %% "upickle" % "0.2.7",
-    "com.lihaoyi" %% "scalatags" % "0.4.7"
+    "com.lihaoyi" %% "scalatags" % "0.5.0"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
   scalaVersion := "2.11.6",
@@ -97,7 +97,7 @@ lazy val scrollspy = project
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % "0.2.7",
       "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-      "com.lihaoyi" %%% "scalatags" % "0.4.7"
+      "com.lihaoyi" %%% "scalatags" % "0.5.0"
     )
   )
 publish := ()

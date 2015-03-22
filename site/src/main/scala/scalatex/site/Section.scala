@@ -4,7 +4,7 @@ import scala.collection.mutable
 import scalatags.Text.all
 import scalatags.Text.all._
 import scalatags.text.Builder
-
+import Styles.css
 
 object Section{
   case class Proxy(func: Seq[Frag] => Frag){
@@ -58,7 +58,7 @@ class Section{
   def munge(name: String): String = name.replace(" ", "")
 
   def headingAnchor(name: String) = a(
-    Styles.headerLink,
+    css.headerLink,
     href:=s"#${munge(name)}",
     i(cls:="fa fa-link"),
     position.absolute,
@@ -80,8 +80,8 @@ class Section{
         hs.header(headingAnchor(munged), header, subHeader)(
           id:=munged,
           display.block,
-          Styles.hoverContainer,
-          Styles.headerTag
+          css.hoverContainer,
+          css.headerTag
         ),
         hs.content(body)
       )

@@ -4,6 +4,7 @@ import ammonite.ops.{RelPath, Path}
 
 import scalatags.Text.all._
 import ammonite.ops._
+import Styles.css
 /**
  * Lets you instantiate a Highlighter object. This can be used to reference
  * snippets of code from files within your project via the `.ref` method, often
@@ -102,7 +103,7 @@ trait Highlighter{
 
       val linkUrl = s"$url/${absPath - prefix}$hash"
       a(
-        Styles.headerLink,
+        css.headerLink,
         i(cls:="fa fa-link "),
         position.absolute,
         right:="0.5em",
@@ -115,7 +116,7 @@ trait Highlighter{
     }
 
     pre(
-      Styles.hoverContainer,
+      css.hoverContainer,
       code(cls:=lang + " scalatex-highlight-js hljs", blob),
       link
     )

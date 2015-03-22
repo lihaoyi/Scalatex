@@ -4,7 +4,7 @@ import org.scalajs.dom
 import org.scalajs.dom.ext._
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
-
+import Styles.css
 
 case class Tree[T](value: T, children: Vector[Tree[T]])
 
@@ -29,13 +29,13 @@ class ScrollSpy(structure: Tree[String]){
         t.value,
         href:="#"+Controller.munge(t.value),
         cls:="menu-item",
-        Styles.menuItem
+        css.menuItem
       ).render
       val originalI = i
       val children = t.children.map(recurse(_, depth + 1))
 
       val list = ul(
-        Styles.menuList,
+        css.menuList,
         children.map(_.value.frag)
       ).render
 
@@ -101,11 +101,11 @@ class ScrollSpy(structure: Tree[String]){
     def close(tree: Tree[MenuNode]): Unit = {
       if (!open) tree.value.list.style.maxHeight = "0px"
       else setFullHeight(tree.value)
-      tree.value.frag.classList.remove(Styles.pathed.name)
+      tree.value.frag.classList.remove(css.pathed.name)
 
       tree.children.foreach(close)
-      tree.value.link.classList.add(Styles.closed.name)
-      tree.value.link.classList.remove(Styles.selected.name)
+      tree.value.link.classList.add(css.closed.name)
+      tree.value.link.classList.remove(css.selected.name)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
       val epsilon = 10
@@ -113,22 +113,22 @@ class ScrollSpy(structure: Tree[String]){
       for((child, idx) <- tree.children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
           if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
-            child.value.link.classList.remove(Styles.closed.name)
-            child.value.link.classList.add(Styles.selected.name)
+            child.value.link.classList.remove(css.closed.name)
+            child.value.link.classList.add(css.selected.name)
             walk(child)
-            child.value.frag.classList.remove(Styles.pathed.name)
+            child.value.frag.classList.remove(css.pathed.name)
           }else {
 
             close(child)
-            child.value.frag.classList.add(Styles.pathed.name)
+            child.value.frag.classList.add(css.pathed.name)
           }
         }else{
-          child.value.frag.classList.remove(Styles.pathed.name)
+          child.value.frag.classList.remove(css.pathed.name)
           close(child)
         }
       }
     }
-    domTrees.value.link.classList.add(Styles.selected.name)
+    domTrees.value.link.classList.add(css.selected.name)
     walk(domTrees)
   }
 }
