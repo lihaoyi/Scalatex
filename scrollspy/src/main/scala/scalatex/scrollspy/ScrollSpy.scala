@@ -2,10 +2,8 @@ package scalatex.scrollspy
 
 import org.scalajs.dom
 import org.scalajs.dom.ext._
-import org.scalajs.dom.{Element, css, html}
+import org.scalajs.dom.html
 import scalatags.JsDom.all._
-import scalatags.JsDom.tags2
-import scalatags.generic.StylePair
 
 
 case class Tree[T](value: T, children: Vector[Tree[T]])
@@ -117,7 +115,6 @@ class ScrollSpy(structure: Tree[String]){
           if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
             child.value.link.classList.remove(Styles.closed.name)
             child.value.link.classList.add(Styles.selected.name)
-//            child.value.link.classList.add(Styles.pathed.name)
             walk(child)
             child.value.frag.classList.remove(Styles.pathed.name)
           }else {
