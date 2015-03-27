@@ -101,6 +101,7 @@ object Tests extends TestSuite{
     'Highlighter{
       import scalatex.site.Highlighter
       object hl extends Highlighter {
+        def languages = Seq("scala")
         def suffixMappings = Map("scala" -> "scala")
       }
       'wholeFile {

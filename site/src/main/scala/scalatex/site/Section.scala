@@ -25,7 +25,7 @@ object Section{
       Header((frag, name, subname) => t(frag, name))
   }
 
-  case class Tree[T](value: T, children: mutable.Buffer[Tree[T]])
+
 }
 
 /**
@@ -33,7 +33,8 @@ object Section{
  *
  * This lets you determine a sequence of headers used
  */
-class Section{
+trait Section{
+
   import Section._
   type Header = Section.Header
   val Header = Section.Header

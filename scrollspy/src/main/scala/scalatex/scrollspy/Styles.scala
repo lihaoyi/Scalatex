@@ -29,7 +29,7 @@ trait Styles extends StyleSheet{
     display.block,
     left := 0,
     top := 0,
-    "transition".style := "maxHeight 0.2s ease-out"
+    transition := "max-height 0.2s ease-out"
   )
 
   def selected = cls(

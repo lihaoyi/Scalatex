@@ -16,20 +16,9 @@ import Styles.css
 trait Site{
 
   def webjars = root/"META-INF"/'resources/'webjars
-  def highlightJs = webjars/'highlightjs/"8.2-1"
+
   def fontAwesome = webjars/"font-awesome"/"4.2.0"
-  /**
-   * Resources related to the highlight.js library
-   */
-  def highlightJsResources = Seq(
-    highlightJs/"highlight.min.js",
-    highlightJs/'styles/"idea.min.css",
-    highlightJs/'languages/"scala.min.js",
-    highlightJs/'languages/"javascript.min.js",
-    highlightJs/'languages/"bash.min.js",
-    highlightJs/'languages/"diff.min.js",
-    highlightJs/'languages/"xml.min.js"
-  )
+
   /**
    * Resources related to the pure-css library
    */
@@ -57,7 +46,7 @@ trait Site{
   /**
    * Resources that get automatically included in the bundled js or css file
    */
-  def autoResources = highlightJsResources ++ pureCss ++ siteCss
+  def autoResources = pureCss ++ siteCss
 
   /**
    * Resources copied to the output folder but not included on the page by default

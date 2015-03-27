@@ -1,5 +1,5 @@
 package scalatex.site
-
+import collection.mutable
 import ammonite.ops.{RelPath, Path}
 
 import scalatags.Text.all._
@@ -11,6 +11,34 @@ import Styles.css
  * used via `hl.ref` where `hl` is a previously-instantiated Highlighter.
  */
 trait Highlighter{
+  val languages = mutable.Set.empty[String]
+  def webjars = root/"META-INF"/'resources/'webjars
+  def highlightJs = webjars/'highlightjs/"8.2-1"
+  def style: String = "idea"
+
+  def lang(name: String) = (s: String) => this.highlight(s, name)
+  def as = lang("actionscript")
+  def scala = lang("scala")
+  def asciidoc = lang("asciidoc")
+  def ahk = lang("autohotkey")
+  def sh = lang("bash")
+  def clj = lang("clojure")
+  def coffee = lang("coffeescript")
+  def ex = lang("elixir")
+  def erl = lang("erlang")
+  def fs = lang("fsharp")
+  def hs = lang("haskell")
+  def hx = lang("haxe")
+  def js = lang("javascript")
+  def nim = lang("nimrod")
+  def rb = lang("ruby")
+  def ts = lang("typescript")
+  def vb = lang("vbnet")
+  def autoResources =
+    Seq(highlightJs/"highlight.min.js") ++
+    Seq(highlightJs/'styles/s"$style.min.css") ++
+    languages.map(x => highlightJs/'languages/s"$x.min.js")
+
   /**
    * A mapping of file-path-prefixes to URLs where the source
    * can be accessed. e.g.
@@ -37,13 +65,36 @@ trait Highlighter{
    *   "js" -> "javascript"
    * )
    */
-  def suffixMappings: Map[String, String]
+  def suffixMappings: Map[String, String] = Map(
+    "scala" -> "scala",
+    "sbt" -> "scala",
+    "scalatex" -> "scala",
+    "as" -> "actionscript",
+    "ahk" -> "autohotkey",
+    "coffee" -> "coffeescript",
+    "clj" -> "clojure",
+    "cljs" -> "clojure",
+    "sh" -> "bash",
+    "ex" -> "elixir",
+    "erl" -> "erlang",
+    "fs" -> "fsharp",
+    "hs" -> "haskell",
+    "hx" -> "haxe",
+    "js" -> "javascript",
+    "nim" -> "nimrod",
+    "rkt" -> "lisp",
+    "scm" -> "lisp",
+    "sch" -> "lisp",
+    "rb" -> "ruby",
+    "ts" -> "typescript",
+    "vb" -> "vbnet"
+  )
 
   /**
    * Highlight a short code snippet with the specified language
    */
   def highlight(string: String, lang: String) = {
-
+    languages.add(lang)
     val lines = string.split("\n", -1)
     if (lines.length == 1){
       code(
@@ -88,9 +139,11 @@ trait Highlighter{
       case p: Path => p
       case p: RelPath => cwd/p
     }
+
+    val ext = filePath.last.split('.').last
     val lang = Option(className)
-      .orElse(suffixMappings.get(filePath.last.split('.').last))
-      .getOrElse("")
+      .getOrElse(suffixMappings.getOrElse(ext, ext))
+
 
     val linkData =
       pathMappings.iterator

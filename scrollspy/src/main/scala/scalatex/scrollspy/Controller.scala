@@ -20,12 +20,10 @@ object Controller{
   }
 
   @JSExport
-  def main(data: scala.scalajs.js.Any,
-           menu: html.Element,
-           menuLink: html.Element) = {
+  def main(data: scala.scalajs.js.Any) = {
+
 
     val structure = upickle.readJs[Tree[String]](upickle.json.readJs(data))
-
 
     val snippets = dom.document.getElementsByClassName("highlight-me")
 
@@ -63,13 +61,25 @@ object Controller{
       }
     ).render
 
-
-    menu.appendChild(
+    val menu = div(
+      position.fixed,
+      overflow.scroll,
+      backgroundColor := "#191818",
+      height := "100%",
+      width := 250,
+      left := 0,
+      top := 0,
+      a(href:="#menu", id:="menu-link", cls:="menu-link")(
+        span
+      ),
       div(
         list,
         expandLink
-      ).render
-    )
+      )
+    ).render
+
+    dom.document.body.appendChild(menu)
+    dom.document.body.style.marginLeft = "250px"
 
     dom.addEventListener("scroll", (e: dom.UIEvent) => updateScroll())
     updateScroll()

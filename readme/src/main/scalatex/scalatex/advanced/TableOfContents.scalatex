@@ -1,5 +1,5 @@
 @import scalatex.site.Section
-@import Section.Tree
+@import scalatex.site.Tree
 @object sect extends Section()
 
 @sect{TOC Main Section}

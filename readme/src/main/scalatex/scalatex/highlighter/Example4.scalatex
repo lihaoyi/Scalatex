@@ -1,9 +1,5 @@
 @import Main._
 @object hl extends scalatex.site.Highlighter{
-  def suffixMappings = Map(
-    "scala" -> "scala",
-    "sbt" -> "scala"
-  )
   override def pathMappings = Seq(
     wd -> (
       "https://github.com/lihaoyi/" +

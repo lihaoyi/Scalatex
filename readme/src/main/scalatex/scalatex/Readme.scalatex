@@ -1,6 +1,36 @@
 @import Main._
 @import site._
 
+
+@def exampleWrapper(f: Frag*) = Seq(
+  hr,
+  div(
+    opacity:="0.6",
+    fontStyle.oblique,
+    f
+  ),
+  hr
+)
+@def pairs(frags: Frag*) = div(frags, div(clear:="both"))
+@def half(frags: Frag*) = div(frags, width:="50%", float.left)
+@def exampleRef(start: String, classes: String) = {
+  val path = wd/'api/'src/'test/'scala/'scalatex/"ExampleTests.scala"
+  val tq = "\"\"\""
+  val classList = classes.split(" ")
+  val chunks = for(i <- 0 until classList.length) yield half{
+    hl.ref(path, Seq("'" + start, tq) ++ Seq.fill(i*2)(tq) ++ Seq(""), Seq(tq), classList(i))
+  }
+  pairs(chunks)
+}
+@a(
+  href:="https://github.com/lihaoyi/scalatex",
+  position.absolute,
+  top:=0,right:=0,border:=0,
+  img(
+    src:="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67",
+    alt:="Fork me on GitHub"
+  )
+)
 @sect{Scalatex 0.1.5}
   @i{Programmable Documents in Scala}
 
