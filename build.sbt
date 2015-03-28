@@ -69,7 +69,7 @@ lazy val site =
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
     val file = (resourceManaged in Compile).value/"scalatex"/"scrollspy"/"scrollspy.js"
-    val js = (fastOptJS in (scrollspy, Compile)).value.data
+    val js = (fullOptJS in (scrollspy, Compile)).value.data
     sbt.IO.copyFile(js, file)
     file
   }

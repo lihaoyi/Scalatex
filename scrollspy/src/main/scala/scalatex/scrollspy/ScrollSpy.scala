@@ -109,11 +109,15 @@ class ScrollSpy(structure: Seq[Tree[String]]){
       tree.value.link.classList.remove(css.selected.name)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
-      val epsilon = 10
       setFullHeight(tree.value)
-      for((child, idx) <- tree.children.zipWithIndex) {
+      recChildren(tree.children)
+    }
+    def recChildren(children: Seq[Tree[MenuNode]]) = {
+      val epsilon = 10
+
+      for((child, idx) <- children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
-          if (idx+1 >= tree.children.length || offset(tree.children(idx+1).value.header) > scrollTop + epsilon) {
+          if (idx+1 >= children.length || offset(children(idx+1).value.header) > scrollTop + epsilon) {
             child.value.link.classList.remove(css.closed.name)
             child.value.link.classList.add(css.selected.name)
             walk(child)
@@ -129,7 +133,14 @@ class ScrollSpy(structure: Seq[Tree[String]]){
         }
       }
     }
-    domTrees.map(_.value.link.classList.add(css.selected.name))
-    domTrees.map(walk)
+
+    recChildren(domTrees)
+    for(t <- domTrees){
+      val cl = t.value.link.classList
+      setFullHeight(t.value)
+      cl.remove(css.closed.name)
+      t.value.frag.classList.remove(css.pathed.name)
+      cl.add(css.selected.name)
+    }
   }
 }

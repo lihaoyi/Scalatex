@@ -178,179 +178,179 @@
         This is very useful for defining constants or functions which aren't needed anywhere else, but can help reduce repetition within the current document
 
 
-  @sect{Scalatex Site}
+@sect{Scalatex Site}
+  @p
+    The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities that can quickly turn your structured document into a pretty, browse-able web page.
+
+  @sect{Quick Start}
     @p
-      The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities that can quickly turn your structured document into a pretty, browse-able web page.
+      If you want to get started quickly without fuss, given you've already added the SBT plugin to your @code{build.sbt} file, you should use @hl.scala{scalatex.ScalatexReadme} to get off the ground quickly:
 
-    @sect{Quick Start}
-      @p
-        If you want to get started quickly without fuss, given you've already added the SBT plugin to your @code{build.sbt} file, you should use @hl.scala{scalatex.ScalatexReadme} to get off the ground quickly:
+    @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme", ".settings")
 
-      @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme", ".settings")
+    @p
+      This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with @hl.scala("@import Main._") to get access to functionality such as:
 
-      @p
-        This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with @hl.scala("@import Main._") to get access to functionality such as:
+    @ul
+      @li
+        @sect.ref("Section", "sect"): a mechanism for defining sections in your document that will automatically get the correct-sized heading, and turn up in the table of contents
+      @li
+        @sect.ref("Highlighter", "hl"): a way to highlight strings in various languages or grab snippets from the filesystem to highlight
 
-      @ul
-        @li
-          @sect.ref("Section", "sect"): a mechanism for defining sections in your document that will automatically get the correct-sized heading, and turn up in the table of contents
-        @li
-          @sect.ref("Highlighter", "hl"): a way to highlight strings in various languages or grab snippets from the filesystem to highlight
+    @p
+      When all is said and done, run:
 
-      @p
-        When all is said and done, run:
+    @hl.scala
+      readme/run
 
-      @hl.scala
-        readme/run
-
-      @p
-        To generate the Scalatex site inside the @code{target/site} folder.
+    @p
+      To generate the Scalatex site inside the @code{target/site} folder.
 
 
-      @hr
-      
-      @p
-        The changes are, this will create a reasonable looking document with an interactive navigation bar, nice looking headers, etc.. If you wish to really customize Scalatex, look at the following sections to see how these various components of a Scalatex site actually work.
+    @hr
+    
+    @p
+      The changes are, this will create a reasonable looking document with an interactive navigation bar, nice looking headers, etc.. If you wish to really customize Scalatex, look at the following sections to see how these various components of a Scalatex site actually work.
 
-    @sect{Section}
-      @p
-        One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatext provides the @hl.scala{scalatex.site.Section} helper that lets you do this easily:
+  @sect{Section}
+    @p
+      One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatext provides the @hl.scala{scalatex.site.Section} helper that lets you do this easily:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'section/"Example1.scalatex")
-        @half
-          @exampleWrapper
-            @section.Example1()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'section/"Example1.scalatex")
+      @half
+        @exampleWrapper
+          @section.Example1()
 
-      @p
-        As you can see, all the indented sections are automatically set to smaller headings. This is of course doable manually with @hl.scala{@@h1} @hl.scala{@@h2} @hl.scala{@@h3} tags etc., but then you have to manually keep track of how deep something is. With @hl.scala{Section}, this is kept track of for you.
+    @p
+      As you can see, all the indented sections are automatically set to smaller headings. This is of course doable manually with @hl.scala{@@h1} @hl.scala{@@h2} @hl.scala{@@h3} tags etc., but then you have to manually keep track of how deep something is. With @hl.scala{Section}, this is kept track of for you.
 
-      @p
-        You can override the default rendering of @hl.scala{Section}s to e.g. use different headers:
+    @p
+      You can override the default rendering of @hl.scala{Section}s to e.g. use different headers:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'section/"Example2.scalatex", Nil, "@sect")
-        @half
-          @exampleWrapper
-            @section.Example2()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'section/"Example2.scalatex", Nil, "@sect")
+      @half
+        @exampleWrapper
+          @section.Example2()
 
-      @p
-        Above, you see it using bold, underlines and strike-throughs to delimit the boundaries between headers. You can also override things in more detail using the @hl.scala{Section.Header} class instead of simple tags.
+    @p
+      Above, you see it using bold, underlines and strike-throughs to delimit the boundaries between headers. You can also override things in more detail using the @hl.scala{Section.Header} class instead of simple tags.
 
-      @p
-        You can use @hl.scala{@@sect.ref} to link to another part of the document:
+    @p
+      You can use @hl.scala{@@sect.ref} to link to another part of the document:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'section/"Example3.scalatex")
-        @half
-          @exampleWrapper
-            @section.Example3()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'section/"Example3.scalatex")
+      @half
+        @exampleWrapper
+          @section.Example3()
 
-      @p
-        Any links created with @hl.scala{@@sect.ref} are stored in an @hl.scala{@@sect.usedRefs} property as a list. We also expose a @hl.scala{@@sect.structure} property which allows you to inspect the tree of sections.
+    @p
+      Any links created with @hl.scala{@@sect.ref} are stored in an @hl.scala{@@sect.usedRefs} property as a list. We also expose a @hl.scala{@@sect.structure} property which allows you to inspect the tree of sections.
 
-      @p
-        Here we're just stringifying the @hl.scala{Tree} structure and placing it as text on the page, but you can easily recurse over the @hl.scala{Tree} structure and use it to e.g. build a table of contents, or a navigation bar. You can also compare the two structures to validate the internal links and ensure that none of our @hl.scala{@@sect.ref}s are broken.
+    @p
+      Here we're just stringifying the @hl.scala{Tree} structure and placing it as text on the page, but you can easily recurse over the @hl.scala{Tree} structure and use it to e.g. build a table of contents, or a navigation bar. You can also compare the two structures to validate the internal links and ensure that none of our @hl.scala{@@sect.ref}s are broken.
 
-    @sect{Highlighter}
-      @p
-        Scalatex Site provides a @hl.scala{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @hl.scala{Highlighter} object:
+  @sect{Highlighter}
+    @p
+      Scalatex Site provides a @hl.scala{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @hl.scala{Highlighter} object:
 
-      @hl.ref(wd/'readme/'highlighter/"hl.scala")
+    @hl.ref(wd/'readme/'highlighter/"hl.scala")
 
-      @p
-        Once you have done so, you can highlight individual code snippets:
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example5.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example5()
+    @p
+      Once you have done so, you can highlight individual code snippets:
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example5.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example5()
 
-      @p
-        Or you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
+    @p
+      Or you can use it to reference files in your code base in whole; e.g. here is Scalatex's plugins file:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example1.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example1()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example1.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example1()
 
-      @p
-        Note here we are using @a("Ammonite", href:="https://github.com/lihaoyi/Ammonite") to construct a path to pass to @hl.scala{@@hl.ref}; this path takes a working directory which you'll need to define yourself (here imported from @hl.scala{Main}) via @hl.scala{val wd = ammonite.ops.cwd}.
+    @p
+      Note here we are using @a("Ammonite", href:="https://github.com/lihaoyi/Ammonite") to construct a path to pass to @hl.scala{@@hl.ref}; this path takes a working directory which you'll need to define yourself (here imported from @hl.scala{Main}) via @hl.scala{val wd = ammonite.ops.cwd}.
 
-      @p
-        Apart than referencing the whole file, you can also grab text from the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
+    @p
+      Apart than referencing the whole file, you can also grab text from the line containing a key-string to the line containing another; here is parts of Scalatex's build file, from @hl.scala{lazy val api} to the next @hl.scala{lazy val}:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example2.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example2()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example2.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example2()
 
-      @p
-        Using multiple key-strings to navigate to a particular start- or end- line; here is the body of the unit test @hl.scala{scalatex.BasicTests.parenArgumentLists.attributes}, only from the @hl.scala{check} to the @hl.scala("}") closing that test.
+    @p
+      Using multiple key-strings to navigate to a particular start- or end- line; here is the body of the unit test @hl.scala{scalatex.BasicTests.parenArgumentLists.attributes}, only from the @hl.scala{check} to the @hl.scala("}") closing that test.
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example3.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example3()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example3.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example3()
 
-      @p
-        Note the spaces before the @hl.scala("}"), which ensures that it doesn't grab the earlier @hl.scala("}") in the string-literal which is part of the test body.
-      @p
-        Normally, the language used to highlight is inferred from the @hl.scala{suffixMappings} you defined when instantiating the @hl.scala{Highlighter}. You can override it manually by passing it in:
+    @p
+      Note the spaces before the @hl.scala("}"), which ensures that it doesn't grab the earlier @hl.scala("}") in the string-literal which is part of the test body.
+    @p
+      Normally, the language used to highlight is inferred from the @hl.scala{suffixMappings} you defined when instantiating the @hl.scala{Highlighter}. You can override it manually by passing it in:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example6.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example6()
-      @p
-        As you can see, this is especially useful from grabbing examples from unit tests. You can encapsulate the boilerplate in a function, and easily grab both the code and the expected output from the unit tests highlighted in their own particular way to include in the document.
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example6.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example6()
+    @p
+      As you can see, this is especially useful from grabbing examples from unit tests. You can encapsulate the boilerplate in a function, and easily grab both the code and the expected output from the unit tests highlighted in their own particular way to include in the document.
 
-      @p
-        Lastly, you can define a @hl.scala{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the top right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
+    @p
+      Lastly, you can define a @hl.scala{pathMappings} property, which is a sequence of prefixes which the highlighter tries to match against the files you're referencing. If any of them match, a link is generated (in the top right corner of the code snippet) containing the mapped path prefix combined with the remainder of the file path. Here's one that links everything to github:
 
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'highlighter/"Example4.scalatex")
-        @half
-          @exampleWrapper
-            @highlighter.Example4()
+    @pairs
+      @half
+        @hl.ref(wd/'readme/'highlighter/"Example4.scalatex")
+      @half
+        @exampleWrapper
+          @highlighter.Example4()
 
 
-      @p
-        You can customize the link to link to other places (bitbucket, local files, etc.) by changing the mapped URL. You can also pass in multiple @hl.scala{pathMappings} have links to files in different folders map to different base URLs, e.g. if you are referencing files in sub-repositories that have different public code
+    @p
+      You can customize the link to link to other places (bitbucket, local files, etc.) by changing the mapped URL. You can also pass in multiple @hl.scala{pathMappings} have links to files in different folders map to different base URLs, e.g. if you are referencing files in sub-repositories that have different public code
 
-      @hr
-      @p
-        In general, @hl.scala{Highlighter.ref} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter.ref}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
+    @hr
+    @p
+      In general, @hl.scala{Highlighter.ref} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter.ref}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
 
-    @sect{Site}
-      @p
-        Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @hl.scala{Site} trait which lets you do this easily:
+  @sect{Site}
+    @p
+      Finally, if all you want is to produce a working, pretty website without having to set up CSS and hosting and all that yourself, Scalatex provides a @hl.scala{Site} trait which lets you do this easily:
 
-      @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
 
-      @p
-        This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
+    @p
+      This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @a("Highlight.js", href:="https://highlightjs.org/") and css for @a("Font Awesome", href:="http://fortawesome.github.io/Font-Awesome/") and @a("Less CSS", href:="http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
 
-      @p
-        Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
+    @p
+      Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
 
-      @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
 
-      @p
-        There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
+    @p
+      There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
 
   @sect{Advanced Techniques}
     @p
@@ -426,148 +426,149 @@
 
       @p
         Note the use of the @hl.scala{sect.munge} function. This is the function that converts the headings (with their spaces and other special characters) into a HTML element ID that can be used for the anchor link. By default, it simply removes spaces, but you can override it in the @hl.scala{Highlighter} object if you want some custom behavior.
-  @sect{Why Scalatex}
+        
+@sect{Why Scalatex}
+  @p
+    Scalatex requires that you learn a new syntax for doing things, which is incompatible with @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown"),  @a("Textile", href:="http://en.wikipedia.org/wiki/Textile_(markup_language)"), and any other markup language you previously learned. Apart from that, Scalatex itself was the culmination of quite a lot of work to implement. Why did I do this?
+  @p
+    In general, Scalatex aims to make eliminating repetition and C&P sufficiently easy and elegant. Most template processors (with the exception of Twirl) start from text, and apply a series of transformations that turn the document into the HTML that you want. This ends up implementing a custom programming language with a custom syntax right inside your templates, often with
+
+  @ul
+    @li
+      Unclear semantics and interactions
+    @li
+      A buggy parser
+    @li
+      No spec
+    @li
+      Lots of space for XSS vulnerabilities
+
+  @p
+    This is not great, but it always happens given a sufficiently complex document. For example, here's a sample of "real world" markdown taken from the Scala.js website, the render a relatively simple page:
+
+  @pre
+    @code
+      ---
+      layout: page
+      title: Passing basic types to JavaScript
+      ---
+      {% include JB/setup %}
+
+      ## Problem
+
+      You need to pass simple types (String, Int, Boolean) to
+      JavaScript functions.
+
+      ## Solution
+
+      Let us illustrate the case by writing some functions on the host-page.
+
+      Edit `index-dev.html` and add the following function:
+
+      {% highlight scala %}
+      function happyNew(name, year) {
+        alert("Hey " + name + ", happy new " + year + "!");
+      }
+      {% endhighlight %}
+
+      As we saw in the recipe of [accessing the global scope][1],
+      we need to make the following import:
+
+      {% highlight scala %}
+      import scala.scalajs.js
+      import js.Dynamic.{ global => g }
+      {% endhighlight %}
+
+      Now on the Scala side you can call it like this:
+
+      {% highlight scala %}
+      def main(): Unit = {
+        g.happyNew("Martin", 2014)
+      }
+      {% endhighlight %}
+
+      Which will result in the values being used and the corresponding
+      alert being shown.
+
+      [1]: ./accessing-global-scope.html
+  @p
+    Note how we have:
+  @ul
+    @li
+      @a("YAML", href:="http://en.wikipedia.org/wiki/YAML") mixed in at the top of the file, ad-hoc separated from the rest via @code{---}s.
+    @li
+      A mix of @a("Markdown", href:="commonmark.org") @code{##}s and @code{``}s and @a("Jekyll", href:="http://en.wikipedia.org/wiki/Jekyll_(software)") @code("{% %}")s to actually mark things up
+    @li
+      Custom imports at the top of the page @code("{% include JB/setup %}")
+  @p
+    This is a markdown document, but the same fate ends up befalling any complex document written in any existing document generation system: you end up with a chimera of 3 different languages spliced together using regexes. Scalatex fixes this not by making custom-logic unnecessary, but by making custom-logic so @sect.ref("Custom Tags", "easy and standardized") such that you never need to fall back to hacky regex manipulation.
+  @p
+    Furthermore, by leveraging the Scala compiler, Scalatex also provides many things that other markup languages do note:
+  @ul
+    @li
+      @b{Precise error messages}: if you make a typo in a tag name, you get a compilation error telling you exactly where it went wrong
+    @li
+      @b{Type-safety}: this is what turns those typos into compile errors (instead of runtime mis-formats) in the first place
+    @li
+      @b{Incremental compilation}: Only recompile what you need to, so in a large (@a("100s of pages", href:="aoyi.github.io/hands-on-scala-js/")) document, you don't end up recompiling the world every change.
+
+  @p
+    These are things that virtually no markup generators provide, but Scalatex does. Here are a few more detailed comparisons between Scalatex and alternatives.
+
+  @sect{Why Not: Markdown}
     @p
-      Scalatex requires that you learn a new syntax for doing things, which is incompatible with @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown"),  @a("Textile", href:="http://en.wikipedia.org/wiki/Textile_(markup_language)"), and any other markup language you previously learned. Apart from that, Scalatex itself was the culmination of quite a lot of work to implement. Why did I do this?
+      @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown") is a lightweight format for writing rich text that has gained popularity recently. It has advantages of being extremely readable in plain-text: Markdown documents are formatted often exactly as someone would format emails or chat.
     @p
-      In general, Scalatex aims to make eliminating repetition and C&P sufficiently easy and elegant. Most template processors (with the exception of Twirl) start from text, and apply a series of transformations that turn the document into the HTML that you want. This ends up implementing a custom programming language with a custom syntax right inside your templates, often with
+      Markdown has the advantages of being:
 
     @ul
       @li
-        Unclear semantics and interactions
+        @b{Much more lightweight than Scalatex}: @code{`hello`} rather than @code{@@code{hello}}, @code{[link](url)} rather than @code{@@a("link", href:="url")}
       @li
-        A buggy parser
-      @li
-        No spec
-      @li
-        Lots of space for XSS vulnerabilities
+        @b{Be much more popularly supported}: @a("Github", href:="https://help.github.com/articles/github-flavored-markdown/"), @a("Stackoverflow", href:="http://stackoverflow.com/editing-help") and many others already use semi-compatible implementations of it
 
     @p
-      This is not great, but it always happens given a sufficiently complex document. For example, here's a sample of "real world" markdown taken from the Scala.js website, the render a relatively simple page:
-
-    @pre
-      @code
-        ---
-        layout: page
-        title: Passing basic types to JavaScript
-        ---
-        {% include JB/setup %}
-
-        ## Problem
-
-        You need to pass simple types (String, Int, Boolean) to
-        JavaScript functions.
-
-        ## Solution
-
-        Let us illustrate the case by writing some functions on the host-page.
-
-        Edit `index-dev.html` and add the following function:
-
-        {% highlight scala %}
-        function happyNew(name, year) {
-          alert("Hey " + name + ", happy new " + year + "!");
-        }
-        {% endhighlight %}
-
-        As we saw in the recipe of [accessing the global scope][1],
-        we need to make the following import:
-
-        {% highlight scala %}
-        import scala.scalajs.js
-        import js.Dynamic.{ global => g }
-        {% endhighlight %}
-
-        Now on the Scala side you can call it like this:
-
-        {% highlight scala %}
-        def main(): Unit = {
-          g.happyNew("Martin", 2014)
-        }
-        {% endhighlight %}
-
-        Which will result in the values being used and the corresponding
-        alert being shown.
-
-        [1]: ./accessing-global-scope.html
-    @p
-      Note how we have:
+      However, it also has some downsides:
     @ul
       @li
-        @a("YAML", href:="http://en.wikipedia.org/wiki/YAML") mixed in at the top of the file, ad-hoc separated from the rest via @code{---}s.
+        @b{Completely non-customizable by default}: in Markdown, you have @code{`code`} for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have @code{[link](url)} for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: @hl.scala("@hl.scala{code}") to highlight Scala code, @hl.scala("@hl.javascript{code}") for Javascript, @hl.scala("@hl.html{code}") to highlight HTML. Similarly, you can easily define a @sect.ref{Custom Tags} that distinguish internal links from external links, giving them different CSS, markup of assertions.
       @li
-        A mix of @a("Markdown", href:="commonmark.org") @code{##}s and @code{``}s and @a("Jekyll", href:="http://en.wikipedia.org/wiki/Jekyll_(software)") @code("{% %}")s to actually mark things up
+        @b{Messy, ad-hoc extensions}: @a("Python Markdown", href:="https://pythonhosted.org/Markdown/extensions/") provides a list of extensions. @a("CommonMark.org", href:="commonmark.org") does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is "Who knows?" and to the second "Regexes". Naturally, this makes people hesitant to implement extensions: they'd rather C&P markup than deal with crazy regex transforms. Is highlight code done using @code{```scala} or @code("{% highlight scala %}")? With Scalatex, defining @sect.ref{Custom Tags} is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.
       @li
-        Custom imports at the top of the page @code("{% include JB/setup %}")
+        @b{Unclear semantics}. For example, for rendering a link with parentheses in the URL, there are a @a("dozen different work-arounds", href:="http://meta.stackexchange.com/questions/13501/links-to-urls-containing-parentheses") that make it work in increasingly roundabout ways, all stemming from the fact that Markdown doesn't have a good, standard way of expressing escape-characters. With Scalatex, the semantics are much more regular: you can put anything in a @hl.scala{@@("string")} to escape it, and always fall back to Scala-strings with Scala-string-escapes. And their semantics behave exactly as you'd expect.
+      @li
+        @b{Unsafe}: What happens if you fat-finger some special characters in Markdown? You get another, perfectly valid markdown document, that you did not want. If you fat-finger a tag in Scalatex, you get a compilation error telling you where you made a mistake.
     @p
-      This is a markdown document, but the same fate ends up befalling any complex document written in any existing document generation system: you end up with a chimera of 3 different languages spliced together using regexes. Scalatex fixes this not by making custom-logic unnecessary, but by making custom-logic so @sect.ref("Custom Tags", "easy and standardized") such that you never need to fall back to hacky regex manipulation.
+      In general, Markdown is far more concise than Scalatex, and probably better for writing small documents like comments or chat boxes. For anything larger, you probaby do want to define larger, re-usable components to deal with, rather than working directly with the fixed set of primitives markdown provides. Instead of working with fenced-code-snippets, links, and headers, you're working with references to your unit test code, or document sections that automatically provide the correct sized headers.
+
     @p
-      Furthermore, by leveraging the Scala compiler, Scalatex also provides many things that other markup languages do note:
+      This makes large-scale documents much more pleasant, to the extent that you can perform large-scale refactorings of your Scalatex document without worrying about broken intra-document links or a stale table-of-contents.
+
+  @sect{Why Not: Twirl}
+    @p
+      @a("Twirl", href:="https://github.com/playframework/twirl#twirl") is the templating engine used by the @a("Play framework", href:="https://www.playframework.com/documentation/2.3.x/ScalaTemplates"). It provides a Scala-based syntax (and implementation!) very similar to Scalatex.
+    @p
+      In general, Scalatex is heavily inspired by Twirl: the original implementation started off as a fork of the Twirl source code, and though it has now diverged, the similarities are obvious. Scalatex has attempted to clean up a lot of unnecessary or ad-hoc cruft in the Twirl language, in an attempt to make something cleaner and nicer to use. For example:
+
     @ul
       @li
-        @b{Precise error messages}: if you make a typo in a tag name, you get a compilation error telling you exactly where it went wrong
+        @b{Scalatex has dropped Twirl's XML syntax}: using tags like @hl.scala{<div>} are redundant when you can use tags like @hl.scala("@div"), and so the latter is now the only way to do things.
       @li
-        @b{Type-safety}: this is what turns those typos into compile errors (instead of runtime mis-formats) in the first place
+        @b{Scalatex has regularized the Twirl grammar substantially}: Twirl only allows function definitions to occur in templates at the top-level, which Scalatex allows @hl.scala{object}s, @hl.scala{class}es, @hl.scala{def}s, @hl.scala{val}s anywhere with your document with proper lexical scoping. This makes working with large documents much easier, as you aren't restricted by the ad-hoc "only-top-level" constraint when trying to remove duplication within your document.
       @li
-        @b{Incremental compilation}: Only recompile what you need to, so in a large (@a("100s of pages", href:="aoyi.github.io/hands-on-scala-js/")) document, you don't end up recompiling the world every change.
-
+        @b{Scalatex has made indentation significant}, thus greatly reducing the need for curly brackets in large documents.
+      @li
+        @b{Scalatex has a greatly simplified implementation} that gives you incremental compilation, proper error messages, etc. all for free without the @a("crazy contortions", href:="https://github.com/playframework/twirl/blob/master/sbt-twirl/src/main/scala/play/twirl/sbt/TemplateProblem.scala") that the Play team have gone through to get them working with their source-generation model.
     @p
-      These are things that virtually no markup generators provide, but Scalatex does. Here are a few more detailed comparisons between Scalatex and alternatives.
-
-    @sect{Why Not: Markdown}
-      @p
-        @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown") is a lightweight format for writing rich text that has gained popularity recently. It has advantages of being extremely readable in plain-text: Markdown documents are formatted often exactly as someone would format emails or chat.
-      @p
-        Markdown has the advantages of being:
-
-      @ul
-        @li
-          @b{Much more lightweight than Scalatex}: @code{`hello`} rather than @code{@@code{hello}}, @code{[link](url)} rather than @code{@@a("link", href:="url")}
-        @li
-          @b{Be much more popularly supported}: @a("Github", href:="https://help.github.com/articles/github-flavored-markdown/"), @a("Stackoverflow", href:="http://stackoverflow.com/editing-help") and many others already use semi-compatible implementations of it
-
-      @p
-        However, it also has some downsides:
-      @ul
-        @li
-          @b{Completely non-customizable by default}: in Markdown, you have @code{`code`} for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have @code{[link](url)} for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: @hl.scala("@hl.scala{code}") to highlight Scala code, @hl.scala("@hl.javascript{code}") for Javascript, @hl.scala("@hl.html{code}") to highlight HTML. Similarly, you can easily define a @sect.ref{Custom Tags} that distinguish internal links from external links, giving them different CSS, markup of assertions.
-        @li
-          @b{Messy, ad-hoc extensions}: @a("Python Markdown", href:="https://pythonhosted.org/Markdown/extensions/") provides a list of extensions. @a("CommonMark.org", href:="commonmark.org") does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is "Who knows?" and to the second "Regexes". Naturally, this makes people hesitant to implement extensions: they'd rather C&P markup than deal with crazy regex transforms. Is highlight code done using @code{```scala} or @code("{% highlight scala %}")? With Scalatex, defining @sect.ref{Custom Tags} is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.
-        @li
-          @b{Unclear semantics}. For example, for rendering a link with parentheses in the URL, there are a @a("dozen different work-arounds", href:="http://meta.stackexchange.com/questions/13501/links-to-urls-containing-parentheses") that make it work in increasingly roundabout ways, all stemming from the fact that Markdown doesn't have a good, standard way of expressing escape-characters. With Scalatex, the semantics are much more regular: you can put anything in a @hl.scala{@@("string")} to escape it, and always fall back to Scala-strings with Scala-string-escapes. And their semantics behave exactly as you'd expect.
-        @li
-          @b{Unsafe}: What happens if you fat-finger some special characters in Markdown? You get another, perfectly valid markdown document, that you did not want. If you fat-finger a tag in Scalatex, you get a compilation error telling you where you made a mistake.
-      @p
-        In general, Markdown is far more concise than Scalatex, and probably better for writing small documents like comments or chat boxes. For anything larger, you probaby do want to define larger, re-usable components to deal with, rather than working directly with the fixed set of primitives markdown provides. Instead of working with fenced-code-snippets, links, and headers, you're working with references to your unit test code, or document sections that automatically provide the correct sized headers.
-
-      @p
-        This makes large-scale documents much more pleasant, to the extent that you can perform large-scale refactorings of your Scalatex document without worrying about broken intra-document links or a stale table-of-contents.
-
-    @sect{Why Not: Twirl}
-      @p
-        @a("Twirl", href:="https://github.com/playframework/twirl#twirl") is the templating engine used by the @a("Play framework", href:="https://www.playframework.com/documentation/2.3.x/ScalaTemplates"). It provides a Scala-based syntax (and implementation!) very similar to Scalatex.
-      @p
-        In general, Scalatex is heavily inspired by Twirl: the original implementation started off as a fork of the Twirl source code, and though it has now diverged, the similarities are obvious. Scalatex has attempted to clean up a lot of unnecessary or ad-hoc cruft in the Twirl language, in an attempt to make something cleaner and nicer to use. For example:
-
-      @ul
-        @li
-          @b{Scalatex has dropped Twirl's XML syntax}: using tags like @hl.scala{<div>} are redundant when you can use tags like @hl.scala("@div"), and so the latter is now the only way to do things.
-        @li
-          @b{Scalatex has regularized the Twirl grammar substantially}: Twirl only allows function definitions to occur in templates at the top-level, which Scalatex allows @hl.scala{object}s, @hl.scala{class}es, @hl.scala{def}s, @hl.scala{val}s anywhere with your document with proper lexical scoping. This makes working with large documents much easier, as you aren't restricted by the ad-hoc "only-top-level" constraint when trying to remove duplication within your document.
-        @li
-          @b{Scalatex has made indentation significant}, thus greatly reducing the need for curly brackets in large documents.
-        @li
-          @b{Scalatex has a greatly simplified implementation} that gives you incremental compilation, proper error messages, etc. all for free without the @a("crazy contortions", href:="https://github.com/playframework/twirl/blob/master/sbt-twirl/src/main/scala/play/twirl/sbt/TemplateProblem.scala") that the Play team have gone through to get them working with their source-generation model.
-      @p
-        Scalatex is still missing a few features:
-      @ul
-        @li
-          Being able to parametrize an entire template as a function
-        @li
-          Being able to define @hl.scala{def}s using Scalatex syntax; Scalatex @hl.scala{def}s have to be defined using Scala syntax
-      @p
-        In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @a("I have", href:="http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
-      @p
-        The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
+      Scalatex is still missing a few features:
+    @ul
+      @li
+        Being able to parametrize an entire template as a function
+      @li
+        Being able to define @hl.scala{def}s using Scalatex syntax; Scalatex @hl.scala{def}s have to be defined using Scala syntax
+    @p
+      In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @a("I have", href:="http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
+    @p
+      The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
 

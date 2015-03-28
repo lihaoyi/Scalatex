@@ -98,4 +98,7 @@ trait Styles extends StyleSheet{
 
   def pathed = cls(borderLeft := "2px solid white")
 
+  def exact = cls(
+    fontStyle.italic
+  )
 }
