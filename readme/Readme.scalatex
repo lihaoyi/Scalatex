@@ -31,7 +31,7 @@
     alt:="Fork me on GitHub"
   )
 )
-@sect("Scalatex 0.2.0")
+@sect("Scalatex 0.2.1")
 
   @exampleRef("helloWorld", "scala html")
 
@@ -60,7 +60,7 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.2.0")
+      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.2.1")
 
     @p
       And the following to your project in your @code{build.sbt}:
