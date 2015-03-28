@@ -34,11 +34,13 @@ trait Highlighter{
   def rb = lang("ruby")
   def ts = lang("typescript")
   def vb = lang("vbnet")
-  def autoResources =
+  def xml = lang("xml")
+  def diff = lang("diff")
+  def autoResources = {
     Seq(highlightJs/"highlight.min.js") ++
     Seq(highlightJs/'styles/s"$style.min.css") ++
     languages.map(x => highlightJs/'languages/s"$x.min.js")
-
+  }
   /**
    * A mapping of file-path-prefixes to URLs where the source
    * can be accessed. e.g.
@@ -98,7 +100,7 @@ trait Highlighter{
     val lines = string.split("\n", -1)
     if (lines.length == 1){
       code(
-        cls:=lang + " scalatex-highlight-js",
+        cls:=lang + " " + Styles.css.highlightMe.name,
         display:="inline",
         padding:=0,
         margin:=0,
@@ -113,7 +115,7 @@ trait Highlighter{
         .dropWhile(_ == "")
         .mkString("\n")
 
-      pre(code(cls:=lang + " scalatex-highlight-js", stripped))
+      pre(code(cls:=lang + " " + Styles.css.highlightMe.name, stripped))
     }
   }
   import Highlighter._
@@ -170,7 +172,7 @@ trait Highlighter{
 
     pre(
       css.hoverContainer,
-      code(cls:=lang + " scalatex-highlight-js hljs", blob),
+      code(cls:=lang + " " + Styles.css.highlightMe.name, blob),
       link
     )
   }
@@ -214,6 +216,16 @@ trait Highlighter{
 }
 
 object Highlighter{
+  def snippet = script(raw(s"""
+    ['DOMContentLoaded', 'load'].forEach(function(ev){
+      addEventListener(ev, function(){
+        Array.prototype.forEach.call(
+          document.getElementsByClassName('${Styles.css.highlightMe.name}'),
+          hljs.highlightBlock
+        );
+      })
+    })
+  """))
   /**
    * A context bound used to ensure you pass a `String`
    * or `Seq[String]` to the `@hl.ref` function

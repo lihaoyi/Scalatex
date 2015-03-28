@@ -68,17 +68,7 @@ trait Site{
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     tags2.style(raw(css.styleSheetText)),
-    script(src:=scriptName),
-    script("""
-      ['DOMContentLoaded', 'load'].forEach(function(ev){
-        addEventListener(ev, function(){
-          Array.prototype.forEach.call(
-            document.querySelectorAll('code.scalatex-highlight-js'),
-            hljs.highlightBlock
-          );
-        })
-      })
-    """)
+    script(src:=scriptName)
   )
 
   /**
@@ -114,9 +104,8 @@ trait Site{
     }
   }
   def renderTo(outputRoot: Path) = {
-    bundleResources(outputRoot)
     generateHtml(outputRoot)
-
+    bundleResources(outputRoot)
   }
 }
 

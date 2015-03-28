@@ -186,7 +186,7 @@
       @p
         If you want to get started quickly without fuss, given you've already added the SBT plugin to your @code{build.sbt} file, you should use @hl.scala{scalatex.ScalatexReadme} to get off the ground quickly:
 
-      @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme")
+      @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme", ".settings")
 
       @p
         This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with @hl.scala("@import Main._") to get access to functionality such as:

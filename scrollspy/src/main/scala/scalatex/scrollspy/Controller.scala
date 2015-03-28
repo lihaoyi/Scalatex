@@ -46,7 +46,7 @@ class Controller(data: js.Any){
 
 
   val scrollSpy = new ScrollSpy(
-    upickle.readJs[Tree[String]](upickle.json.readJs(data))
+    upickle.readJs[Seq[Tree[String]]](upickle.json.readJs(data))
   )
 
   val list = ul(
@@ -54,7 +54,7 @@ class Controller(data: js.Any){
     margin := 0,
     padding := 0,
     "flex".style := 10000,
-    scrollSpy.domTrees.value.frag
+    scrollSpy.domTrees.map(_.value.frag)
   ).render
 
   def updateScroll() = scrollSpy()
@@ -99,9 +99,7 @@ class Controller(data: js.Any){
   }
 
   def init() = {
-    dom.document.getElementsByClassName("highlight-me").foreach(
-      js.Dynamic.global.hljs.highlightBlock(_)
-    )
+
     updateScroll()
 
     toggler.apply()

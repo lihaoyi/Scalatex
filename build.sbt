@@ -92,4 +92,9 @@ lazy val readme = scalatex.ScalatexReadme(
   source = "Readme",
   targetFolder = "target/site"
 )
-
+.settings(
+  libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site")
+)
+.dependsOn(
+  site
+)

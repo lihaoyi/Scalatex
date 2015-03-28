@@ -39,7 +39,8 @@ class Main(url: String,
   override def bodyFrag(frag: Frag) = {
     Seq(
       super.bodyFrag(frag),
-      site.Sidebar.snippet(sect.structure.children(0))
+      site.Sidebar.snippet(sect.structure.children),
+      Highlighter.snippet
     )
   }
   def content = Map("index.html" -> frag)

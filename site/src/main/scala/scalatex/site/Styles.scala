@@ -7,6 +7,8 @@ object Styles{
 }
 trait Styles extends CascadingStyleSheet {
 
+  def highlightMe = cls()
+
   def headerLink = cls(
     color := "#777",
     opacity := 0.05,

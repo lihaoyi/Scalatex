@@ -3,7 +3,7 @@ package scalatex
 import sbt.Keys._
 import sbt._
 object SbtPlugin extends sbt.AutoPlugin{
-  val scalatexVersion = "0.2.0"
+  val scalatexVersion = "0.2.1"
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",

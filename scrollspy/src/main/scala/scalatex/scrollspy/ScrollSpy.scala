@@ -20,7 +20,7 @@ case class MenuNode(frag: html.Element,
  * High performance scalatex.scrollspy to work keep the left menu bar in sync.
  * Lots of sketchy imperative code in order to maximize performance.
  */
-class ScrollSpy(structure: Tree[String]){
+class ScrollSpy(structure: Seq[Tree[String]]){
 
   lazy val domTrees = {
     var i = -1
@@ -61,7 +61,7 @@ class ScrollSpy(structure: Tree[String]){
       )
     }
 
-    val domTrees = recurse(structure, 0)
+    val domTrees = structure.map(recurse(_, 0))
     domTrees
   }
   def offset(el: html.Element): Double = {
@@ -78,7 +78,7 @@ class ScrollSpy(structure: Tree[String]){
         f(tree.value)
         tree.children.foreach(rec(_)(f))
       }
-      rec(domTrees)(setFullHeight)
+      domTrees.map(rec(_)(setFullHeight))
     }else{
       start(force = true)
     }
@@ -129,7 +129,7 @@ class ScrollSpy(structure: Tree[String]){
         }
       }
     }
-    domTrees.value.link.classList.add(css.selected.name)
-    walk(domTrees)
+    domTrees.map(_.value.link.classList.add(css.selected.name))
+    domTrees.map(walk)
   }
 }
