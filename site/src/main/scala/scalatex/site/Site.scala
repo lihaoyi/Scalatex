@@ -85,10 +85,6 @@ trait Site{
    * The body of this site's HTML page
    */
   def bodyFrag(frag: Frag): Frag = div(
-    maxWidth:="768px",
-    marginLeft:="auto",
-    marginRight:="auto",
-    css.content,
     frag
   )
 

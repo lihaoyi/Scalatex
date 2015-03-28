@@ -1,5 +1,5 @@
 @import Main._
-@import site._
+@import scalatex.site._
 
 
 @def exampleWrapper(f: Frag*) = Seq(
@@ -31,8 +31,7 @@
     alt:="Fork me on GitHub"
   )
 )
-@sect{Scalatex 0.1.5}
-  @i{Programmable Documents in Scala}
+@sect("Scalatex 0.2.0")
 
   @exampleRef("helloWorld", "scala html")
 
@@ -61,7 +60,7 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
-      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.1.5")
+      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.2.0")
 
     @p
       And the following to your project in your @code{build.sbt}:
@@ -177,15 +176,41 @@
       @exampleRef("internalDefinitions", "scala html")
       @p
         This is very useful for defining constants or functions which aren't needed anywhere else, but can help reduce repetition within the current document
+
+
   @sect{Scalatex Site}
     @p
-      The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities in
+      The core of Scalatex is a very small, superficial translation from the @hl.scala{.scalatex} syntax to a @a("Scalatags", href:="https://github.com/lihaoyi/scalatags") fragment, letting you spit out HTML strings. Nevertheless, there are other concerns common to most (all?) documents, and Scalatags provides a number of common utilities that can quickly turn your structured document into a pretty, browse-able web page.
 
-    @hl.scala
-     libraryDependencies += "com.lihaoyi" %% "scalatex-site" % "0.1.5"
+    @sect{Quick Start}
+      @p
+        If you want to get started quickly without fuss, given you've already added the SBT plugin to your @code{build.sbt} file, you should use @hl.scala{scalatex.ScalatexReadme} to get off the ground quickly:
 
-    @p
-      Here are a number of them.
+      @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme")
+
+      @p
+        This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with @hl.scala("@import Main._") to get access to functionality such as:
+
+      @ul
+        @li
+          @sect.ref("Section", "sect"): a mechanism for defining sections in your document that will automatically get the correct-sized heading, and turn up in the table of contents
+        @li
+          @sect.ref("Highlighter", "hl"): a way to highlight strings in various languages or grab snippets from the filesystem to highlight
+
+      @p
+        When all is said and done, run:
+
+      @hl.scala
+        readme/run
+
+      @p
+        To generate the Scalatex site inside the @code{target/site} folder.
+
+
+      @hr
+      
+      @p
+        The changes are, this will create a reasonable looking document with an interactive navigation bar, nice looking headers, etc.. If you wish to really customize Scalatex, look at the following sections to see how these various components of a Scalatex site actually work.
 
     @sect{Section}
       @p
@@ -193,7 +218,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example1.scalatex")
+          @hl.ref(wd/'readme/'section/"Example1.scalatex")
         @half
           @exampleWrapper
             @section.Example1()
@@ -206,7 +231,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example2.scalatex", Nil, "@sect")
+          @hl.ref(wd/'readme/'section/"Example2.scalatex", Nil, "@sect")
         @half
           @exampleWrapper
             @section.Example2()
@@ -219,7 +244,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'section/"Example3.scalatex")
+          @hl.ref(wd/'readme/'section/"Example3.scalatex")
         @half
           @exampleWrapper
             @section.Example3()
@@ -234,13 +259,13 @@
       @p
         Scalatex Site provides a @hl.scala{Highlighter} class, which lets you easily highlight snippets of code pulled from files on disk. First, you need to instantiate a @hl.scala{Highlighter} object:
 
-      @hl.ref(wd/'readme/'src/'main/'scala/'scalatex/'highlighter/"hl.scala")
+      @hl.ref(wd/'readme/'highlighter/"hl.scala")
 
       @p
         Once you have done so, you can highlight individual code snippets:
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example5.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example5.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example5()
@@ -250,7 +275,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example1.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example1.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example1()
@@ -263,7 +288,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example2.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example2.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example2()
@@ -273,7 +298,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example3.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example3.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example3()
@@ -285,7 +310,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example6.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example6.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example6()
@@ -297,7 +322,7 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'highlighter/"Example4.scalatex")
+          @hl.ref(wd/'readme/'highlighter/"Example4.scalatex")
         @half
           @exampleWrapper
             @highlighter.Example4()
@@ -337,10 +362,10 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"CustomTags1.scalatex")
+          @hl.ref(wd/'readme/'advanced/"CustomTags1.scalatex")
         @half
           @exampleWrapper
-            @scalatex.advanced.CustomTags1()
+            @advanced.CustomTags1()
 
 
       @p
@@ -355,10 +380,10 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"CustomTags2.scalatex")
+          @hl.ref(wd/'readme/'advanced/"CustomTags2.scalatex")
         @half
           @exampleWrapper
-            @scalatex.advanced.CustomTags2()
+            @advanced.CustomTags2()
 
 
       @p
@@ -369,10 +394,10 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"DeadSectRefs.scalatex")
+          @hl.ref(wd/'readme/'advanced/"DeadSectRefs.scalatex")
         @half
           @exampleWrapper
-            @scalatex.advanced.DeadSectRefs()
+            @advanced.DeadSectRefs()
 
       @p
         Note how the typo @code{Page with Ref} instead of @code{Page with Refs} was immediately picked up. This example simply prints it to the page, but you could add an assert if you really wanted to ensure it didn't happen.
@@ -391,10 +416,10 @@
 
       @pairs
         @half
-          @hl.ref(wd/'readme/'src/'main/'scalatex/'scalatex/'advanced/"TableOfContents.scalatex")
+          @hl.ref(wd/'readme/'advanced/"TableOfContents.scalatex")
         @half
           @exampleWrapper
-            @scalatex.advanced.TableOfContents()
+            @advanced.TableOfContents()
 
       @p
         As you can see, one short recursive function and is all that is necessary to transform the captured structure into a @hl.scala{ul} tree, with links to all the section headers! If you wish you can trivially modify this function to e.g. generate different HTML/CSS, only show top-level or top-and-second-level headers, or all manner of other things.

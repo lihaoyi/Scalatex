@@ -1,3 +1,4 @@
+@import Main._
 @div
   @hl.highlight(
     "<div><b>Some</b> HTML</div>",

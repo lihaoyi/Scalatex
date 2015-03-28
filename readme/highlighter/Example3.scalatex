@@ -1,3 +1,4 @@
+@import Main._
 @import ammonite.ops._
 @hl.ref(
   'api/'src/'test/'scala/

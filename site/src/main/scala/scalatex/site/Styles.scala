@@ -30,6 +30,9 @@ trait Styles extends CascadingStyleSheet {
     *(
       position.relative
     ),
+    maxWidth:="768px",
+    marginLeft:="auto",
+    marginRight:="auto",
     margin := "0 auto",
     padding := "0 1em",
     maxWidth := 800,

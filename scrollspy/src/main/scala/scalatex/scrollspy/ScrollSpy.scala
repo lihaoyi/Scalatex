@@ -85,7 +85,8 @@ class ScrollSpy(structure: Tree[String]){
   }
 
   def setFullHeight(mn: MenuNode) = {
-    mn.list.style.maxHeight = (mn.end - mn.start + 1) * 44 + "px"
+    // height + 1 to account for border
+    mn.list.style.maxHeight = (mn.end - mn.start + 1) * (Styles.itemHeight + 1) + "px"
   }
 
   def apply(): Unit = {

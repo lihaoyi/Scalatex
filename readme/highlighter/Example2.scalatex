@@ -1,4 +1,4 @@
-@import Main.wd
+@import Main._
 
 @hl.ref(
   wd/"build.sbt",

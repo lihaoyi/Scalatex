@@ -3,7 +3,7 @@ package scalatex
 import sbt.Keys._
 import sbt._
 object SbtPlugin extends sbt.AutoPlugin{
-  val scalatexVersion = "0.1.6"
+  val scalatexVersion = "0.2.0"
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",
@@ -29,6 +29,7 @@ object SbtPlugin extends sbt.AutoPlugin{
         IO.write(
           outFile,
           s"""
+            |package scalatex
             |$pkgName
             |import scalatags.Text.all._
             |
@@ -65,12 +66,13 @@ object ScalatexReadme{
       sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
         val file = dir / "scalatex" / "Main.scala"
         IO.write(file, s"""
+          package scalatex
           object Main extends scalatex.site.Main(
             url = "$url",
             wd = ammonite.ops.cwd,
             output = ammonite.ops.cwd/ammonite.ops.RelPath("$targetFolder"),
             extraAutoResources = Seq(${autoResources.map('"' + _ + '"').mkString(",")}).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
-            $source()
+            scalatex.$source()
           )
         """)
         Seq(file)
@@ -79,7 +81,5 @@ object ScalatexReadme{
       libraryDependencies += "com.lihaoyi" %% "scalatex-site" % SbtPlugin.scalatexVersion,
       scalaVersion := "2.11.6"
     )
-  )
-   .enablePlugins(SbtPlugin)
-
+  ).enablePlugins(SbtPlugin)
 }

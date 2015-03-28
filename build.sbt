@@ -75,22 +75,6 @@ lazy val site =
   }
 )
 
-lazy val readme = project
-  .settings(scalatex.SbtPlugin.projectSettings:_*)
-  .dependsOn(api, site)
-  .settings(
-  libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
-  libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
-    "com.lihaoyi" %% "utest" % "0.3.1",
-    "com.lihaoyi" %% "scalatags" % "0.5.1",
-    "com.lihaoyi" %% "upickle" % "0.2.7"
-  ),
-  testFrameworks += new TestFramework("utest.runner.Framework"),
-  scalaVersion := "2.11.6",
-  publish := ()
-)
-
 lazy val scrollspy = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
@@ -101,4 +85,11 @@ lazy val scrollspy = project
       "com.lihaoyi" %%% "scalatags" % "0.5.1"
     )
   )
-publish := ()
+
+lazy val readme = scalatex.ScalatexReadme(
+  folder = "readme",
+  url = "https://github.com/lihaoyi/scalatex/tree/master",
+  source = "Readme",
+  targetFolder = "target/site"
+)
+

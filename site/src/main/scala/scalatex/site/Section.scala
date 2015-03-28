@@ -40,7 +40,53 @@ trait Section{
   val Header = Section.Header
   var structure = Tree[String]("root", mutable.Buffer.empty)
   var depth = 0
-  val headers: Seq[Header] = Seq(h1, h2, h3, h4, h5, h6)
+  /**
+  .header {
+    margin: 0;
+    color: #333;
+    text-align: center;
+    padding: 2.5em 2em 0;
+    border-bottom: 1px solid #eee;
+}
+.header h1 {
+    margin: 0.2em 0;
+    font-size: 3em;
+    font-weight: 300;
+}
+.header h2 {
+    font-weight: 300;
+    color: #ccc;
+    padding: 0;
+    margin-top: 0;
+}
+   */
+  val header = Seq(
+    margin := 0,
+    color := "#333",
+    textAlign.center,
+    padding := "2.5em 2em 0",
+    borderBottom := "1px solid #eee"
+  )
+  val headerH1 = Seq(
+    margin := "0.2em 0",
+    fontSize := "3em",
+    fontWeight := 300
+  )
+  val headerH2 = Seq(
+    fontWeight := 300,
+    color := "#ccc",
+    padding := 0,
+    marginTop := 0
+  )
+  val headers: Seq[Header] = Seq(
+    Header(
+      (l, h, s) => div(header, h1(headerH1, h, l), br, if(s != "") h2(headerH2, s) else ()),
+      f => div(Styles.css.content, f)
+    ),
+    Header(
+      (l, h, s) => div(header, h1(headerH1, id:=munge(h), h, l), br, if(s != "") h2(headerH2, s) else ())),
+    h1, h2, h3, h4, h5, h6
+  )
 
   val usedRefs = mutable.Set.empty[String]
 
