@@ -1,6 +1,6 @@
 
 val sharedSettings = Seq(
-  version := scalatex.SbtPlugin.scalatexVersion,
+  version := repo.version,
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.10.4", "2.11.6"),
   scalaVersion := "2.11.6",
@@ -87,13 +87,14 @@ lazy val scrollspy = project
   )
 
 lazy val readme = scalatex.ScalatexReadme(
-  folder = "readme",
+  projectId = "readme",
+  wd = file(""),
   url = "https://github.com/lihaoyi/scalatex/tree/master",
-  source = "Readme",
-  targetFolder = "target/site"
+  source = "Readme"
 )
 .settings(
-  libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site")
+  libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
+  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala"
 )
 .dependsOn(
   site

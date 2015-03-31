@@ -17,8 +17,9 @@ class Main(url: String,
            val wd: Path,
            output: Path,
            extraAutoResources: Seq[Path],
+           extraManualResources: Seq[Path],
            frag: => Frag) extends scalatex.site.Site{
-
+  
   lazy val hl = new Highlighter {
     override def pathMappings = Seq(
       wd -> url
@@ -26,7 +27,7 @@ class Main(url: String,
   }
 
   def main(args: Array[String]): Unit = renderTo(output)
-
+  override def manualResources = super.manualResources ++ extraManualResources
   override def autoResources =
     super.autoResources ++
     hl.autoResources ++

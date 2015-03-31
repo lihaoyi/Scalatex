@@ -10,13 +10,15 @@ import Styles.css
  * snippets of code from files within your project via the `.ref` method, often
  * used via `hl.ref` where `hl` is a previously-instantiated Highlighter.
  */
-trait Highlighter{
+trait Highlighter{ hl =>
   val languages = mutable.Set.empty[String]
   def webjars = root/"META-INF"/'resources/'webjars
   def highlightJs = webjars/'highlightjs/"8.2-1"
   def style: String = "idea"
 
-  def lang(name: String) = (s: String) => this.highlight(s, name)
+  case class lang(name: String){
+    def apply(s: Any*) = hl.highlight(s.mkString, name)
+  }
   def as = lang("actionscript")
   def scala = lang("scala")
   def asciidoc = lang("asciidoc")
