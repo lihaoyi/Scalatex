@@ -19,7 +19,7 @@ class Main(url: String,
            extraAutoResources: Seq[Path],
            extraManualResources: Seq[Path],
            frag: => Frag) extends scalatex.site.Site{
-  
+
   lazy val hl = new Highlighter {
     override def pathMappings = Seq(
       wd -> url
