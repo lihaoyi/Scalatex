@@ -25,20 +25,38 @@ object ErrorTests extends TestSuite{
 
     assert(msg.contains(expectedMsg))
     assert(formattedPos == formattedExpectedPos)
-
   }
+
   val tests = TestSuite{
+    'simple {
+      * - check(
+        twRuntimeErrors("@o"),
+        """not found: value o""",
+        """
+        twRuntimeErrors("@o"),
+                          ^
+        """
+      )
+      val tq = "\"\"\""
+      * - check(
 
+        twRuntimeErrors("""@o"""),
+        """not found: value o""",
+        s"""
+        twRuntimeErrors($tq@o$tq),
+                            ^
+        """
+      )
 
-    'simple - check(
-      twRuntimeErrors("omg @notInScope lol"),
-      """not found: value notInScope""",
-      """
-      twRuntimeErrors("omg @notInScope lol"),
-                           ^
-      """
-    )
-
+      * - check(
+        twRuntimeErrors("omg @notInScope lol"),
+        """not found: value notInScope""",
+        """
+        twRuntimeErrors("omg @notInScope lol"),
+                              ^
+        """
+      )
+    }
     'chained{
       'properties {
         * - check(
@@ -140,6 +158,7 @@ object ErrorTests extends TestSuite{
                                            ^
           """
         )
+
         * - check(
           twRuntimeErrors("@scala.math.cos[omg]('omg)"),
           "not found: type omg",
@@ -167,7 +186,7 @@ object ErrorTests extends TestSuite{
           "missing arguments for method foldLeft",
           """
           twRuntimeErrors("@p{@Seq(1, 2, 3).foldLeft(0)}"),
-                                                   ^
+                                                    ^
           """
         )
 
@@ -180,22 +199,22 @@ object ErrorTests extends TestSuite{
           """
         )
 
-//        * - check(
-//          twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
-//            "type mismatch",
-//            """
-//          twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
-//                                                ^
-//          """
-//        )
-//        * - check(
-//          twRuntimeErrors("@Nil.map{ omg}"),
-//          "too many arguments for method map",
-//          """
-//          twRuntimeErrors("@Nil.map{ omg}"),
-//                                    ^
-//          """
-//        )
+        * - check(
+          twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
+            "type mismatch",
+            """
+          twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
+                                       ^
+          """
+        )
+        * - check(
+          twRuntimeErrors("@Nil.map{ omg}"),
+          "too many arguments for method map",
+          """
+          twRuntimeErrors("@Nil.map{ omg}"),
+                                    ^
+          """
+        )
       }
       'callContents{
         * - check(
@@ -232,7 +251,7 @@ object ErrorTests extends TestSuite{
           "Unspecified value parameter y",
           """
           twRuntimeErrors("@if(true){ (@math.pow(10)) * 10  }else{ 2 }"),
-                                               ^
+                                                ^
           """
         )
         * - check(
@@ -240,7 +259,7 @@ object ErrorTests extends TestSuite{
           "too many arguments for method sin: (x: Double)Double",
           """
           twRuntimeErrors("@if(true){ * 10  }else{ @math.sin(3, 4, 5) }"),
-                                                           ^
+                                                            ^
           """
         )
       }
@@ -365,7 +384,7 @@ object ErrorTests extends TestSuite{
         "value * is not a member of Object",
         """
             val z = y * x
-                     ^
+                      ^
         """
       )
       'blocks - check(
@@ -382,7 +401,7 @@ object ErrorTests extends TestSuite{
         "not found: value lol",
         """
                 @lol
-                ^
+                 ^
         """
       )
     }

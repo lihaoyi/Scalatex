@@ -58,7 +58,14 @@ object ParseErrors extends TestSuite{
     )
     * - check(
       """@ """.stripMargin,
-      """(ForLoop | IfElse | ScalaChain | HeaderBlock | DoubleAt):1 ..." """"
+      """(IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | @@):1 ..." """"
+    )
+
+    * - check(
+      """@p
+        |  @if(
+        |""".stripMargin,
+      """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):9 ..."\n""""
     )
   }
 }

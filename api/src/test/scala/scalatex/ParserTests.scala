@@ -201,24 +201,22 @@ object ParserTests extends utest.TestSuite{
           IfElse(0, "if(true)", Block(9, Seq(Text(9, "lol"))), Some(Block(18, Seq(Text(18, " omg ")))))
         )
         'ifBlock - check(
-          """
-            |@if(true)
+          """if(true)
             |  omg""".stripMargin,
           _.IndentIfElse,
-          IfElse(2, "if(true)", Block(10, Seq(Text(10, "\n  omg"))), None)
+          IfElse(0, "if(true)", Block(8, Seq(Text(8, "\n  omg"))), None)
         )
         'ifBlockElseBlock - check(
-          """
-            |@if(true)
+          """if(true)
             |  omg
             |@else
             |  wtf""".stripMargin,
           _.IndentIfElse,
           IfElse(
-            2,
+            0,
             "if(true)",
-            Block(10, Seq(Text(10, "\n  omg"))),
-            Some(Block(22, Seq(Text(22, "\n  wtf"))))
+            Block(8, Seq(Text(8, "\n  omg"))),
+            Some(Block(20, Seq(Text(20, "\n  wtf"))))
           )
         )
         'ifBlockElseBraceBlock - check(

@@ -63,7 +63,9 @@ package object scalatex {
       compileThing(c)(
         scalatexFragment,
         expr.tree.pos.source,
-        expr.tree.pos.point + (if (stringStart == "\"\"") 1 else -1),
+        expr.tree.pos.point
+        + (if (stringStart == "\"\"") 3 else 1) // Offset from start of string literal
+        - 1, // WTF I don't know why we need this
         runtimeErrors,
         debug
       )
