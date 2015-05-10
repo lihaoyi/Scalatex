@@ -5,7 +5,7 @@ publishArtifact := false
 publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 
 val sharedSettings = Seq(
-  version := repo.version,
+  version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.10.4", "2.11.6"),
   scalaVersion := "2.11.6",
@@ -51,7 +51,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   name := "scalatex-sbt-plugin",
   scalaVersion := "2.10.4",
   sbtPlugin := true,
-  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala"
+  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
 )
 
 lazy val site =
@@ -103,7 +103,7 @@ lazy val readme = scalatex.ScalatexReadme(
 )
 .settings(
   libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
-  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala",
+  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala",
   publishArtifact := false,
   publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 )
