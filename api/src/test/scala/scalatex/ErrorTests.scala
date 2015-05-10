@@ -195,7 +195,7 @@ object ErrorTests extends TestSuite{
           "missing arguments for method foldLeft",
           """
           twRuntimeErrors("@Nil.foldLeft{XY}"),
-                                        ^
+                                         ^
           """
         )
 
@@ -208,10 +208,10 @@ object ErrorTests extends TestSuite{
           """
         )
         * - check(
-          twRuntimeErrors("@Nil.map{ omg}"),
+          twRuntimeErrors("@Nil.map{ zomg}"),
           "too many arguments for method map",
           """
-          twRuntimeErrors("@Nil.map{ omg}"),
+          twRuntimeErrors("@Nil.map{ zomg}"),
                                     ^
           """
         )
@@ -321,7 +321,7 @@ object ErrorTests extends TestSuite{
           """value omglolol is not a member of Int""",
           """
           twRuntimeErrors("omg @for(x <- (0 + 1 + 2) omglolol (10 + 11 + 2)){ hello }"),
-                                                     ^
+                                                      ^
           """
         )
 
@@ -330,7 +330,7 @@ object ErrorTests extends TestSuite{
           """too many arguments for method +""",
           """
           twRuntimeErrors("omg @for(x <- 0 until 10){ @((x, 2) + (1, 2)) }"),
-                                                              ^
+                                                               ^
           """
         )
       }
@@ -358,7 +358,7 @@ object ErrorTests extends TestSuite{
         """not found: value notInScope""",
         """
         omg @notInScope lol
-            ^
+             ^
         """
       )
 //      'wrongType - check(

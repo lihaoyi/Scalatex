@@ -28,7 +28,8 @@ object Compiler{
         current + // start of of tree relative to start of fragment
         offset + // start of fragment relative to start of string-literal
         fragPos.point // start of string-literal relative to start of file
-//      println(s"$finalPos = $current + $offset + ${fragPos.point}\t $tree")
+
+      println(s"$finalPos = $current + $offset + ${fragPos.point}\t $tree")
       c.internal.setPos(tree,
         new OffsetPosition(
           fragPos.source,
@@ -45,7 +46,7 @@ object Compiler{
     val prefix = "omg"
 
     def compileChain(code: String, parts: Seq[Ast.Chain.Sub], offset: Int): c.Tree = {
-//      println("compileChain " + parts + "\t" + offset)
+      println("compileChain " + parts + "\t" + offset)
       val out = parts.foldLeft(incPosRec(c.parse(code), offset)){
         case (curr, Ast.Chain.Prop(offset2, str)) =>
 //          println(s"Prop $str $offset2")
@@ -75,7 +76,7 @@ object Compiler{
       out
     }
     def compileBlock(parts: Seq[Ast.Block.Sub], offset: Int): Seq[c.Tree] = {
-//      println("compileBlock " + parts + "\t" + offset)
+      println("compileBlock " + parts + "\t" + offset)
       val res = parts.map{
         case Ast.Block.Text(offset1, str) =>
           incPos(q"$str", offset1)
