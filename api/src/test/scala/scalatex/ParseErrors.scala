@@ -11,7 +11,7 @@ object ParseErrors extends TestSuite{
   def check(input: String, expectedTrace: String) = {
 
     val failure = new stages.Parser()
-      .Body
+      .File
       .parse(input, trace=false)
       .asInstanceOf[fastparse.Result.Failure]
 

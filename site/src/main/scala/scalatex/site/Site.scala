@@ -100,7 +100,7 @@ trait Site{
         body(bodyFrag(frag))
       ).render
 
-      write.over! outputRoot/path ! txt
+      write.over! outputRoot/path ! ("<!DOCTYPE html>" + txt)
     }
   }
   def renderTo(outputRoot: Path) = {

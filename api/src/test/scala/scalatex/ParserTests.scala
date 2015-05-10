@@ -163,7 +163,7 @@ object ParserTests extends utest.TestSuite{
           """
             |@for(x <- 0 until 3)
             |  lol""".stripMargin,
-          _.Body,
+          _.File,
           Block(0, Seq(
             Text(0, "\n"),
             For(
@@ -178,7 +178,7 @@ object ParserTests extends utest.TestSuite{
             |@for(x <- 0 until 3){
             |  lol
             |}""".stripMargin,
-          _.Body,
+          _.File,
           Block(0, Seq(
             Text(0, "\n"),
             For(
@@ -270,7 +270,7 @@ object ParserTests extends utest.TestSuite{
           |  @wtf
           |    @bbq
           |      @lol""".stripMargin,
-        _.Body,
+        _.File,
         Block(0, Seq(
           Text(0, "\n"),
           Chain(2, "omg",Seq(Block(5, Seq(
@@ -290,7 +290,7 @@ object ParserTests extends utest.TestSuite{
           |@omg
           |  @wtf
           |@bbq""".stripMargin,
-        _.Body,
+        _.File,
         Block(0,
           Seq(
           Text(0, "\n"),
@@ -310,7 +310,7 @@ object ParserTests extends utest.TestSuite{
           |  @wtf
           |}
           |@bbq""".stripMargin,
-        _.Body,
+        _.File,
         Block(0, Seq(
           Text(0, "\n"),
           Chain(2, "omg",Seq(Block(6,
@@ -329,7 +329,7 @@ object ParserTests extends utest.TestSuite{
           |@omg("lol", 1, 2)
           |  @wtf
           |bbq""".stripMargin,
-        _.Body,
+        _.File,
         Block(0, Seq(
           Text(0, "\n"),
           Chain(2, "omg",Seq(
@@ -350,7 +350,7 @@ object ParserTests extends utest.TestSuite{
 //          |    )
 //          |  wtf
 //          |bbq""".stripMargin,
-//        _.Body,
+//        _.File,
 //        Block(0, Seq(
 //          Text(0, "\n"),
 //          Chain(1, "omg",Seq(
@@ -381,7 +381,7 @@ object ParserTests extends utest.TestSuite{
           |  val omg = "omg"
           |  omg * 2
           |}""".stripMargin,
-        _.Body,
+        _.File,
         Block(0, Seq(
           Text(0, "\n"),
           Chain(2, "{\"lol\" * 3}", Seq()),
@@ -404,7 +404,7 @@ object ParserTests extends utest.TestSuite{
           |  @div
           |    @span
           |      @lol""".stripMargin,
-        _.Body,
+        _.File,
         Block(0,List(
           Text(0,"\nlol\nomg\nwtf\nbbq\n"),
           Chain(18,"body",Vector(

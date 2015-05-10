@@ -14,7 +14,7 @@ import fastparse._
  */
 object Parser extends ((String, Int) => Ast.Block){
   def apply(input: String, offset: Int = 0): Ast.Block = {
-    new Parser(offset).Body.parse(input) match {
+    new Parser(offset).File.parse(input) match {
       case s: fastparse.Result.Success[Ast.Block] => s.value
       case f: fastparse.Result.Failure => throw new Exception(f.trace)
     }
@@ -136,6 +136,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   )
   val Body = P( BodyEx("") )
 
+  val File = P( Body ~ End )
   val BodyNoBrace = P( BodyEx("}") )
   def BodyEx(exclusions: String) = P( Index ~ BodyItem(exclusions).rep ).map{
     case (i, x) => Ast.Block(i, flattenText(x.flatten))
