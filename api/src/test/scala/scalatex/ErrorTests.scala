@@ -195,27 +195,29 @@ object ErrorTests extends TestSuite{
           "missing arguments for method foldLeft",
           """
           twRuntimeErrors("@Nil.foldLeft{XY}"),
-                                         ^
+                                        ^
           """
         )
+
 
         * - check(
           twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
             "type mismatch",
             """
           twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
-                                       ^
+                                      ^
           """
         )
         * - check(
-          twRuntimeErrors("@Nil.map{ zomg}"),
+          twRuntimeErrors("@Nil.map{ @omg}"),
           "too many arguments for method map",
           """
-          twRuntimeErrors("@Nil.map{ zomg}"),
-                                    ^
+          twRuntimeErrors("@Nil.map{ @omg}"),
+                                   ^
           """
         )
       }
+
       'callContents{
         * - check(
           twRuntimeErrors("@scala.math.abs((1, 2).wtf)"),
@@ -321,7 +323,7 @@ object ErrorTests extends TestSuite{
           """value omglolol is not a member of Int""",
           """
           twRuntimeErrors("omg @for(x <- (0 + 1 + 2) omglolol (10 + 11 + 2)){ hello }"),
-                                                      ^
+                                                     ^
           """
         )
 
@@ -350,6 +352,7 @@ object ErrorTests extends TestSuite{
         )
       }
     }
+
     'multiLine{
       'missingVar - check(
         twRuntimeErrors("""
@@ -361,16 +364,16 @@ object ErrorTests extends TestSuite{
              ^
         """
       )
-//      'wrongType - check(
-//        twRuntimeErrors("""
-//        omg @{() => ()} lol
-//        """),
-//        """type mismatch""",
-//        """
-//        omg @{() => ()} lol
-//                 ^
-//        """
-//      )
+      'wrongType - check(
+        twRuntimeErrors("""
+        omg @{() => ()} lol
+        """),
+        """type mismatch""",
+        """
+        omg @{() => ()} lol
+                 ^
+        """
+      )
 
       'bigExpression - check(
         twRuntimeErrors("""
@@ -387,6 +390,19 @@ object ErrorTests extends TestSuite{
                       ^
         """
       )
+      'header - check(
+        twRuntimeErrors("""
+          @val x = 1
+          @val y = x map 0
+          lol lol
+        """),
+        "value map is not a member of Int",
+        """
+          @val y = x map 0
+                      ^
+        """
+      )
+
       'blocks - check(
         twRuntimeErrors("""
           lol

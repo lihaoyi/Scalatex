@@ -29,7 +29,7 @@ object Compiler{
         offset + // start of fragment relative to start of string-literal
         fragPos.point // start of string-literal relative to start of file
 
-      println(s"$finalPos = $current + $offset + ${fragPos.point}\t $tree")
+//      println(s"$finalPos = $current + $offset + ${fragPos.point}\t $tree")
       c.internal.setPos(tree,
         new OffsetPosition(
           fragPos.source,
@@ -66,7 +66,11 @@ object Compiler{
 
         case (curr, Ast.Block(offset2, parts)) =>
 //          println(s"Block $parts $offset2")
-          incPos(q"$curr(..${compileBlock(parts, offset2)})", offset2)
+          // -1 because the offset of a block is currently defined as the
+          // first character *after* the curly brace, where-as normal Scala
+          // error messages place the error position for a block-apply on
+          // the curly brace itself.
+          incPos(q"$curr(..${compileBlock(parts, offset2-1)})", offset2 - 1)
 
         case (curr, Ast.Header(offset2, header, block)) =>
 //          println(s"Header $header $offset2")
@@ -102,7 +106,7 @@ object Compiler{
         case Ast.Block.For(offset1, generators, Ast.Block(offset2, parts2)) =>
           val fresh = c.fresh()
 
-          val tree = incPosRec(c.parse(s"$generators yield $fresh"), offset1 + 1)
+          val tree = incPosRec(c.parse(s"$generators yield $fresh"), offset1)
 
           def rec(t: Tree): Tree = t match {
             case a @ Apply(fun, List(f @ Function(vparams, body))) =>
