@@ -22,40 +22,20 @@ object Parser extends ((String, Int) => Ast.Block){
 
 }
 class Parser(indent: Int = 0, offset: Int = 0) {
-  implicit class FlatMapParser[T](p1: fastparse.Parser[T]){
-    def flatMap[V](f: T => fastparse.Parser[V]): fastparse.Parser[V] = FlatMapped(p1, f)
-
-  }
   import Scala.{KeyWordOperators => K}
-  // We should make CharsWhile take a default min = 1,
-  // because adding .? to make it optional is really easy
+
   /**
    * Wraps another parser, succeeding/failing identically
    * but consuming no input
    */
   case class LookaheadValue[T](p: fastparse.Parser[T]) extends fastparse.Parser[T]{
-    def parseRec(cfg: ParseCtx, index: Int) = {
+    def parseRec(cfg: core.ParseCtx, index: Int) = {
       p.parseRec(cfg, index) match{
         case s: fastparse.Result.Success.Mutable[T] => success(cfg.success, s.value, index, false)
         case f: fastparse.Result.Failure.Mutable => failMore(f, index, cfg.trace)
       }
     }
     override def toString = s"&($p)"
-  }
-  case class FlatMapped[T, V](p1: fastparse.Parser[T],
-                              func: T => fastparse.Parser[V])
-                              extends fastparse.Parser[V] {
-    def parseRec(cfg: ParseCtx, index: Int): Result[V] = {
-      p1.parseRec(cfg, index) match{
-        case f: fastparse.Result.Failure.Mutable => failMore(f, index, cfg.trace, false)
-        case s: fastparse.Result.Success.Mutable[T] => func(s.value).parseRec(cfg, s.index)
-      }
-    }
-  }
-  case object Index extends fastparse.Parser[Int]{
-    def parseRec(cfg: ParseCtx, index: Int) = {
-      success(cfg.success, index, index, false)
-    }
   }
 
   /**
@@ -64,7 +44,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
    */
   def `@@` = P( Index ~ "@" ).map(Ast.Block.Text(_, "@"))
   def TextNot(chars: String) = {
-    val AllowedChars = P( CharsWhile(!(chars + "@\n").contains(_), min = 1) )
+    val AllowedChars = P( CharsWhile(!(chars + "@\n").contains(_)) )
     P( Index ~ AllowedChars.!.rep1 ).map{
       case (i, x) => Ast.Block.Text(i, x.mkString)
     }
@@ -80,7 +60,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val BlankLine = P( "\n" ~ " ".rep ~ &("\n") )
 
-  val IndentSpaces = P( fastparse.Parser.Repeat(" ", min = indent, delimiter = Pass) )
+  val IndentSpaces = P( fastparse.parsers.Combinators.Repeat(" ", min = indent, delimiter = Pass) )
   val Indent = P( "\n" ~ IndentSpaces )
   val IndentPrefix = P( Index ~ (Indent | Start).! ).map(Ast.Block.Text.tupled)
   val IndentScalaChain = P(ScalaChain ~ (IndentBlock | BraceBlock).?).map{
