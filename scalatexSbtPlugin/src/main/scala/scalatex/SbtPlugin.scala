@@ -90,20 +90,17 @@ object ScalatexReadme{
 
         val generated = dir / "scalatex" / "Main.scala"
 
-        val autoResourcesStrings = for {
-          res <- autoResources
-          f = file(res)
-          if f.exists
-        }yield '"' + f.getCanonicalPath + '"'
+        val autoResourcesStrings = autoResources.map('"' + _ + '"').mkString(",")
 
+        val manualResourceStrings = manualResources.map('"' + _ + '"').mkString(",")
         IO.write(generated, s"""
           package scalatex
           object Main extends scalatex.site.Main(
             url = "$url",
             wd = ammonite.ops.Path("${wd.getAbsolutePath}"),
             output = ammonite.ops.Path("${((target in Compile).value / "scalatex").getAbsolutePath}"),
-            extraAutoResources = Seq[String](${autoResourcesStrings.mkString(",")}).map(ammonite.ops.Path(_)),
-            extraManualResources = Seq[String](${manualResources.map('"' + _ + '"').mkString(",")}).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
+            extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
+            extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
             scalatex.$source()
           )
         """)
