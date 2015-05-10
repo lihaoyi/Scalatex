@@ -58,7 +58,7 @@ object ParseErrors extends TestSuite{
     )
     * - check(
       """@ """.stripMargin,
-      """"""
+      """(ForLoop | IfElse | ScalaChain | HeaderBlock | DoubleAt):1 ..." """"
     )
   }
 }

@@ -57,19 +57,19 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     }
   }
 
-  def DoubleAt = P( "@@" ).map(_ => "@")
+  def DoubleAt = P( Index ~ "@@" ).map(Ast.Block.Text(_, "@"))
   def TextNot(chars: String) = {
     val AllowedChars = P( CharsWhile(!(chars + "@\n").contains(_), min = 1) )
-    P( Index ~ (AllowedChars.! | DoubleAt).rep1 ).map{
+    P( Index ~ AllowedChars.!.rep1 ).map{
       case (i, x) => Ast.Block.Text(i, x.mkString)
     }
   }
 
   val Text = TextNot("")
-  val Code = P( "@" ~ (scalaparse.syntax.Identifiers.Id | BlockExpr | ExprCtx.Parened ).! )
-  val Header = P( "@" ~ (BlockDef | Import).! )
+  val Code = P( (scalaparse.syntax.Identifiers.Id | BlockExpr | ExprCtx.Parened ).! )
+  val Header = P( (BlockDef | Import).! )
 
-  val HeaderBlock = P( Index ~ Header ~ (WL.! ~ Header).rep ~ Body ).map{
+  val HeaderBlock = P( Index ~ Header ~ (WL.! ~ "@" ~ Header).rep ~ Body ).map{
     case (i, start, heads, body) => Ast.Header(i, start + heads.map{case (x, y) => x + y}.mkString, body)
   }
 
@@ -79,10 +79,10 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   val Indent = P( "\n" ~ IndentSpaces )
   val IndentPrefix = P( Index ~ (Indent | Start).! ).map(Ast.Block.Text.tupled)
   val IndentScalaChain: P[(Ast.Block.Text, Ast.Chain)] = {
-    val IndentSuffix = P(InlineScalaChain ~ (IndentBlock | BraceBlock).?).map{
+    val IndentSuffix = P(ScalaChain ~ (IndentBlock | BraceBlock).?).map{
       case (chain, body) => chain.copy(parts = chain.parts ++ body)
     }
-    P( IndentPrefix ~ IndentSuffix )
+    P( IndentPrefix ~ "@" ~ IndentSuffix )
   }
   val IndentBlock = P( LookaheadValue("\n".rep1 ~ IndentSpaces.!) ~ Index ).flatMap{
     case (nextIndent, offsetIndex) =>
@@ -90,25 +90,23 @@ class Parser(indent: Int = 0, offset: Int = 0) {
       else new Parser(nextIndent.length, offsetIndex).Body
   }
 
-  val IfHead = P( "@" ~ (`if` ~ "(" ~ ExprCtx.Expr ~ ")").! )
-  val IfElse1 = P(
-    Index ~ IfHead ~ BraceBlock ~ (`else` ~ (BraceBlock | IndentBlock)).?
-  )
-  val IfElse2 = P(
-    (Indent | Start) ~ Index ~ IfHead ~ IndentBlock ~ (Indent ~ "@else" ~ (BraceBlock | IndentBlock)).?
-  )
-  val IfElse = P( IfElse1 | IfElse2 ).map(Ast.Block.IfElse.tupled)
+  val IfHead = P( (`if` ~ "(" ~ ExprCtx.Expr ~ ")").! )
+  val IfElse = P( Index ~ IfHead ~ BraceBlock ~ (`else` ~ BraceBlock).? ).map(Ast.Block.IfElse.tupled)
+  val IndentIfElse = P(
+    (Indent | Start) ~ "@" ~ Index ~ IfHead ~ IndentBlock ~ (Indent ~ "@else" ~ (BraceBlock | IndentBlock)).?
+  ).map(Ast.Block.IfElse.tupled)
+
 
   val ForHead = {
     val ForBody = P( "(" ~! ExprCtx.Enumerators ~ ")" | "{" ~! StatCtx.Enumerators ~ "}" )
-    P( Index ~ "@" ~ (`for` ~! ForBody).! )
+    P( Index ~ (`for` ~! ForBody).! )
   }
-  val InlineForLoop = P( ForHead ~ BraceBlock ).map(Ast.Block.For.tupled)
+  val ForLoop = P( ForHead ~ BraceBlock ).map(Ast.Block.For.tupled)
   val IndentForLoop = P(
-    IndentPrefix ~ (ForHead ~ (IndentBlock | BraceBlock)).map(Ast.Block.For.tupled)
+    IndentPrefix ~ "@" ~ (ForHead ~ (IndentBlock | BraceBlock)).map(Ast.Block.For.tupled)
   )
 
-  val InlineScalaChain = P( Index ~ Code ~ Extension.rep ).map {
+  val ScalaChain = P( Index ~ Code ~ Extension.rep ).map {
     case (x, c, ex) => Ast.Chain(x, c, ex)
   }
 
@@ -121,13 +119,18 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val BraceBlock = P( "{" ~! BodyNoBrace  ~ "}" )
 
-  def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
-    InlineForLoop.map(Seq(_)) |
-    IndentForLoop.map{ case (a, b) => Seq(a, b) } |
+  val Special = P(
+    ForLoop.map(Seq(_)) |
     IfElse.map(Seq(_)) |
-    IndentScalaChain.map{ case (a, b) => Seq(a, b) } |
-    InlineScalaChain.map(Seq(_)) |
+    ScalaChain.map(Seq(_)) |
     HeaderBlock.map(Seq(_)) |
+    DoubleAt.map(Seq(_))
+  )
+  def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
+    IndentForLoop.map{ case (a, b) => Seq(a, b) } |
+    IndentScalaChain.map{ case (a, b) => Seq(a, b) } |
+    IndentIfElse.map(Seq(_)) |
+    "@" ~! Special |
     TextNot(exclusions).map(Seq(_)) |
     (Index ~ Indent.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
     (Index ~ BlankLine.!).map(Ast.Block.Text.tupled).map(Seq(_))
