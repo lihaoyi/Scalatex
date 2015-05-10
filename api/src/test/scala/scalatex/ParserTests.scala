@@ -134,7 +134,7 @@ object ParserTests extends utest.TestSuite{
       )
     }
     'Chain{
-      * - check("@omg.bbq[omg].fff[fff](123)  ", _.ScalaChain,
+      * - check("@omg.bbq[omg].fff[fff](123)  ", _.InlineScalaChain,
         Chain(0, "omg",Seq(
           Chain.Prop(4, "bbq"),
           Chain.TypeArgs(8, "[omg]"),
@@ -143,7 +143,7 @@ object ParserTests extends utest.TestSuite{
           Chain.Args(22, "(123)")
         ))
       )
-      * - check("@omg{bbq}.cow(moo){a @b}\n", _.ScalaChain,
+      * - check("@omg{bbq}.cow(moo){a @b}\n", _.InlineScalaChain,
         Chain(0, "omg",Seq(
           Block(5, Seq(Text(5, "bbq"))),
           Chain.Prop(9, "cow"),
@@ -156,7 +156,7 @@ object ParserTests extends utest.TestSuite{
       'for {
         'for - check(
           "@for(x <- 0 until 3){lol}",
-          _.ForLoop,
+          _.InlineForLoop,
           For(0, "for(x <- 0 until 3)", Block(21, Seq(Text(21, "lol"))))
         )
         'forBlock - check(
