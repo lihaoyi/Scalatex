@@ -3,7 +3,7 @@ package scalatex
 import sbt.Keys._
 import sbt._
 object SbtPlugin extends sbt.AutoPlugin {
-  val scalatexVersion = "0.2.2-SNAPSHOT"
+  val scalatexVersion = repo.version
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",
@@ -90,13 +90,19 @@ object ScalatexReadme{
 
         val generated = dir / "scalatex" / "Main.scala"
 
+        val autoResourcesStrings = for {
+          res <- autoResources
+          f = file(res)
+          if f.exists
+        }yield '"' + f.getCanonicalPath + '"'
+
         IO.write(generated, s"""
           package scalatex
           object Main extends scalatex.site.Main(
             url = "$url",
             wd = ammonite.ops.Path("${wd.getAbsolutePath}"),
             output = ammonite.ops.Path("${((target in Compile).value / "scalatex").getAbsolutePath}"),
-            extraAutoResources = Seq[String](${autoResources.map('"' + file(_).getCanonicalPath + '"').mkString(",")}).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
+            extraAutoResources = Seq[String](${autoResourcesStrings.mkString(",")}).map(ammonite.ops.Path(_)),
             extraManualResources = Seq[String](${manualResources.map('"' + _ + '"').mkString(",")}).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
             scalatex.$source()
           )

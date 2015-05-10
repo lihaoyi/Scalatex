@@ -1,4 +1,9 @@
 
+
+publishArtifact := false
+
+publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
+
 val sharedSettings = Seq(
   version := repo.version,
   organization := "com.lihaoyi",
@@ -45,7 +50,8 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
   scalaVersion := "2.10.4",
-  sbtPlugin := true
+  sbtPlugin := true,
+  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala"
 )
 
 lazy val site =
@@ -82,7 +88,11 @@ lazy val scrollspy = project
       "com.lihaoyi" %%% "upickle" % "0.2.7",
       "org.scala-js" %%% "scalajs-dom" % "0.8.0",
       "com.lihaoyi" %%% "scalatags" % "0.5.2"
-    )
+    ),
+    emitSourceMaps := false,
+
+    publishArtifact := false,
+    publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
   )
 
 lazy val readme = scalatex.ScalatexReadme(
@@ -93,7 +103,9 @@ lazy val readme = scalatex.ScalatexReadme(
 )
 .settings(
   libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
-  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala"
+  (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"repo.scala",
+  publishArtifact := false,
+  publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 )
 .dependsOn(
   site
