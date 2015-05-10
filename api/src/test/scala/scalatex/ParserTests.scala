@@ -152,6 +152,16 @@ object ParserTests extends utest.TestSuite{
         ))
       )
     }
+    'Escaping{
+      check(
+        """
+          |haoyi@@gmail.com""".stripMargin,
+        _.File,
+        Block(0, Seq(
+          Text(0, "\nhaoyi@gmail.com")
+        ))
+      )
+    }
     'ControlFlow{
       'for {
         'for - check(

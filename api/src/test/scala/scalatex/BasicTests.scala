@@ -13,7 +13,6 @@ object BasicTests extends TestSuite{
 
   val tests = TestSuite{
 
-
     'interpolation{
       'chained-check(
         tw("omg @scala.math.pow(0.5, 3) wtf"),

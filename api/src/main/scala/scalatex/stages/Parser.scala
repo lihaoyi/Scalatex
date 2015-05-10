@@ -58,7 +58,11 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     }
   }
 
-  def `@@` = P( Index ~ "@@" ).map(Ast.Block.Text(_, "@"))
+  /**
+   * This only needs to parse the second `@`l the first one is
+   * already parsed by [[BodyItem]]
+   */
+  def `@@` = P( Index ~ "@" ).map(Ast.Block.Text(_, "@"))
   def TextNot(chars: String) = {
     val AllowedChars = P( CharsWhile(!(chars + "@\n").contains(_), min = 1) )
     P( Index ~ AllowedChars.!.rep1 ).map{
@@ -136,7 +140,8 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   )
   val Body = P( BodyEx("") )
 
-  val File = P( Body ~ End )
+  // Some day we'll turn this on, but for now it seems to be making things blow up
+  val File = P( Body/* ~ End */)
   val BodyNoBrace = P( BodyEx("}") )
   def BodyEx(exclusions: String) = P( Index ~ BodyItem(exclusions).rep ).map{
     case (i, x) => Ast.Block(i, flattenText(x.flatten))

@@ -41,6 +41,10 @@ object ExampleTests extends TestSuite{
       tw(""""""),
       ""
     )
+    'escaping - check(
+      tw("haoyi@@gmail.com"),
+      "haoyi@gmail.com"
+    )
     'variousSyntaxes - check(
       tw("""
           @div
