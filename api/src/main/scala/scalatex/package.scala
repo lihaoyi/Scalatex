@@ -33,7 +33,7 @@ package object scalatex {
         .value
         .value
         .asInstanceOf[String]
-      val txt = io.Source.fromFile(fileName).mkString
+      val txt = io.Source.fromFile(fileName)(scala.io.Codec.UTF8).mkString
       val sourceFile = new BatchSourceFile(
         new PlainFile(fileName),
         txt.toCharArray

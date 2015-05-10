@@ -1,10 +1,12 @@
 package scalatex.site
 
+import java.nio.CharBuffer
 import java.nio.file.{Paths, Files}
 
 import ammonite.ops.Path
 import ammonite.ops._
 import scalatags.Text.all._
+import scalatags.Text.attrs
 import scalatags.Text.tags2
 import Styles.css
 /**
@@ -67,6 +69,7 @@ trait Site{
   def headFrags: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
+    meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
     tags2.style(raw(css.styleSheetText)),
     script(src:=scriptName)
   )
@@ -99,8 +102,11 @@ trait Site{
         head(headFrags),
         body(bodyFrag(frag))
       ).render
+      val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
 
-      write.over! outputRoot/path ! ("<!DOCTYPE html>" + txt)
+      val bytes = scala.io.Codec.UTF8.encoder.encode(cb)
+
+      write.over(outputRoot/path, bytes.array())
     }
   }
   def renderTo(outputRoot: Path) = {

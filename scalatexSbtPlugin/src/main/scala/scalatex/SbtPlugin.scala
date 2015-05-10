@@ -58,6 +58,19 @@ object SbtPlugin extends sbt.AutoPlugin {
   )
 }
 object ScalatexReadme{
+  /**
+   *
+   * @param projectId The name this readme project will take,
+   *                  and the folder it will live in
+   * @param wd The working directory of this readme project will
+   *           use as `wd` inside the code
+   * @param source The name of the scalatex file which will be bundled into
+   *               `index.html`, without the `.scalatex` suffix
+   * @param url Where this project lives on the internet, so `hl.ref` can
+   *            properly insert links
+   * @param autoResources Any other CSS or JS files you want to bundle into
+   *                      index.html
+   */
   def apply(projectId: String = "scalatex",
             wd: java.io.File,
             source: String,

@@ -36,11 +36,6 @@ object ParseErrors extends TestSuite{
       """(TypePattern | BindPattern):5 ...";\n""""
     )
     * - check(
-      """@a.b.""
-        |""".stripMargin,
-      """(BacktickId | PlainId):5 ..."\"\"\n""""
-    )
-    * - check(
       """@{ => x
         |""".stripMargin,
       """("}" | `case`):2 ..." => x\n""""

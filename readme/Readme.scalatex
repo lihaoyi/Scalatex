@@ -31,7 +31,7 @@
     alt:="Fork me on GitHub"
   )
 )
-@sect("Scalatex " + repo.version)
+@sect("Scalateχ ", repo.version)
 
   @exampleRef("helloWorld", "scala html")
 
@@ -189,7 +189,13 @@
     @hl.ref(wd/"build.sbt", "scalatex.ScalatexReadme", ".settings")
 
     @p
-      This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with @hl.scala("@import Main._") to get access to functionality such as:
+      This example usage would quickly create a project in the @code{readme/} folder, that you can immediately work with. Simple place a @code{Readme.scalatex} file in @code{readme/} and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the @hl.scala{Main} object, so make sure you start off with
+
+    @hl.scala("""
+      @import Main._
+    """)
+    @p
+      to get access to functionality such as:
 
     @ul
       @li
@@ -218,7 +224,7 @@
 
     @pairs
       @half
-        @hl.ref(wd/'readme/'section/"Example1.scalatex")
+        @hl.ref(wd/'readme/'section/"Example1.scalatex", "@sect")
       @half
         @exampleWrapper
           @section.Example1()
@@ -244,7 +250,7 @@
 
     @pairs
       @half
-        @hl.ref(wd/'readme/'section/"Example3.scalatex")
+        @hl.ref(wd/'readme/'section/"Example3.scalatex", "@sect")
       @half
         @exampleWrapper
           @section.Example3()

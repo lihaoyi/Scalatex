@@ -1,3 +1,4 @@
+
 @object sect extends scalatex.site.Section()
 
 @sect{Page with Refs}

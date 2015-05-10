@@ -1,16 +1,9 @@
 @import Main._
 @div
-  @hl.highlight(
-    "<div><b>Some</b> HTML</div>",
-    "xml"
-  )
+  @hl.xml{<div><b>Some</b> HTML</div>}
 @div
-  @hl.highlight(
-    "f = function(x){return x+1}",
-    "javascript"
-  )
+  @hl.js("f = function(x){return x+1}")
 @div
-  @hl.highlight(
-    "val f = (x) => { x + 1 }",
-    "scala"
-  )
+  @hl.scala
+    val f = (x) => { x + 1 }
+

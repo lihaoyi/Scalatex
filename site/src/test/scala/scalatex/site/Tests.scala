@@ -1,4 +1,7 @@
 package scalatex.site
+
+import java.nio.CharBuffer
+
 import scalatex.scalatex.site._
 import java.nio.file.{Paths, Files}
 
@@ -10,6 +13,7 @@ import scalatags.Text.all._
 import scalatex.site.Tree
 import ammonite.ops._
 object Tests extends TestSuite{
+
   def cmp(s1: String, s2: String) = {
     val f1 = s1.filter(!_.isWhitespace).mkString
     val f2 = s2.filter(!_.isWhitespace)

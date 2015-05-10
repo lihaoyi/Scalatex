@@ -119,7 +119,9 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   }
 
   val Extension = P(
-    (Index ~ "." ~! Identifiers.Id.!).map(Ast.Chain.Prop.tupled) |
+    // Not cutting after the ".", because full-stops are very common
+    // in english so this results in lots of spurious failures
+    (Index ~ "." ~ Identifiers.Id.!).map(Ast.Chain.Prop.tupled) |
     (Index ~ TypeArgs.!).map(Ast.Chain.TypeArgs.tupled) |
     (Index ~ ParenArgList.!).map(Ast.Chain.Args.tupled) |
     BraceBlock
