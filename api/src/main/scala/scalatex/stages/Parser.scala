@@ -26,6 +26,8 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   }
 
+  // We should make CharsWhile take a default min = 1,
+  // because adding .? to make it optional is really easy
   /**
    * Wraps another parser, succeeding/failing identically
    * but consuming no input
@@ -49,22 +51,22 @@ class Parser(indent: Int = 0, offset: Int = 0) {
       }
     }
   }
-  case object OffsetIndex extends fastparse.Parser[Int]{
+  case object Index extends fastparse.Parser[Int]{
     def parseRec(cfg: ParseCtx, index: Int) = {
-      success(cfg.success, index + offset, index, false)
+      success(cfg.success, index, index, false)
     }
   }
 
   def TextNot(chars: String): P[Ast.Block.Text] = P(
-    OffsetIndex ~ (CharsWhile(!(chars + "\n").contains(_)) | "@@").rep1.!
+    Index ~ (CharsWhile(!(chars + "\n").contains(_), min = 1) | "@@").rep1.!
   ).map{ case (i, x) => Ast.Block.Text(i, x.replace("@@", "@")) }
+
   val Text = TextNot("@")
   val Code = P( "@" ~ (scalaparse.syntax.Identifiers.Id | BlockExpr2 | ("(" ~ Exprs.? ~ ")")).! )
   val Header = P( "@" ~ (BlockDef | Import).! )
 
   val HeaderBlock: P[Ast.Header] = P(
-    OffsetIndex ~ Header ~ (WL.! ~ Header map {case (a, b) => a + b}).rep ~
-      IndentBlock
+    Index ~ Header ~ (WL.! ~ Header map {case (a, b) => a + b}).rep ~ IndentBlock
   ).map{
     case (i, start, heads, body) => Ast.Header(i, start + heads.mkString, body)
   }
@@ -74,21 +76,21 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   val IndentSpaces = P( fastparse.Parser.Repeat(" ", min = indent, delimiter = Pass) )
   val Indent = P( "\n" ~ IndentSpaces )
   val LoneScalaChain: P[(Ast.Block.Text, Ast.Chain)] = P(
-    (OffsetIndex ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
+    (Index ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
     (ScalaChain ~ IndentBlock).map{
       case (chain: Ast.Chain, body: Ast.Block) => chain.copy(parts = chain.parts :+ body)
     }
   )
   val IndentBlock: P[Ast.Block] = P(
-    LookaheadValue("\n".rep ~ IndentSpaces.!) ~ OffsetIndex
+    LookaheadValue("\n".rep ~ IndentSpaces.!) ~ Index
   ).flatMap{ case (nextIndent, offsetIndex) => new Parser(nextIndent.length, offsetIndex).Body}
 
   val IfHead = P( "@" ~ (`if` ~ "(" ~ ExprCtx.Expr ~ ")").! )
   val IfElse1 = P(
-    OffsetIndex ~ IfHead ~ BraceBlock ~ (`else` ~ (BraceBlock | IndentBlock)).?
+    Index ~ IfHead ~ BraceBlock ~ (`else` ~ (BraceBlock | IndentBlock)).?
   )
   val IfElse2 = P(
-    (Indent| Start) ~ OffsetIndex ~ IfHead ~ IndentBlock ~ (Indent ~ "@else" ~ (BraceBlock | IndentBlock)).?
+    (Indent| Start) ~ Index ~ IfHead ~ IndentBlock ~ (Indent ~ "@else" ~ (BraceBlock | IndentBlock)).?
   )
   val IfElse: P[Ast.Block.IfElse] = P(
     (IfElse1 | IfElse2).map(Ast.Block.IfElse.tupled)
@@ -96,23 +98,23 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val ForHead = {
     val Body = P( "(" ~ ExprCtx.Enumerators ~ ")" | "{" ~ StatCtx.Enumerators ~ "}" )
-    P( OffsetIndex ~ "@" ~ (`for` ~ Body).! )
+    P( Index ~ "@" ~ (`for` ~ Body).! )
   }
   val ForLoop: P[Ast.Block.For] = P(
     ForHead ~ BraceBlock
   ).map(Ast.Block.For.tupled)
   val LoneForLoop: P[(Ast.Block.Text, Ast.Block.For)] = P(
-    (OffsetIndex ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
+    (Index ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
     (ForHead ~ IndentBlock).map(Ast.Block.For.tupled)
   )
 
   val ScalaChain: P[Ast.Chain] = P(
-    (OffsetIndex ~ Code ~ Extension.rep) map { case (x, c, ex) => Ast.Chain(x, c, ex) }
+    (Index ~ Code ~ Extension.rep) map { case (x, c, ex) => Ast.Chain(x, c, ex) }
   )
   val Extension: P[Ast.Chain.Sub] = P(
-    (OffsetIndex ~ "." ~ Identifiers.Id.! map Ast.Chain.Prop.tupled) |
-    (OffsetIndex ~ TypeArgs2.! map Ast.Chain.TypeArgs.tupled) |
-    (OffsetIndex ~ ArgumentExprs2.! map Ast.Chain.Args.tupled) |
+    (Index ~ "." ~ Identifiers.Id.! map Ast.Chain.Prop.tupled) |
+    (Index ~ TypeArgs2.! map Ast.Chain.TypeArgs.tupled) |
+    (Index ~ ArgumentExprs2.! map Ast.Chain.Args.tupled) |
     BraceBlock
   )
   val Ws = WL
@@ -133,19 +135,19 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     LoneScalaChain.map{ case (a, b) => Seq(a, b) } |
     HeaderBlock.map(Seq(_)) |
     TextNot("@" + exclusions).map(Seq(_)) |
-    (OffsetIndex ~ Indent.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
-    (OffsetIndex ~ BlankLine.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
+    (Index ~ Indent.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
+    (Index ~ BlankLine.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
     ScalaChain.map(Seq(_))
   )
   val Body = P( BodyEx() )
   val BodyNoBrace = P( BodyEx("}") )
   def BodyEx(exclusions: String = "") = P(
-    OffsetIndex ~ BodyItem(exclusions).rep1 map {case (i, x) =>
+    Index ~ BodyItem(exclusions).rep1 map {case (i, x) =>
       Ast.Block(i, flattenText(x.flatten))
     }
   )
   val Body0 = P(
-    OffsetIndex ~ BodyItem("").rep map { case (i, x) =>
+    Index ~ BodyItem("").rep map { case (i, x) =>
       Ast.Block(i, flattenText(x.flatten))
     }
   )
