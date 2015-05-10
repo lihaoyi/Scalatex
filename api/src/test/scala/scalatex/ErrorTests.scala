@@ -390,6 +390,7 @@ object ErrorTests extends TestSuite{
                       ^
         """
       )
+
       'header - check(
         twRuntimeErrors("""
           @val x = 1
@@ -399,7 +400,7 @@ object ErrorTests extends TestSuite{
         "value map is not a member of Int",
         """
           @val y = x map 0
-                      ^
+                     ^
         """
       )
 

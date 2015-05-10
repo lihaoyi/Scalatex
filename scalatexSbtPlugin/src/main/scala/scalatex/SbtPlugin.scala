@@ -34,7 +34,7 @@ object SbtPlugin extends sbt.AutoPlugin {
             |import scalatags.Text.all._
             |
             |object $objectName{
-            |  def apply(): Frag = scalatex.twf("${inFile.getAbsolutePath}")
+            |  def apply(): Frag = _root_.scalatex.twf("${inFile.getAbsolutePath}")
             |}
             |
             |${IO.readLines(inFile).map("//"+_).mkString("\n")}

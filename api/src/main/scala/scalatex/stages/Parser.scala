@@ -1,6 +1,7 @@
 package scalatex
 package stages
 import acyclic.file
+import scalaparse.Scala
 import scalaparse.Scala._
 import scalaparse.syntax._
 import fastparse._
@@ -25,7 +26,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     def flatMap[V](f: T => fastparse.Parser[V]): fastparse.Parser[V] = FlatMapped(p1, f)
 
   }
-
+  import Scala.{KeyWordOperators => K}
   // We should make CharsWhile take a default min = 1,
   // because adding .? to make it optional is really easy
   /**
@@ -89,11 +90,11 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   }
 
   val IfHead = P( (`if` ~! "(" ~ ExprCtx.Expr ~ ")").! )
-  val IfSuffix = P( BraceBlock ~ (`else` ~ BraceBlock).?  )
+  val IfSuffix = P( BraceBlock ~ (K.W("else") ~! BraceBlock).?  )
   val IfElse = P( Index ~ IfHead ~ IfSuffix).map{ case (w, a, (b, c)) => Ast.Block.IfElse(w, a, b, c) }
 
   val IndentIfElse = {
-    val IfBlockSuffix = P( (IndentBlock ~ (Indent ~ "@else" ~ (BraceBlock | IndentBlock)).?) )
+    val IfBlockSuffix = P( IndentBlock ~ (Indent ~ K.W("@else") ~ (BraceBlock | IndentBlock)).? )
     P(Index ~ IfHead ~ (IfBlockSuffix | IfSuffix)).map{
       case (w, a, (b, c)) => Ast.Block.IfElse(w, a, b, c)
     }
@@ -122,21 +123,10 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val BraceBlock = P( "{" ~! BodyNoBrace  ~ "}" )
 
-  val Special = P(
-    ForLoop |
-    IfElse |
-    ScalaChain |
-    HeaderBlock |
-    `@@`
-  ).map(Seq(_))
+  val Special = P( ForLoop | IfElse | ScalaChain | HeaderBlock | `@@` ).map(Seq(_))
 
-  val SpecialIndented = P(
-    IndentForLoop |
-    IndentScalaChain |
-    IndentIfElse |
-    HeaderBlock |
-    `@@`
-  )
+  val SpecialIndented = P( IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | `@@` )
+
   def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
     (IndentPrefix ~ "@" ~! SpecialIndented).map{ case (a, b) => Seq(a, b) } |
     "@" ~! Special |

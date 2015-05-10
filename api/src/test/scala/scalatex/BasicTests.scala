@@ -255,6 +255,7 @@ object BasicTests extends TestSuite{
           """
         )
       }
+//      This would be cool butis currently unsupported
 //
 //      'args{
 //        val things = Seq(1, 2, 3)
@@ -416,40 +417,40 @@ object BasicTests extends TestSuite{
           "<p>Hello</p>"
         )
       }
-//      'funkyExpressions{
-//        * - check(
-//          tw("""
-//            @p
-//              @if(true == false == (true.==(false)))
-//                @if(true == false == (true.==(false)))
-//                  Hello1
-//                @else
-//                  lols1
-//              @else
-//                @if(true == false == (true.==(false)))
-//                  Hello2
-//                @else
-//                  lols2
-//          """),
-//          "<p>Hello1</p>"
-//        )
-//        * - check(
-//          tw("""
-//            @p
-//              @if(true == false != (true.==(false)))
-//                @if(true == false != (true.==(false)))
-//                  Hello1
-//                @else
-//                  lols1
-//              @else
-//                @if(true == false != (true.==(false)))
-//                  Hello2
-//                @else
-//                  lols2
-//          """),
-//          "<p>lols2</p>"
-//        )
-//      }
+      'funkyExpressions{
+        * - check(
+          tw("""
+            @p
+              @if(true == false == (true.==(false)))
+                @if(true == false == (true.==(false)))
+                  Hello1
+                @else
+                  lols1
+              @else
+                @if(true == false == (true.==(false)))
+                  Hello2
+                @else
+                  lols2
+          """),
+          "<p>Hello1</p>"
+        )
+        * - check(
+          tw("""
+            @p
+              @if(true == false != (true.==(false)))
+                @if(true == false != (true.==(false)))
+                  Hello1
+                @else
+                  lols1
+              @else
+                @if(true == false != (true.==(false)))
+                  Hello2
+                @else
+                  lols2
+          """),
+          "<p>lols2</p>"
+        )
+      }
     }
 
     'files{

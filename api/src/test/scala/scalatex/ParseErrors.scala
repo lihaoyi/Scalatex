@@ -67,5 +67,10 @@ object ParseErrors extends TestSuite{
         |""".stripMargin,
       """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):9 ..."\n""""
     )
+    * - check(
+      """@if(true){ 123 }else lol
+        |""".stripMargin,
+      """"{":20 ..." lol\n""""
+    )
   }
 }

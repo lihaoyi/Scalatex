@@ -84,7 +84,7 @@ trait Section{
       f => div(Styles.css.content, f)
     ),
     Header(
-      (l, h, s) => div(header, h1(headerH1, id:=munge(h), h, l), br, if(s != "") h2(headerH2, s) else ())),
+      (l, h, s) => div(header, h1(headerH1, h, l), br, if(s != "") h2(headerH2, s) else ())),
     h1, h2, h3, h4, h5, h6
   )
 

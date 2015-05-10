@@ -1,5 +1,5 @@
 package scalatex.site
-
+import scalatex.scalatex.site._
 import java.nio.file.{Paths, Files}
 
 import utest._
@@ -7,7 +7,7 @@ import scala.collection.mutable
 import scalatags.Text.all
 import scalatags.Text.all._
 
-import scalatex.site.Section.Tree
+import scalatex.site.Tree
 import ammonite.ops._
 object Tests extends TestSuite{
   def cmp(s1: String, s2: String) = {
@@ -62,7 +62,8 @@ object Tests extends TestSuite{
           "Hai" -> 1
         )
         for ((token, count) <- expectedTokens) {
-          assert(token.r.findAllIn(txt).length == count)
+          val found = token.r.findAllIn(txt).toVector
+          assert({txt; found.length} == count)
         }
         val expectedTree = Tree[String]("root", mutable.Buffer(
           Tree[String]("Main", mutable.Buffer(
@@ -101,8 +102,6 @@ object Tests extends TestSuite{
     'Highlighter{
       import scalatex.site.Highlighter
       object hl extends Highlighter {
-        def languages = Seq("scala")
-        def suffixMappings = Map("scala" -> "scala")
       }
       'wholeFile {
         val (start, end, txt) = hl.referenceText(

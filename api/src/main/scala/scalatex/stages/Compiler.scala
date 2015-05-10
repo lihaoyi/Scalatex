@@ -46,7 +46,7 @@ object Compiler{
     val prefix = "omg"
 
     def compileChain(code: String, parts: Seq[Ast.Chain.Sub], offset: Int): c.Tree = {
-      println("compileChain " + parts + "\t" + offset)
+//      println("compileChain " + parts + "\t" + offset)
       val out = parts.foldLeft(incPosRec(c.parse(code), offset)){
         case (curr, Ast.Chain.Prop(offset2, str)) =>
 //          println(s"Prop $str $offset2")
@@ -80,7 +80,7 @@ object Compiler{
       out
     }
     def compileBlock(parts: Seq[Ast.Block.Sub], offset: Int): Seq[c.Tree] = {
-      println("compileBlock " + parts + "\t" + offset)
+//      println("compileBlock " + parts + "\t" + offset)
       val res = parts.map{
         case Ast.Block.Text(offset1, str) =>
           incPos(q"$str", offset1)
@@ -126,7 +126,7 @@ object Compiler{
     }
     def compileHeader(header: String, block: Ast.Block, offset: Int): c.Tree = {
       val Block(stmts, expr) = c.parse(s"{$header\n ()}")
-      Block(stmts, compileBlockWrapped(block.parts, block.offset))
+      Block(stmts.map(incPosRec(_, offset)), compileBlockWrapped(block.parts, block.offset))
     }
 
     val res = compileBlockWrapped(template.parts, template.offset)
