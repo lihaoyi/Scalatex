@@ -189,253 +189,253 @@ object ParserTests extends utest.TestSuite{
           ))
         )
       }
-//      'ifElse {
-//        'if - check(
-//          "@if(true){lol}",
-//          _.IfElse.run(),
-//          IfElse(0, "if(true)", Block(10, Seq(Text(10, "lol"))), None)
-//        )
-//        'ifElse - check(
-//          "@if(true){lol}else{ omg }",
-//          _.IfElse.run(),
-//          IfElse(0, "if(true)", Block(10, Seq(Text(10, "lol"))), Some(Block(19, Seq(Text(19, " omg ")))))
-//        )
-//        'ifBlock - check(
-//          """
-//            |@if(true)
-//            |  omg""".stripMargin,
-//          _.IfElse.run(),
-//          IfElse(1, "if(true)", Block(10, Seq(Text(10, "\n  omg"))), None)
-//        )
-//        'ifBlockElseBlock - check(
-//          """
-//            |@if(true)
-//            |  omg
-//            |@else
-//            |  wtf""".stripMargin,
-//          _.IfElse.run(),
-//          IfElse(
-//            1,
-//            "if(true)",
-//            Block(10, Seq(Text(10, "\n  omg"))),
-//            Some(Block(22, Seq(Text(22, "\n  wtf"))))
-//          )
-//        )
-//        'ifBlockElseBraceBlock - check(
-//          """@if(true){
-//            |  omg
-//            |}else{
-//            |  wtf
-//            |}""".stripMargin,
-//          _.IfElse.run(),
-//          IfElse(
-//            0,
-//            "if(true)",
-//            Block(10, Seq(Text(10, "\n  omg\n"))),
-//            Some(Block(23, Seq(Text(23, "\n  wtf\n"))))
-//          )
-//        )
-//        'ifBlockElseBraceBlockNested - {
-//          val res = Parser(Trim.old(
-//            """
-//        @p
-//          @if(true){
-//            Hello
-//          }else{
-//            lols
-//          }
-//            """))
-//          val expected =
-//            Block(0, Vector(
-//              Text(0, "\n"),
-//              Chain(1, "p",Vector(Block(3, Vector(
-//                Text(3, "\n  "),
-//                IfElse(6, "if(true)",
-//                  Block(16, Vector(
-//                    Text(16, "\n    Hello\n  ")
-//                  )),
-//                  Some(Block(35, Vector(
-//                    Text(35, "\n    lols\n  ")
-//                  )))
-//                ))))),
-//              Text(48, "\n")
-//            ))
-//          assert(res == expected)
-//        }
-//        'ifElseBlock - check(
-//          """@if(true){
-//            |  omg
-//            |}else
-//            |  wtf""".stripMargin,
-//          _.IfElse.run(),
-//          IfElse(
-//            0,
-//            "if(true)",
-//            Block(10, Seq(Text(10, "\n  omg\n"))),
-//            Some(Block(22, Seq(Text(22, "\n  wtf"))))
-//          )
-//        )
-//      }
-//
+      'ifElse {
+        'if - check(
+          "@if(true){lol}",
+          _.IfElse,
+          IfElse(0, "if(true)", Block(10, Seq(Text(10, "lol"))), None)
+        )
+        'ifElse - check(
+          "@if(true){lol}else{ omg }",
+          _.IfElse,
+          IfElse(0, "if(true)", Block(10, Seq(Text(10, "lol"))), Some(Block(19, Seq(Text(19, " omg ")))))
+        )
+        'ifBlock - check(
+          """
+            |@if(true)
+            |  omg""".stripMargin,
+          _.IfElse,
+          IfElse(1, "if(true)", Block(10, Seq(Text(10, "\n  omg"))), None)
+        )
+        'ifBlockElseBlock - check(
+          """
+            |@if(true)
+            |  omg
+            |@else
+            |  wtf""".stripMargin,
+          _.IfElse,
+          IfElse(
+            1,
+            "if(true)",
+            Block(10, Seq(Text(10, "\n  omg"))),
+            Some(Block(22, Seq(Text(22, "\n  wtf"))))
+          )
+        )
+        'ifBlockElseBraceBlock - check(
+          """@if(true){
+            |  omg
+            |}else{
+            |  wtf
+            |}""".stripMargin,
+          _.IfElse,
+          IfElse(
+            0,
+            "if(true)",
+            Block(10, Seq(Text(10, "\n  omg\n"))),
+            Some(Block(23, Seq(Text(23, "\n  wtf\n"))))
+          )
+        )
+        'ifBlockElseBraceBlockNested - {
+          val res = Parser(Trim.old(
+            """
+        @p
+          @if(true){
+            Hello
+          }else{
+            lols
+          }
+            """))
+          val expected =
+            Block(0, Vector(
+              Text(0, "\n"),
+              Chain(1, "p",Vector(Block(3, Vector(
+                Text(3, "\n  "),
+                IfElse(6, "if(true)",
+                  Block(16, Vector(
+                    Text(16, "\n    Hello\n  ")
+                  )),
+                  Some(Block(35, Vector(
+                    Text(35, "\n    lols\n  ")
+                  )))
+                ))))),
+              Text(48, "\n")
+            ))
+          assert(res == expected)
+        }
+        'ifElseBlock - check(
+          """@if(true){
+            |  omg
+            |}else
+            |  wtf""".stripMargin,
+          _.IfElse,
+          IfElse(
+            0,
+            "if(true)",
+            Block(10, Seq(Text(10, "\n  omg\n"))),
+            Some(Block(22, Seq(Text(22, "\n  wtf"))))
+          )
+        )
+      }
+
     }
-//    'Body{
-//      'indents - check(
+    'Body{
+      'indents - check(
+        """
+          |@omg
+          |  @wtf
+          |    @bbq
+          |      @lol""".stripMargin,
+        _.Body,
+        Block(0, Seq(
+          Text(0, "\n"),
+          Chain(1, "omg",Seq(Block(5, Seq(
+            Text(5, "\n  "),
+            Chain(8, "wtf",Seq(Block(12, Seq(
+              Text(12, "\n    "),
+              Chain(17, "bbq",Seq(Block(21, Seq(
+                Text(21, "\n      "),
+                Chain(28, "lol",Seq())
+              ))))
+            ))))
+          ))))
+        ))
+      )
+      'dedents - check(
+        """
+          |@omg
+          |  @wtf
+          |@bbq""".stripMargin,
+        _.Body,
+        Block(0,
+          Seq(
+          Text(0, "\n"),
+          Chain(1, "omg",Seq(Block(5,
+            Seq(
+              Text(5, "\n  "),
+              Chain(8, "wtf",Seq())
+            )
+          ))),
+          Text(12, "\n"),
+          Chain(13, "bbq", Seq())
+        ))
+      )
+      'braces - check(
+        """
+          |@omg{
+          |  @wtf
+          |}
+          |@bbq""".stripMargin,
+        _.Body,
+        Block(0, Seq(
+          Text(0, "\n"),
+          Chain(1, "omg",Seq(Block(6,
+            Seq(
+              Text(6, "\n  "),
+              Chain(9, "wtf",Seq()),
+              Text(13, "\n")
+            )
+          ))),
+          Text(15, "\n"),
+          Chain(16, "bbq", Seq())
+        ))
+      )
+      'dedentText - check(
+        """
+          |@omg("lol", 1, 2)
+          |  @wtf
+          |bbq""".stripMargin,
+        _.Body,
+        Block(0, Seq(
+          Text(0, "\n"),
+          Chain(1, "omg",Seq(
+            Args(5, """("lol", 1, 2)"""),
+            Block(18, Seq(
+              Text(18, "\n  "),
+              Chain(21, "wtf",Seq())
+            ))
+          )),
+          Text(25, "\nbbq")
+        ))
+      )
+//      'weird - check(
 //        """
-//          |@omg
-//          |  @wtf
-//          |    @bbq
-//          |      @lol""".stripMargin,
-//        _.Body.run(),
-//        Block(0, Seq(
-//          Text(0, "\n"),
-//          Chain(1, "omg",Seq(Block(5, Seq(
-//            Text(5, "\n  "),
-//            Chain(8, "wtf",Seq(Block(12, Seq(
-//              Text(12, "\n    "),
-//              Chain(17, "bbq",Seq(Block(21, Seq(
-//                Text(21, "\n      "),
-//                Chain(28, "lol",Seq())
-//              ))))
-//            ))))
-//          ))))
-//        ))
-//      )
-//      'dedents - check(
-//        """
-//          |@omg
-//          |  @wtf
-//          |@bbq""".stripMargin,
-//        _.Body.run(),
-//        Block(0,
-//          Seq(
-//          Text(0, "\n"),
-//          Chain(1, "omg",Seq(Block(5,
-//            Seq(
-//              Text(5, "\n  "),
-//              Chain(8, "wtf",Seq())
-//            )
-//          ))),
-//          Text(12, "\n"),
-//          Chain(13, "bbq", Seq())
-//        ))
-//      )
-//      'braces - check(
-//        """
-//          |@omg{
-//          |  @wtf
-//          |}
-//          |@bbq""".stripMargin,
-//        _.Body.run(),
-//        Block(0, Seq(
-//          Text(0, "\n"),
-//          Chain(1, "omg",Seq(Block(6,
-//            Seq(
-//              Text(6, "\n  "),
-//              Chain(9, "wtf",Seq()),
-//              Text(13, "\n")
-//            )
-//          ))),
-//          Text(15, "\n"),
-//          Chain(16, "bbq", Seq())
-//        ))
-//      )
-//      'dedentText - check(
-//        """
-//          |@omg("lol", 1, 2)
-//          |  @wtf
+//          |@omg("lol",
+//          |1,
+//          |       2
+//          |    )
+//          |  wtf
 //          |bbq""".stripMargin,
-//        _.Body.run(),
+//        _.Body,
 //        Block(0, Seq(
 //          Text(0, "\n"),
 //          Chain(1, "omg",Seq(
-//            Args(5, """("lol", 1, 2)"""),
-//            Block(18, Seq(
-//              Text(18, "\n  "),
-//              Chain(21, "wtf",Seq())
+//            Args(5, "(\"lol\",\n1,\n       2\n    )"),
+//            Block(30, Seq(
+//              Text(30, "\n  "), Text(33, "wtf")
 //            ))
 //          )),
-//          Text(25, "\nbbq")
+//          Text(36, "\n"),
+//          Text(37, "bbq")
 //        ))
 //      )
-////      'weird - check(
-////        """
-////          |@omg("lol",
-////          |1,
-////          |       2
-////          |    )
-////          |  wtf
-////          |bbq""".stripMargin,
-////        _.Body.run(),
-////        Block(0, Seq(
-////          Text(0, "\n"),
-////          Chain(1, "omg",Seq(
-////            Args(5, "(\"lol\",\n1,\n       2\n    )"),
-////            Block(30, Seq(
-////              Text(30, "\n  "), Text(33, "wtf")
-////            ))
-////          )),
-////          Text(36, "\n"),
-////          Text(37, "bbq")
-////        ))
-////      )
-//      'codeBlock - check(
-//        """@{
-//          |  val omg = "omg"
-//          |  omg * 2
-//          |}""".stripMargin,
-//        _.Code.run(),
-//        """{
-//        |  val omg = "omg"
-//        |  omg * 2
-//        |}""".stripMargin
-//      )
-//      'codeBlocks - check(
-//        """
-//          |@{"lol" * 3}
-//          |@{
-//          |  val omg = "omg"
-//          |  omg * 2
-//          |}""".stripMargin,
-//        _.Body.run(),
-//        Block(0, Seq(
-//          Text(0, "\n"),
-//          Chain(1, "{\"lol\" * 3}", Seq()),
-//          Text(13, "\n"),
-//          Chain(14, """{
-//            |  val omg = "omg"
-//            |  omg * 2
-//            |}""".stripMargin,
-//            Seq()
-//          )
-//        ))
-//      )
-//      'nesting - check(
-//        """
-//          |lol
-//          |omg
-//          |wtf
-//          |bbq
-//          |@body
-//          |  @div
-//          |    @span
-//          |      @lol""".stripMargin,
-//        _.Body.run(),
-//        Block(0,List(
-//          Text(0,"\nlol\nomg\nwtf\nbbq\n"),
-//          Chain(17,"body",Vector(
-//            Block(22,List(Text(22,"\n  "),
-//              Chain(25,"div",Vector(Block(29,List(Text(29, "\n    "),
-//                Chain(34,"span",Vector(Block(39,List(Text(39, "\n      "),
-//                  Chain(46,"lol",Vector())))
-//                ))
-//              ))
-//              ))))))))
-//      )
-//    }
+      'codeBlock - check(
+        """@{
+          |  val omg = "omg"
+          |  omg * 2
+          |}""".stripMargin,
+        _.Code,
+        """{
+        |  val omg = "omg"
+        |  omg * 2
+        |}""".stripMargin
+      )
+      'codeBlocks - check(
+        """
+          |@{"lol" * 3}
+          |@{
+          |  val omg = "omg"
+          |  omg * 2
+          |}""".stripMargin,
+        _.Body,
+        Block(0, Seq(
+          Text(0, "\n"),
+          Chain(1, "{\"lol\" * 3}", Seq()),
+          Text(13, "\n"),
+          Chain(14, """{
+            |  val omg = "omg"
+            |  omg * 2
+            |}""".stripMargin,
+            Seq()
+          )
+        ))
+      )
+      'nesting - check(
+        """
+          |lol
+          |omg
+          |wtf
+          |bbq
+          |@body
+          |  @div
+          |    @span
+          |      @lol""".stripMargin,
+        _.Body,
+        Block(0,List(
+          Text(0,"\nlol\nomg\nwtf\nbbq\n"),
+          Chain(17,"body",Vector(
+            Block(22,List(Text(22,"\n  "),
+              Chain(25,"div",Vector(Block(29,List(Text(29, "\n    "),
+                Chain(34,"span",Vector(Block(39,List(Text(39, "\n      "),
+                  Chain(46,"lol",Vector())))
+                ))
+              ))
+              ))))))))
+      )
+    }
 //    'Test{
 //      check(
 //        "@{() => ()}",
-//        _.Code.run(),
+//        _.Code,
 //        ""
 //      )
 //    }

@@ -66,7 +66,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   val Header = P( "@" ~ (BlockDef | Import).! )
 
   val HeaderBlock: P[Ast.Header] = P(
-    Index ~ Header ~ (WL.! ~ Header map {case (a, b) => a + b}).rep ~ IndentBlock
+    Index ~ Header ~ (WL.! ~ Header map {case (a, b) => a + b}).rep ~ Body
   ).map{
     case (i, start, heads, body) => Ast.Header(i, start + heads.mkString, body)
   }
@@ -77,13 +77,17 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   val Indent = P( "\n" ~ IndentSpaces )
   val LoneScalaChain: P[(Ast.Block.Text, Ast.Chain)] = P(
     (Index ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
-    (ScalaChain ~ IndentBlock).map{
-      case (chain: Ast.Chain, body: Ast.Block) => chain.copy(parts = chain.parts :+ body)
+    (ScalaChain ~ (IndentBlock | BraceBlock).?).map{
+      case (chain, body) => chain.copy(parts = chain.parts ++ body)
     }
   )
   val IndentBlock: P[Ast.Block] = P(
-    LookaheadValue("\n".rep ~ IndentSpaces.!) ~ Index
-  ).flatMap{ case (nextIndent, offsetIndex) => new Parser(nextIndent.length, offsetIndex).Body}
+    LookaheadValue("\n".rep1 ~ IndentSpaces.!) ~ Index
+  ).flatMap{ case (nextIndent, offsetIndex) =>
+    if (nextIndent.length <= indent) fastparse.Fail
+    else new Parser(nextIndent.length, offsetIndex).Body
+  }
+
 
   val IfHead = P( "@" ~ (`if` ~ "(" ~ ExprCtx.Expr ~ ")").! )
   val IfElse1 = P(
@@ -105,7 +109,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   ).map(Ast.Block.For.tupled)
   val LoneForLoop: P[(Ast.Block.Text, Ast.Block.For)] = P(
     (Index ~ (Indent | Start).!).map(Ast.Block.Text.tupled) ~
-    (ForHead ~ IndentBlock).map(Ast.Block.For.tupled)
+    (ForHead ~ (IndentBlock | BraceBlock)).map(Ast.Block.For.tupled)
   )
 
   val ScalaChain: P[Ast.Chain] = P(
@@ -113,20 +117,20 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   )
   val Extension: P[Ast.Chain.Sub] = P(
     (Index ~ "." ~ Identifiers.Id.! map Ast.Chain.Prop.tupled) |
-    (Index ~ TypeArgs2.! map Ast.Chain.TypeArgs.tupled) |
-    (Index ~ ArgumentExprs2.! map Ast.Chain.Args.tupled) |
+    (Index ~ TypeArgs.! map Ast.Chain.TypeArgs.tupled) |
+    (Index ~ ParenArgList.! map Ast.Chain.Args.tupled) |
     BraceBlock
   )
   val Ws = WL
   // clones of the version in ScalaSyntax, but without tailing whitespace or newlines
-  val TypeArgs2 = P( "[" ~ Ws ~ Types ~ "]" )
-  val ArgumentExprs2 = P(
-    "(" ~ Ws ~
-    ((Exprs ~ "," ~ Ws).? ~ ExprCtx.PostfixExpr ~ ":" ~ Ws ~ "_" ~ Ws ~ "*" ~ Ws | Exprs.? ) ~
-    Ws ~ ")"
-  )
+//  val TypeArgs2 = P( "[" ~ Ws ~ Types ~ "]" )
+//  val ArgumentExprs2 = P(
+//    "(" ~ Ws ~
+//    ((Exprs ~ "," ~ Ws).? ~ ExprCtx.PostfixExpr ~ ":" ~ Ws ~ "_" ~ Ws ~ "*" ~ Ws | Exprs.? ) ~
+//    Ws ~ ")"
+//  )
   val BlockExpr2: P0 = P( "{" ~ Ws ~ (CaseClauses | Block) ~ Ws ~ "}" )
-  val BraceBlock: P[Ast.Block] = P( "{" ~ BodyNoBrace ~ "}" )
+  val BraceBlock: P[Ast.Block] = P( "{" ~ BodyNoBrace  ~ "}" )
 
   def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
     ForLoop.map(Seq(_)) |
