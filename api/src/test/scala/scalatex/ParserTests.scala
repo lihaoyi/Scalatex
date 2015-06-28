@@ -9,12 +9,12 @@ import Ast.Chain.Args
 object ParserTests extends utest.TestSuite{
   import Ast._
   import utest._
-  def check[T](input: String, parser: Parser => fastparse.Parser[T], expected: T) = {
+  def check[T](input: String, parser: Parser => fastparse.core.Parser[T], expected: T) = {
     parser(new Parser()).parse(input) match{
-      case s: fastparse.Result.Success[T] =>
+      case s: fastparse.core.Result.Success[T] =>
         val result = s.value
         assert(result == expected)
-      case f: fastparse.Result.Failure => throw new Exception(f.trace)
+      case f: fastparse.core.Result.Failure => throw new Exception(f.traced.trace)
     }
   }
   def tests = TestSuite{
@@ -114,8 +114,7 @@ object ParserTests extends utest.TestSuite{
       }
       'caseclass{
         check(
-          """case class Foo(i: Int, s: String)
-          """.stripMargin,
+          """case class Foo(i: Int, s: String)""".stripMargin,
           _.Header,
           "case class Foo(i: Int, s: String)"
         )

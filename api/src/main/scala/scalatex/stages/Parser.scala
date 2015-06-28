@@ -4,8 +4,8 @@ import acyclic.file
 import scalaparse.Scala
 import scalaparse.Scala._
 import scalaparse.syntax._
-import fastparse._
-
+import fastparse.all._
+import fastparse.core.{Mutable, ParseCtx}
 /**
  * Parses the input text into a roughly-structured AST. This AST
  * is much simpler than the real Scala AST, but serves us well
@@ -15,8 +15,8 @@ import fastparse._
 object Parser extends ((String, Int) => Ast.Block){
   def apply(input: String, offset: Int = 0): Ast.Block = {
     new Parser(offset).File.parse(input) match {
-      case s: fastparse.Result.Success[Ast.Block] => s.value
-      case f: fastparse.Result.Failure => throw new Exception(f.trace)
+      case s: Result.Success[Ast.Block] => s.value
+      case f: Result.Failure => throw new Exception(f.traced.trace)
     }
   }
 
@@ -28,11 +28,11 @@ class Parser(indent: Int = 0, offset: Int = 0) {
    * Wraps another parser, succeeding/failing identically
    * but consuming no input
    */
-  case class LookaheadValue[T](p: fastparse.Parser[T]) extends fastparse.Parser[T]{
-    def parseRec(cfg: core.ParseCtx, index: Int) = {
+  case class LookaheadValue[T](p: P[T]) extends P[T]{
+    def parseRec(cfg: ParseCtx, index: Int) = {
       p.parseRec(cfg, index) match{
-        case s: fastparse.Result.Success.Mutable[T] => success(cfg.success, s.value, index, false)
-        case f: fastparse.Result.Failure.Mutable => failMore(f, index, cfg.trace)
+        case s: Mutable.Success[T] => success(cfg.success, s.value, index, Nil, false)
+        case f: Mutable.Failure => failMore(f, index, cfg.logDepth)
       }
     }
     override def toString = s"&($p)"
@@ -45,7 +45,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   def `@@` = P( Index ~ "@" ).map(Ast.Block.Text(_, "@"))
   def TextNot(chars: String) = {
     val AllowedChars = P( CharsWhile(!(chars + "@\n").contains(_)) )
-    P( Index ~ AllowedChars.!.rep1 ).map{
+    P( Index ~ AllowedChars.!.rep(1) ).map{
       case (i, x) => Ast.Block.Text(i, x.mkString)
     }
   }
@@ -67,9 +67,9 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     case (chain, body) => chain.copy(parts = chain.parts ++ body)
   }
 
-  val IndentBlock = P( LookaheadValue("\n".rep1 ~ IndentSpaces.!) ~ Index ).flatMap{
+  val IndentBlock = P( LookaheadValue("\n".rep(1) ~ IndentSpaces.!) ~ Index ).flatMap{
     case (nextIndent, offsetIndex) =>
-      if (nextIndent.length <= indent) fastparse.Fail
+      if (nextIndent.length <= indent) Fail
       else new Parser(nextIndent.length, offsetIndex).Body
   }
 
@@ -109,16 +109,22 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val BraceBlock = P( "{" ~! BodyNoBrace  ~ "}" )
 
-  val Special = P( ForLoop | IfElse | ScalaChain | HeaderBlock | `@@` ).map(Seq(_))
+  val CtrlFlow = P( ForLoop | IfElse | ScalaChain | HeaderBlock | `@@` ).map(Seq(_))
 
-  val SpecialIndented = P( IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | `@@` )
+  val CtrlFlowIndented = P( IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | `@@` )
 
-  def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
-    (IndentPrefix ~ "@" ~! SpecialIndented).map{ case (a, b) => Seq(a, b) } |
-    "@" ~! Special |
+  val IndentedExpr = P(
+    (IndentPrefix ~ "@" ~! CtrlFlowIndented).map{ case (a, b) => Seq(a, b) }
+  )
+  def BodyText(exclusions: String) = P(
     TextNot(exclusions).map(Seq(_)) |
     (Index ~ Indent.!).map(Ast.Block.Text.tupled).map(Seq(_)) |
     (Index ~ BlankLine.!).map(Ast.Block.Text.tupled).map(Seq(_))
+  )
+  def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
+    IndentedExpr |
+    "@" ~! CtrlFlow |
+    BodyText(exclusions)
   )
   val Body = P( BodyEx("") )
 

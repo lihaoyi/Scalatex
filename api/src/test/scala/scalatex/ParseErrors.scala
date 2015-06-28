@@ -12,23 +12,23 @@ object ParseErrors extends TestSuite{
 
     val failure = new stages.Parser()
       .File
-      .parse(input, trace=false)
-      .asInstanceOf[fastparse.Result.Failure]
+      .parse(input)
+      .asInstanceOf[fastparse.core.Result.Failure]
 
-    val parsedTrace = failure.trace
-    assert(parsedTrace == expectedTrace)
+    val parsedTrace = failure.traced.copy(fullStack = Nil).trace
+    assert(parsedTrace == expectedTrace.trim)
   }
 
   val tests = TestSuite {
     * - check(
       """@{)
         |""".stripMargin,
-      """("}" | `case`):2 ...")\n""""
+      """ (";" | Newline.rep(1) | "}" | `case`):2 ...")\n" """
     )
     * - check(
       """@({
         |""".stripMargin,
-      """("}" | `case`):4 ..."""""
+      """ (";" | Newline.rep(1) | "}" | `case`):4 ..."" """
     )
     * - check(
       """@for{;
@@ -38,18 +38,18 @@ object ParseErrors extends TestSuite{
     * - check(
       """@{ => x
         |""".stripMargin,
-      """("}" | `case`):2 ..." => x\n""""
+      """ (";" | Newline.rep(1) | "}" | `case`):3 ..."=> x\n" """
     )
 
     * - check(
       """@( => x
         |""".stripMargin,
-      """")":3 ..."=> x\n""""
+      """ (If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda | ")"):3 ..."=> x\n" """
     )
     * - check(
       """@x{
         |""".stripMargin,
-      """"}":4 ..."""""
+      """ ("}" | IndentedExpr | "@" ~! CtrlFlow | BodyText):4 ..."" """
     )
     * - check(
       """@ """.stripMargin,
