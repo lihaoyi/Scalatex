@@ -1,6 +1,6 @@
 package scalatex.site
 
-import ammonite.ops.{cwd, RelPath, Path}
+import ammonite.ops.Path
 
 import scalatags.Text.all._
 import scalatex.site
@@ -44,5 +44,5 @@ class Main(url: String,
       Highlighter.snippet
     )
   }
-  def content = Map("index.html" -> frag)
+  def content = Map("index.html" -> (headFrags, frag))
 }

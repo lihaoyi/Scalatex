@@ -1,14 +1,12 @@
 package scalatex.site
 
 import java.nio.CharBuffer
-import java.nio.file.{Paths, Files}
 
-import ammonite.ops.Path
-import ammonite.ops._
+import ammonite.ops.{Path, _}
+
 import scalatags.Text.all._
-import scalatags.Text.attrs
-import scalatags.Text.tags2
-import Styles.css
+import scalatags.Text.{attrs, tags2}
+import scalatex.site.Styles.css
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -84,7 +82,7 @@ trait Site{
   /**
    * The contents of this page
    */
-  def content: Map[String, Frag]
+  def content: Map[String, (Seq[Frag], Frag)]
 
   def bundleResources(outputRoot: Path) = {
     for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
@@ -97,10 +95,10 @@ trait Site{
   }
 
   def generateHtml(outputRoot: Path) = {
-    for((path, frag) <- content){
+    for((path, page) <- content){
       val txt = html(
-        head(headFrags),
-        body(bodyFrag(frag))
+        head(page._1),
+        body(bodyFrag(page._2))
       ).render
       val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
 
