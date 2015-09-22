@@ -172,6 +172,26 @@ object Tests extends TestSuite{
             |)""".stripMargin
         assert(txt == expected)
       }
+      'indentation{
+        val lang = "js"
+        'noIndent{
+          // Shouldn't crash when no lines are indented
+          val text = "{\ntest\n}"
+          val expectedLines = text
+          val expected = pre(code(cls:=lang + " " + Styles.css.highlightMe.name, expectedLines))
+          val actual = hl.highlight(text, lang)
+          assert(actual == expected)
+        }
+        'zeroMinIndent{
+          // Shouldn't delete text if minimum indent is 0
+          val lang = "js"
+          val text = "{\n  test\n}"
+          val expectedLines = text
+          val expected = pre(code(cls:=lang + " " + Styles.css.highlightMe.name, expectedLines))
+          val actual = hl.highlight(text, lang)
+          assert(actual == expected)
+        }
+      }
     }
     'Site{
       'simple {

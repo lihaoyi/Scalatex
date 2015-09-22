@@ -110,9 +110,7 @@ trait Highlighter{ hl =>
       )
 
     }else{
-      val minIndent = lines.map(_.takeWhile(_ == ' ').length)
-        .filter(_ > 0)
-        .min
+      val minIndent = lines.map(_.takeWhile(_ == ' ').length).min
       val stripped = lines.map(_.drop(minIndent))
         .dropWhile(_ == "")
         .mkString("\n")
