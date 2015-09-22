@@ -69,7 +69,7 @@ lazy val site =
     "org.webjars" % "font-awesome" % "4.2.0",
     "com.lihaoyi" %% "scalatags" % "0.5.2",
     "org.webjars" % "pure" % "0.5.0",
-    "com.lihaoyi" %% "upickle" % "0.2.7"
+    "com.lihaoyi" %% "upickle" % "0.3.6"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
