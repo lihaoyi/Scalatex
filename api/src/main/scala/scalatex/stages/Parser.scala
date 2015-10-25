@@ -22,7 +22,7 @@ object Parser extends ((String, Int) => Ast.Block){
 
 }
 class Parser(indent: Int = 0, offset: Int = 0) {
-  import Scala.{KeyWordOperators => K}
+  import scalaparse.syntax.{Key => K}
 
   /**
    * Wraps another parser, succeeding/failing identically
