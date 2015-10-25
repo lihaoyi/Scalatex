@@ -1,6 +1,11 @@
 language: scala
+
+# ignored, because if we do the ++ thing it uses the wrong
+# scalaVersion to compile the sbt plugin which blows up
 scala:
 - 2.11.6
+script:
+- sbt test
 jdk:
 - oraclejdk7
 - oraclejdk8
