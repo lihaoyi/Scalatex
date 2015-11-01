@@ -149,14 +149,14 @@ trait Highlighter{ hl =>
 
     val linkData =
       pathMappings.iterator
-                  .find{case (prefix, path) => absPath > prefix}
+                  .find{case (prefix, path) => absPath startsWith prefix}
     val (startLine, endLine, blob) = referenceText(absPath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
         else s"#L$startLine-L$endLine"
 
-      val linkUrl = s"$url/${absPath - prefix}$hash"
+      val linkUrl = s"$url/${absPath relativeTo prefix}$hash"
       a(
         css.headerLink,
         i(cls:="fa fa-link "),

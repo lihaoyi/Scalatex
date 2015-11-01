@@ -92,7 +92,7 @@ trait Site{
     }
 
     for(res <- manualResources) {
-      read.resource.bytes! res |> write.over! outputRoot/(res - root)
+      read.resource.bytes! res |> write.over! outputRoot/(res relativeTo root)
     }
   }
 

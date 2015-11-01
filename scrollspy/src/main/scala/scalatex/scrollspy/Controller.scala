@@ -46,7 +46,7 @@ class Controller(data: js.Any){
 
 
   val scrollSpy = new ScrollSpy(
-    upickle.readJs[Seq[Tree[String]]](upickle.json.readJs(data))
+    upickle.default.readJs[Seq[Tree[String]]](upickle.json.readJs(data))
   )
 
   val list = ul(
