@@ -95,10 +95,10 @@ trait Site{
   }
 
   def generateHtml(outputRoot: Path) = {
-    for((path, page) <- content){
+    for((path, (pageHeaders, pageBody)) <- content){
       val txt = html(
-        head(page._1),
-        body(bodyFrag(page._2))
+        head(pageHeaders),
+        body(bodyFrag(pageBody))
       ).render
       val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
 
