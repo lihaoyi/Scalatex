@@ -214,7 +214,7 @@
 
 
     @hr
-    
+
     @p
       The changes are, this will create a reasonable looking document with an interactive navigation bar, nice looking headers, etc.. If you wish to really customize Scalatex, look at the following sections to see how these various components of a Scalatex site actually work.
 
@@ -432,7 +432,7 @@
 
       @p
         Note the use of the @hl.scala{sect.munge} function. This is the function that converts the headings (with their spaces and other special characters) into a HTML element ID that can be used for the anchor link. By default, it simply removes spaces, but you can override it in the @hl.scala{Highlighter} object if you want some custom behavior.
-        
+
 @sect{Why Scalatex}
   @p
     Scalatex requires that you learn a new syntax for doing things, which is incompatible with @a("Markdown", href:="http://en.wikipedia.org/wiki/Markdown"),  @a("Textile", href:="http://en.wikipedia.org/wiki/Textile_(markup_language)"), and any other markup language you previously learned. Apart from that, Scalatex itself was the culmination of quite a lot of work to implement. Why did I do this?

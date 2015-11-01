@@ -251,7 +251,7 @@ object ParserTests extends utest.TestSuite{
           }else{
             lols
           }
-            """))
+            """)).get.value
           val expected =
             Block(0, Vector(
               Text(0, "\n"),

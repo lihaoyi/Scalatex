@@ -28,6 +28,19 @@ object ErrorTests extends TestSuite{
   }
 
   val tests = TestSuite{
+    'syntax{
+      * - check(
+        twRuntimeErrors("""
+          @p
+            ff @ omg
+        """),
+        """Syntax error, expected""",
+        """
+            ff @ omg
+                ^
+        """
+      )
+    }
     'simple {
       * - check(
         twRuntimeErrors("@o"),
