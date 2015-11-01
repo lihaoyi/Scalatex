@@ -170,7 +170,7 @@ object Tests extends TestSuite{
       'simple {
         rm! wd/'site/'target/'output
         val site = new scalatex.site.Site {
-          def content = Map("index.html" -> (headFrags, Hello()))
+          def content = Map("index.html" -> (defaultHeader, Hello()))
         }
         site.renderTo(wd/'site/'target/'output)
 
@@ -202,13 +202,13 @@ object Tests extends TestSuite{
         val site = new scalatex.site.Site {
           override def scriptName = "custom.js"
           override def stylesName = "custom.css"
-          override def headFrags = super.headFrags ++ Seq(
+          override def defaultHeader = super.defaultHeader ++ Seq(
             script("console.log('Hi!')")
           )
 
           def content = Map(
-            "page1.html" -> (headFrags, Hello()),
-            "page2.html" -> (headFrags, About())
+            "page1.html" -> (defaultHeader, Hello()),
+            "page2.html" -> (defaultHeader, About())
           )
         }
         site.renderTo(wd/'site/'target/'output2)
@@ -231,12 +231,12 @@ object Tests extends TestSuite{
       'default {
         rm ! wd / 'site / 'target / 'output
         val site = new scalatex.site.Site {
-          def content = Map("index.html" ->(headFrags, Hello()))
+          def content = Map("index.html" ->(defaultHeader, Hello()))
         }
         site.renderTo(wd / 'site / 'target / 'output)
 
         def check() = {
-          val expected = site.headFrags map (_.render)
+          val expected = site.defaultHeader map (_.render)
           // return empty head if not found => problem
           val results = site.content.getOrElse("index.html", (Seq(), Hello()))._1 map (_.render)
           val ta = expected zip results map (t => t._1.equals(t._2))
@@ -249,7 +249,7 @@ object Tests extends TestSuite{
         rm ! wd / 'site / 'target / 'output
         val mooMarker = "Moooo"
         val site = new scalatex.site.Site {
-          def customHead = headFrags ++ Seq(scalatags.Text.tags2.title(mooMarker))
+          def customHead = defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker))
           def content = Map("index.html" ->(customHead, Hello()))
         }
         site.renderTo(wd / 'site / 'target / 'output)
@@ -263,8 +263,8 @@ object Tests extends TestSuite{
         val bbqMarker = "Barbecue!"
         val site = new scalatex.site.Site {
           def content = Map(
-            "page1.html" -> (headFrags ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
-            "page2.html" -> (headFrags ++ Seq(scalatags.Text.tags2.title(bbqMarker)), About())
+            "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
+            "page2.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(bbqMarker)), About())
           )
         }
         site.renderTo(wd / 'site / 'target / 'output)
@@ -283,8 +283,8 @@ object Tests extends TestSuite{
         val mooMarker = "Moooo"
         val site = new scalatex.site.Site {
           def content = Map(
-            "page1.html" -> (headFrags ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
-            "page2.html" -> (headFrags, About())
+            "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
+            "page2.html" -> (defaultHeader, About())
           )
         }
         site.renderTo(wd / 'site / 'target / 'output)

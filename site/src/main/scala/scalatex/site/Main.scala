@@ -44,5 +44,5 @@ class Main(url: String,
       Highlighter.snippet
     )
   }
-  def content = Map("index.html" -> (headFrags, frag))
+  def content = Map("index.html" -> (defaultHeader, frag))
 }

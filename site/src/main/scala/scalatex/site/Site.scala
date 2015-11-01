@@ -64,7 +64,7 @@ trait Site{
   /**
    * The header of this site's HTML page
    */
-  def headFrags: Seq[Frag] = Seq(
+  def defaultHeader: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
