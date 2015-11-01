@@ -31,6 +31,7 @@ object Tests extends TestSuite{
 
     'Section{
       'Basic {
+        import scalatex.site.Section
         object sect extends Section
         val txt = sect("Main")(
           sect("SectionA")(
@@ -76,6 +77,7 @@ object Tests extends TestSuite{
         assert(sect.usedRefs == Set("Main", "SectionA"))
       }
       'Failure{
+        import scalatex.site.Section
         object sect extends Section
         val txt = sect("Main")(
           sect("SectionA")(
