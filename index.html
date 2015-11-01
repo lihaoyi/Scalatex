@@ -59,7 +59,7 @@ span.hljs-tag, span.hljs-symbol{
 }
     </style><script src="scripts.js"></script></head><body><div>
 <a href="https://github.com/lihaoyi/scalatex" style="position: absolute;top: 0px;right: 0px;border: 0;"><img src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" /></a>
-<div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="Scalateχ" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Scalateχ <a class=" scalatex-site-Styles-headerLink" href="#Scalateχ" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /><h2 style="font-weight: 300;color: #ccc;padding: 0px;margin-top: 0px;">0.3.1</h2></div><div class=" scalatex-site-Styles-content">
+<div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="Scalateχ" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Scalateχ <a class=" scalatex-site-Styles-headerLink" href="#Scalateχ" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /><h2 style="font-weight: 300;color: #ccc;padding: 0px;margin-top: 0px;">0.3.2</h2></div><div class=" scalatex-site-Styles-content">
 
   <div><div style="width: 50%;float: left;"><pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">@div(id:=&quot;my-div&quot;)
   @h1
@@ -84,7 +84,7 @@ span.hljs-tag, span.hljs-symbol{
     <li>
       Extracting the structure of the document as a <a href="#Section">Section</a>, which you can use to generate a navigation bar or <a href="#GeneratingaTableofContents">Generating a Table of Contents</a></li>
     <li>
-      Enforcing that <a href="#FindingDeadLinks">all internal links point to a valid document header, and all external links point to a valid URL</a></li>
+      Enforcing that <a href="#Section">all internal links point to a valid document header</a>, and <a href="#lnk">all external links point to a valid URL</a></li>
     <li>
       <a href="#Highlighter">Fetching snippets of text from files on disk</a> to e.g. use unit-test-code as examples in the docs</li>
     <li>
@@ -96,13 +96,13 @@ span.hljs-tag, span.hljs-symbol{
   <p>
     Scalatex lets you write your HTML in a hierarchical structure which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@</code> sign. These correspond to HTML tags (provided by <a href="https://github.com/lihaoyi/scalatags">Scalatags</a>), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.</p>
   <p>
-    Scalatex is currently used to generate it's own readme (<a href="https://github.com/lihaoyi/scalatex/blob/master/readme/src/main/scalatex/scalatex/Readme.scalatex">here</a>) as well as the e-book <a href="http://lihaoyi.github.io/hands-on-scala-js">Hands-on Scala.js</a>. It is only published for Scala 2.11.x for the time being.
+    Scalatex is currently used to generate it's own readme (<a href="https://github.com/lihaoyi/scalatex/blob/master/readme/Readme.scalatex">here</a>) as well as the e-book <a href="http://lihaoyi.github.io/hands-on-scala-js">Hands-on Scala.js</a>. It is only published for Scala 2.11.x for the time being.
 </p>
   <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="GettingStarted" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Getting Started<a class=" scalatex-site-Styles-headerLink" href="#GettingStarted" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
     <p>
       To get started with Scalatex, add the following to your <code>project/build.sbt</code>:
 </p>
-    <pre><code class="scala scalatex-site-Styles-highlightMe">addSbtPlugin(&quot;com.lihaoyi&quot; % &quot;scalatex-sbt-plugin&quot; % &quot;0.3.1&quot;)
+    <pre><code class="scala scalatex-site-Styles-highlightMe">addSbtPlugin(&quot;com.lihaoyi&quot; % &quot;scalatex-sbt-plugin&quot; % &quot;0.3.2&quot;)
 </code></pre>
     <p>
       And the following to your project in your <code>build.sbt</code>:
@@ -321,12 +321,12 @@ scalaVersion := &quot;2.11.4&quot;
   wd = file(&quot;&quot;),
   url = &quot;https://github.com/lihaoyi/scalatex/tree/master&quot;,
   source = &quot;Readme&quot;
-)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/build.sbt#L97-L103" target="_blank"><i class="fa fa-link "></i></a></pre>
+)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/build.sbt#L98-L104" target="_blank"><i class="fa fa-link "></i></a></pre>
 
     <p>
       This example usage would quickly create a project in the <code>readme/</code> folder, that you can immediately work with. Simple place a <code>Readme.scalatex</code> file in <code>readme/</code> and you can start writing Scalatex that will get turned into your documentation page. This default setup sets up all the commonly used functionality into the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Main</code> object, so make sure you start off with
 </p>
-    <pre><code class="scala scalatex-site-Styles-highlightMe">  @import Main._
+    <pre><code class="scala scalatex-site-Styles-highlightMe">@import Main._
 </code></pre>
     <p>
       to get access to functionality such as:
@@ -482,10 +482,10 @@ Tree(root,ArrayBuffer(Tree(Page with Refs,ArrayBuffer(Tree(Sect A,ArrayBuffer())
 Set(Page with Refs, Sect A)
 </div><hr /></div><div style="clear: both;"></div></div>
     <p>
-      Any links created with <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.ref</code> are stored in an <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.usedRefs</code> property as a list. We also expose a <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.structure</code> property which allows you to inspect the tree of sections.
+      Any links created with <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.ref</code> are stored in an <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.usedRefs</code> property as a list. We also expose a <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.structure</code> property which allows you to inspect the tree of sections. If any of the sections referred to by <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">sect.ref</code> are not found, site-generation will fail with a helpful error telling you which one so you can fix it.
 </p>
     <p>
-      Here we're just stringifying the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Tree</code> structure and placing it as text on the page, but you can easily recurse over the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Tree</code> structure and use it to e.g. build a table of contents, or a navigation bar. You can also compare the two structures to validate the internal links and ensure that none of our <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.ref</code>s are broken.
+      Here we're just stringifying the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Tree</code> structure and placing it as text on the page, but you can easily recurse over the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Tree</code> structure and use it to e.g. build a table of contents, or a navigation bar.
 </p>
   <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="Highlighter" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Highlighter<a class=" scalatex-site-Styles-headerLink" href="#Highlighter" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
     <p>
@@ -534,7 +534,7 @@ object hl extends scalatex.site.Highlighter</code><a class=" scalatex-site-Style
   (root / &quot;scalatexSbtPlugin&quot; ** &quot;*.scala&quot;).get
 }
 
-addSbtPlugin(&quot;org.scala-js&quot; % &quot;sbt-scalajs&quot; % &quot;0.6.2&quot;)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/project/build.sbt#L0-L6" target="_blank"><i class="fa fa-link "></i></a></pre>
+addSbtPlugin(&quot;org.scala-js&quot; % &quot;sbt-scalajs&quot; % &quot;0.6.5&quot;)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/project/build.sbt#L0-L6" target="_blank"><i class="fa fa-link "></i></a></pre>
 
 </div><hr /></div><div style="clear: both;"></div></div>
     <p>
@@ -560,8 +560,8 @@ addSbtPlugin(&quot;org.scala-js&quot; % &quot;sbt-scalajs&quot; % &quot;0.6.2&qu
   .settings(
     name := &quot;scalatex-api&quot;,
     libraryDependencies ++= Seq(
-      &quot;com.lihaoyi&quot; %% &quot;utest&quot; % &quot;0.3.0&quot; % &quot;test&quot;,
-      &quot;com.lihaoyi&quot; %% &quot;scalaparse&quot; % &quot;0.1.0&quot;,
+      &quot;com.lihaoyi&quot; %% &quot;utest&quot; % &quot;0.3.1&quot; % &quot;test&quot;,
+      &quot;com.lihaoyi&quot; %% &quot;scalaparse&quot; % &quot;0.2.1&quot;,
       &quot;com.lihaoyi&quot; %% &quot;scalatags&quot; % &quot;0.5.2&quot;,
       &quot;org.scala-lang&quot; % &quot;scala-reflect&quot; % scalaVersion.value
     ),
@@ -696,7 +696,19 @@ addSbtPlugin(&quot;org.scala-js&quot; % &quot;sbt-scalajs&quot; % &quot;0.6.2&qu
 </p>
     <hr />
     <p>
-      In general, <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Highlighter.ref</code> is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Highlighter.ref</code>, you should never need to copy &amp; paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
+      In general, <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Highlighter.ref</code> is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Highlighter.ref</code>, you should never need to copy &amp; paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.</p>
+    <h1 id="lnk" style="display: block;" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><a class=" scalatex-site-Styles-headerLink" href="#lnk" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a>lnk</h1>
+      <p>
+        Scalatex provides the <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">lnk</code> function. This can be called with a single URL:
+</p>
+      <pre><code class="scala scalatex-site-Styles-highlightMe">@lnk(&quot;http://www.google.com&quot;)
+</code></pre>
+      <p>
+        Or with a custom name
+</p>
+      <pre><code class="scala scalatex-site-Styles-highlightMe">@lnk(&quot;Google&quot;, &quot;http://www.google.com&quot;)</code></pre>
+      <p>
+        And generates a link to that URL. <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@lnk</code> also keeps track of all the links you create, and you can validate them later by running <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">sbt &quot;readme/run --validate&quot;</code> on your Scalatex readme project. This will reach out to every link you use and fail with an error if any of them are broken.
 </p>
   <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="Site" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Site<a class=" scalatex-site-Styles-headerLink" href="#Site" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
     <p>
@@ -705,7 +717,7 @@ addSbtPlugin(&quot;org.scala-js&quot; % &quot;sbt-scalajs&quot; % &quot;0.6.2&qu
     <pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">val site = new scalatex.site.Site {
   def content = Map(&quot;index.html&quot; -&gt; Hello())
 }
-site.renderTo(wd/'site/'target/'output)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/site/src/test/scala/scalatex/site/Tests.scala#L178-L183" target="_blank"><i class="fa fa-link "></i></a></pre>
+site.renderTo(wd/'site/'target/'output)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/site/src/test/scala/scalatex/site/Tests.scala#L214-L219" target="_blank"><i class="fa fa-link "></i></a></pre>
 
     <p>
       This will result in a single HTML file <code>index.html</code> in the <code>site/target/output/</code> folder, as .well as a the Javascript for <a href="https://highlightjs.org/">Highlight.js</a> and css for <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> and <a href="http://purecss.io/">Less CSS</a> bundled together into <code>scripts.js</code> and <code>styles.css</code>. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
@@ -724,7 +736,7 @@ site.renderTo(wd/'site/'target/'output)</code><a class=" scalatex-site-Styles-he
     script(&quot;console.log('Hi!')&quot;)
   )
 }
-site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/site/src/test/scala/scalatex/site/Tests.scala#L208-L220" target="_blank"><i class="fa fa-link "></i></a></pre>
+site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/site/src/test/scala/scalatex/site/Tests.scala#L244-L256" target="_blank"><i class="fa fa-link "></i></a></pre>
 
     <p>
       There are several other things you to can override, for a full list, look at the source code of <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Site</code> to see what's available.
@@ -739,7 +751,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
 </p>
       <div>
         <div style="width: 50%;float: left;">
-          <pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">@def lnk(url: String) = {
+          <pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">@def autoLink(url: String) = {
   if(url.contains(&quot;://&quot;))
     a(url, href:=url)
   else
@@ -748,8 +760,8 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
 
 @p
   I always like going to either
-  @lnk{www.google.com} or
-  @lnk{https://www.facebook.com}
+  @autoLink{www.google.com} or
+  @autoLink{https://www.facebook.com}
   in order to look for things.</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/readme/advanced/CustomTags1.scalatex#L0-L12" target="_blank"><i class="fa fa-link "></i></a></pre></div>
         <div style="width: 50%;float: left;">
           <hr /><div style="opacity: 0.6;font-style: oblique;">
@@ -767,121 +779,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
 </p>
       <p>
         Note how we check for the <code>://</code> inside the URL and default it to <code>http://</code> if it's missing; this is just plain-old-Scala, since the tag is just a Scala function.
-</p>
-    <h1 id="FindingDeadLinks" style="display: block;" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><a class=" scalatex-site-Styles-headerLink" href="#FindingDeadLinks" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a>Finding Dead Links</h1>
-      <p>
-        Because a tag is just a function, it is trivial to add additional capabilities to it. For example, here is a version which keeps track of links that you used in the document:
-</p>
-      <div>
-        <div style="width: 50%;float: left;">
-          <pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">@import collection.mutable
-@val usedUrls = mutable.Buffer.empty[String]
-@def lnk(url: String) = {
-  val finalUrl =
-    if(url.contains(&quot;://&quot;)) url
-    else s&quot;http://$url&quot;
-  usedUrls.append(finalUrl)
-  a(url, href:=finalUrl)
-}
 
-@p
-  I always like going to either
-  @lnk{www.google.com} or
-  @lnk{https://www.facebook.com}
-  in order to look for things.
-
-@p
-  Used Links:
-
-@ul
-  @for(url &lt;- usedUrls)
-    @li
-      @url</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/readme/advanced/CustomTags2.scalatex#L0-L23" target="_blank"><i class="fa fa-link "></i></a></pre></div>
-        <div style="width: 50%;float: left;">
-          <hr /><div style="opacity: 0.6;font-style: oblique;">
-            
-
-<p>
-  I always like going to either
-  <a href="http://www.google.com">www.google.com</a> or
-  <a href="https://www.facebook.com">https://www.facebook.com</a>
-  in order to look for things.
-</p>
-<p>
-  Used Links:
-</p>
-<ul>
-  
-    <li>
-      http://www.google.com</li>
-    <li>
-      https://www.facebook.com</li></ul>
-
-
-</div><hr /></div><div style="clear: both;"></div></div>
-      <p>
-        This makes it very easy to aggregate the list of all-external-links in the application. For example, if you wished to check for dead out-going links, it is trivial to loop over these URLs, since a HTTP request to each one, and verify that they all return 200s.
-</p>
-      <p>
-        For internal links, i.e. references between different sections of your document, this is even easier: you have all the data needed to decide if a ref is invalid right away! Scalatex's <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">Section</code> objects automatically aggregate all internal links defined using <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect.ref{...}</code>, all sections defined using <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@sect{...}</code>, and you can easily compare them:
-</p>
-      <div>
-        <div style="width: 50%;float: left;">
-          <pre class=" scalatex-site-Styles-hoverContainer"><code class="scala scalatex-site-Styles-highlightMe">
-@object sect extends scalatex.site.Section()
-
-@sect{Page with Refs}
-  @p
-    Hello World, look at
-    @sect.ref{Sect A}
-
-  @sect{Sect A}
-    @p
-      I am Cow
-  @sect{Sect B}
-    @p
-      Hear me moo. Click
-      @sect.ref{Page with Ref}
-      to go back to the top.
-
-@b{Invalid Refs!}
-
-@ul
-  @{
-    val list = sect.headerSeq
-    sect
-      .usedRefs
-      .filter(!list.contains(_))
-      .map(li(_))
-      .toSeq
-  }</code><a class=" scalatex-site-Styles-headerLink" style="position: absolute;right: 0.5em;top: 0.5em;display: block;font-size: 24px;" href="https://github.com/lihaoyi/scalatex/tree/master/readme/advanced/DeadSectRefs.scalatex#L0-L28" target="_blank"><i class="fa fa-link "></i></a></pre></div>
-        <div style="width: 50%;float: left;">
-          <hr /><div style="opacity: 0.6;font-style: oblique;">
-            
-
-
-<div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="PagewithRefs" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Page with Refs<a class=" scalatex-site-Styles-headerLink" href="#PagewithRefs" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div><div class=" scalatex-site-Styles-content">
-  <p>
-    Hello World, look at
-    <a href="#SectA">Sect A</a>
-</p>
-  <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="SectA" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Sect A<a class=" scalatex-site-Styles-headerLink" href="#SectA" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
-    <p>
-      I am Cow</p>
-  <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="SectB" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Sect B<a class=" scalatex-site-Styles-headerLink" href="#SectB" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
-    <p>
-      Hear me moo. Click
-      <a href="#PagewithRef">Page with Ref</a>
-      to go back to the top.
-</p></div>
-<b>Invalid Refs!</b>
-
-<ul>
-  <li>Page with Ref</li></ul>
-
-</div><hr /></div><div style="clear: both;"></div></div>
-      <p>
-        Note how the typo <code>Page with Ref</code> instead of <code>Page with Refs</code> was immediately picked up. This example simply prints it to the page, but you could add an assert if you really wanted to ensure it didn't happen.
 </p>
     <h1 id="GeneratingaTableofContents" style="display: block;" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><a class=" scalatex-site-Styles-headerLink" href="#GeneratingaTableofContents" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a>Generating a Table of Contents</h1>
       <p>
@@ -1039,7 +937,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
     <li>
       <a href="http://en.wikipedia.org/wiki/YAML">YAML</a> mixed in at the top of the file, ad-hoc separated from the rest via <code>---</code>s.</li>
     <li>
-      A mix of <a href="commonmark.org">Markdown</a> <code>##</code>s and <code>``</code>s and <a href="http://en.wikipedia.org/wiki/Jekyll_(software)">Jekyll</a> <code>{% %}</code>s to actually mark things up</li>
+      A mix of <a href="http://commonmark.org">Markdown</a> <code>##</code>s and <code>``</code>s and <a href="http://en.wikipedia.org/wiki/Jekyll_(software)">Jekyll</a> <code>{% %}</code>s to actually mark things up</li>
     <li>
       Custom imports at the top of the page <code>{% include JB/setup %}</code></li></ul>
   <p>
@@ -1052,7 +950,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
     <li>
       <b>Type-safety</b>: this is what turns those typos into compile errors (instead of runtime mis-formats) in the first place</li>
     <li>
-      <b>Incremental compilation</b>: Only recompile what you need to, so in a large (<a href="aoyi.github.io/hands-on-scala-js/">100s of pages</a>) document, you don't end up recompiling the world every change.
+      <b>Incremental compilation</b>: Only recompile what you need to, so in a large (<a href="http://lihaoyi.github.io/hands-on-scala-js/">100s of pages</a>) document, you don't end up recompiling the world every change.
 </li></ul>
   <p>
     These are things that virtually no markup generators provide, but Scalatex does. Here are a few more detailed comparisons between Scalatex and alternatives.
@@ -1065,7 +963,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
 </p>
     <ul>
       <li>
-        <b>Much more lightweight than Scalatex</b>: <code>`hello`</code> rather than <code>@code{hello</code>}, <code>[link](url)</code> rather than <code>@a(&quot;link&quot;, href:=&quot;url&quot;)</code></li>
+        <b>Much more lightweight than Scalatex</b>: <code>`hello`</code> rather than <code>@code{hello</code>}, <code>[link](url)</code> rather than <code>@lnk(&quot;link&quot;, &quot;url&quot;)</code></li>
       <li>
         <b>Be much more popularly supported</b>: <a href="https://help.github.com/articles/github-flavored-markdown/">Github</a>, <a href="http://stackoverflow.com/editing-help">Stackoverflow</a> and many others already use semi-compatible implementations of it
 </li></ul>
@@ -1075,7 +973,7 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
       <li>
         <b>Completely non-customizable by default</b>: in Markdown, you have <code>`code`</code> for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have <code>[link](url)</code> for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@hl.scala{code}</code> to highlight Scala code, <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@hl.javascript{code}</code> for Javascript, <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@hl.html{code}</code> to highlight HTML. Similarly, you can easily define a <a href="#CustomTags">Custom Tags</a> that distinguish internal links from external links, giving them different CSS, markup of assertions.</li>
       <li>
-        <b>Messy, ad-hoc extensions</b>: <a href="https://pythonhosted.org/Markdown/extensions/">Python Markdown</a> provides a list of extensions. <a href="commonmark.org">CommonMark.org</a> does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is &quot;Who knows?&quot; and to the second &quot;Regexes&quot;. Naturally, this makes people hesitant to implement extensions: they'd rather C&amp;P markup than deal with crazy regex transforms. Is highlight code done using <code>```scala</code> or <code>{% highlight scala %}</code>? With Scalatex, defining <a href="#CustomTags">Custom Tags</a> is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.</li>
+        <b>Messy, ad-hoc extensions</b>: <a href="http://pythonhosted.org/Markdown/extensions/">Python Markdown</a> provides a list of extensions. <a href="http://commonmark.org">CommonMark.org</a> does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is &quot;Who knows?&quot; and to the second &quot;Regexes&quot;. Naturally, this makes people hesitant to implement extensions: they'd rather C&amp;P markup than deal with crazy regex transforms. Is highlight code done using <code>```scala</code> or <code>{% highlight scala %}</code>? With Scalatex, defining <a href="#CustomTags">Custom Tags</a> is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.</li>
       <li>
         <b>Unclear semantics</b>. For example, for rendering a link with parentheses in the URL, there are a <a href="http://meta.stackexchange.com/questions/13501/links-to-urls-containing-parentheses">dozen different work-arounds</a> that make it work in increasingly roundabout ways, all stemming from the fact that Markdown doesn't have a good, standard way of expressing escape-characters. With Scalatex, the semantics are much more regular: you can put anything in a <code class="scala scalatex-site-Styles-highlightMe" style="display: inline;padding: 0px;margin: 0px;">@(&quot;string&quot;)</code> to escape it, and always fall back to Scala-strings with Scala-string-escapes. And their semantics behave exactly as you'd expect.</li>
       <li>
@@ -1112,11 +1010,19 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
       In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and <a href="http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js">I have</a>). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.</p>
     <p>
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
-
 </p></div>
+<div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="Changelog" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">Changelog<a class=" scalatex-site-Styles-headerLink" href="#Changelog" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div><div class=" scalatex-site-Styles-content">
+  <div style="margin: 0px;color: #333;text-align: center;padding: 2.5em 2em 0;border-bottom: 1px solid #eee;display: block;" id="0.3.2" class=" scalatex-site-Styles-hoverContainer scalatex-site-Styles-headerTag"><h1 style="margin: 0.2em 0;font-size: 3em;font-weight: 300;">0.3.2<a class=" scalatex-site-Styles-headerLink" href="#0.3.2" style="position: absolute;right: 0px;"><i class="fa fa-link"></i></a></h1><br /></div>
+    <ul>
+      <li>
+        Better error reporting for syntax errors; line-contents, caret and line/col number rather than just character-offset</li>
+      <li>
+        Trailing whitespace on a line no longer botches error messages after it</li>
+      <li>
+        Added the <a href="#lnk">lnk</a> function to link to external URLs, and the <code>--validate</code> flag passed to <code>run</code> that makes sure none of them are broken</li></ul></div>
 </div><script>
     scalatex.scrollspy.Controller().main(
-      [{"value":"Scalateχ ","children":[{"value":"Getting Started","children":[]},{"value":"What Scalatex Does","children":[]},{"value":"Exploring Scalatex","children":[{"value":"Loops","children":[]},{"value":"Conditionals","children":[]},{"value":"Functions","children":[]},{"value":"Interpolations","children":[]},{"value":"External Definitions","children":[]},{"value":"Internal Definitions","children":[]}]}]},{"value":"Scalatex Site","children":[{"value":"Quick Start","children":[]},{"value":"Section","children":[]},{"value":"Highlighter","children":[]},{"value":"Site","children":[]},{"value":"Advanced Techniques","children":[{"value":"Custom Tags","children":[]},{"value":"Finding Dead Links","children":[]},{"value":"Generating a Table of Contents","children":[]}]}]},{"value":"Why Scalatex","children":[{"value":"Why Not: Markdown","children":[]},{"value":"Why Not: Twirl","children":[]}]}]
+      [{"value":"Scalateχ ","children":[{"value":"Getting Started","children":[]},{"value":"What Scalatex Does","children":[]},{"value":"Exploring Scalatex","children":[{"value":"Loops","children":[]},{"value":"Conditionals","children":[]},{"value":"Functions","children":[]},{"value":"Interpolations","children":[]},{"value":"External Definitions","children":[]},{"value":"Internal Definitions","children":[]}]}]},{"value":"Scalatex Site","children":[{"value":"Quick Start","children":[]},{"value":"Section","children":[]},{"value":"Highlighter","children":[{"value":"lnk","children":[]}]},{"value":"Site","children":[]},{"value":"Advanced Techniques","children":[{"value":"Custom Tags","children":[]},{"value":"Generating a Table of Contents","children":[]}]}]},{"value":"Why Scalatex","children":[{"value":"Why Not: Markdown","children":[]},{"value":"Why Not: Twirl","children":[]}]},{"value":"Changelog","children":[{"value":"0.3.2","children":[]}]}]
   )</script><script>
     ['DOMContentLoaded', 'load'].forEach(function(ev){
       addEventListener(ev, function(){
@@ -1126,4 +1032,4 @@ site.renderTo(wd/'site/'target/'output2)</code><a class=" scalatex-site-Styles-h
         );
       })
     })
-  </script></body></html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+  </script></body></html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
