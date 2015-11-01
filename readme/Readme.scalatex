@@ -41,7 +41,7 @@
     @li
       Extracting the structure of the document as a @sect.ref{Section}, which you can use to generate a navigation bar or @sect.ref{Generating a Table of Contents}
     @li
-      Enforcing that @sect.ref("Finding Dead Links", "all internal links point to a valid document header, and all external links point to a valid URL")
+      Enforcing that @sect.ref("Section", "all internal links point to a valid document header"), and @sect.ref("lnk", "all external links point to a valid URL")
     @li
       @sect.ref("Highlighter", "Fetching snippets of text from files on disk") to e.g. use unit-test-code as examples in the docs
     @li
@@ -394,33 +394,6 @@
       @p
         Note how we check for the @code{://} inside the URL and default it to @code{http://} if it's missing; this is just plain-old-Scala, since the tag is just a Scala function.
 
-    @sect{Finding Dead Links}
-      @p
-        Because a tag is just a function, it is trivial to add additional capabilities to it. For example, here is a version which keeps track of links that you used in the document:
-
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'advanced/"CustomTags2.scalatex")
-        @half
-          @exampleWrapper
-            @advanced.CustomTags2()
-
-
-      @p
-        This makes it very easy to aggregate the list of all-external-links in the application. For example, if you wished to check for dead out-going links, it is trivial to loop over these URLs, since a HTTP request to each one, and verify that they all return 200s.
-
-      @p
-        For internal links, i.e. references between different sections of your document, this is even easier: you have all the data needed to decide if a ref is invalid right away! Scalatex's @hl.scala{Section} objects automatically aggregate all internal links defined using @hl.scala("@sect.ref{...}"), all sections defined using @hl.scala("@sect{...}"), and you can easily compare them:
-
-      @pairs
-        @half
-          @hl.ref(wd/'readme/'advanced/"DeadSectRefs.scalatex")
-        @half
-          @exampleWrapper
-            @advanced.DeadSectRefs()
-
-      @p
-        Note how the typo @code{Page with Ref} instead of @code{Page with Refs} was immediately picked up. This example simply prints it to the page, but you could add an assert if you really wanted to ensure it didn't happen.
 
     @sect{Generating a Table of Contents}
       @p
@@ -598,3 +571,5 @@
         Better error reporting for syntax errors; line-contents, caret and line/col number rather than just character-offset
       @li
         Trailing whitespace on a line no longer botches error messages after it
+      @li
+        Added the @sect.ref{lnk} function to link to external URLs, and the @code{--validate} flag passed to @code{run} that makes sure none of them are broken

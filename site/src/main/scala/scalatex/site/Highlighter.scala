@@ -178,13 +178,14 @@ trait Highlighter{ hl =>
   }
 
   def referenceText[S: RefPath, V: RefPath](filepath: Path, start: S, end: V) = {
-    val txt = read.lines! filepath
+    val fileLines = read.lines! filepath
     // Start from -1 so that searching for things on the first line of the file (-1 + 1 = 0)
 
+
     def walk(query: Seq[String], start: Int) = {
-      var startIndex = -1
+      var startIndex = start
       for(str <- query){
-        startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
+        startIndex = fileLines.indexWhere(_.contains(str), startIndex + 1)
         if (startIndex == -1) throw new RefError(
           s"Highlighter unable to resolve reference $str in selector $query"
         )
@@ -194,20 +195,19 @@ trait Highlighter{ hl =>
     // But if there are no selectors, start from 0 and not -1
     val startQuery = implicitly[RefPath[S]].apply(start)
     val startIndex = if (startQuery == Nil) 0 else walk(startQuery, -1)
-
-    val startIndent = txt(startIndex).takeWhile(_.isWhitespace).length
+    val startIndent = fileLines(startIndex).takeWhile(_.isWhitespace).length
     val endQuery = implicitly[RefPath[V]].apply(end)
     val endIndex = if (endQuery == Nil) {
-      val next = txt.drop(startIndex).takeWhile{ line =>
+      val next = fileLines.drop(startIndex).takeWhile{ line =>
         line.trim == "" || line.takeWhile(_.isWhitespace).length >= startIndent
       }
       startIndex + next.length
     } else {
+
       walk(endQuery, startIndex)
     }
-
-    val margin = txt(startIndex).takeWhile(_.isWhitespace).length
-    val lines = txt.slice(startIndex, endIndex)
+    val margin = fileLines(startIndex).takeWhile(_.isWhitespace).length
+    val lines = fileLines.slice(startIndex, endIndex)
                    .map(_.drop(margin))
                    .reverse
                    .dropWhile(_.trim == "")
