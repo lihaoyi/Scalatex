@@ -56,7 +56,7 @@ object ParserTests extends utest.TestSuite{
         )
         assert(trimmed == expected)
       }
-      'dropTrailingWhitespace - {
+      'dontDropTrailingWhitespace - {
 
         val trimmed = wrap(stages.Trim.old(
           Seq(
@@ -67,8 +67,8 @@ object ParserTests extends utest.TestSuite{
         ))
         val expected = wrap(
           Seq(
-            "i am a cow",
-            "  hear me moo",
+            "i am a cow   ",
+            "  hear me moo    ",
             " i weigh twice as much as you"
           ).mkString("\n")
         )
@@ -245,12 +245,12 @@ object ParserTests extends utest.TestSuite{
         'ifBlockElseBraceBlockNested - {
           val res = Parser(Trim.old(
             """
-        @p
-          @if(true){
-            Hello
-          }else{
-            lols
-          }
+            @p
+              @if(true){
+                Hello
+              }else{
+                lols
+              }
             """)).get.value
           val expected =
             Block(0, Vector(

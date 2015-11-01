@@ -19,7 +19,6 @@ object Trim extends (String => (String, Int)){
       else
         0
     val res = lines.iterator
-                   .map(_.replaceFirst("\\s+$", ""))
                    .mkString("\n")
     (res, offset)
   }
