@@ -180,12 +180,20 @@ trait Highlighter{ hl =>
   def referenceText[S: RefPath, V: RefPath](filepath: Path, start: S, end: V) = {
     val txt = read.lines! filepath
     // Start from -1 so that searching for things on the first line of the file (-1 + 1 = 0)
-    var startIndex = -1
-    for(str <- implicitly[RefPath[S]].apply(start)){
-      startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
+
+    def walk(query: Seq[String], start: Int) = {
+      var startIndex = -1
+      for(str <- query){
+        startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
+        if (startIndex == -1) throw new RefError(
+          s"Highlighter unable to resolve reference $str in selector $query"
+        )
+      }
+      startIndex
     }
     // But if there are no selectors, start from 0 and not -1
-    startIndex = startIndex max 0
+    val startQuery = implicitly[RefPath[S]].apply(start)
+    val startIndex = if (startQuery == Nil) 0 else walk(startQuery, -1)
 
     val startIndent = txt(startIndex).takeWhile(_.isWhitespace).length
     val endQuery = implicitly[RefPath[V]].apply(end)
@@ -195,12 +203,7 @@ trait Highlighter{ hl =>
       }
       startIndex + next.length
     } else {
-      var endIndex = startIndex
-      for (str <- endQuery) {
-        endIndex = txt.indexWhere(_.contains(str), endIndex + 1)
-      }
-
-      endIndex
+      walk(endQuery, startIndex)
     }
 
     val margin = txt(startIndex).takeWhile(_.isWhitespace).length
@@ -216,6 +219,7 @@ trait Highlighter{ hl =>
 }
 
 object Highlighter{
+  class RefError(msg: String) extends Exception(msg)
   def snippet = script(raw(s"""
     ['DOMContentLoaded', 'load'].forEach(function(ev){
       addEventListener(ev, function(){

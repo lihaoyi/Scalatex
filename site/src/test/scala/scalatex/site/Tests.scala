@@ -192,6 +192,22 @@ object Tests extends TestSuite{
           assert(actual == expected)
         }
       }
+      'notFound - intercept[Highlighter.RefError]{
+        val (start, end, txt) = hl.referenceText(
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
+          Seq("this string " + "doesn't exist"),
+          Nil
+        )
+
+      }
+      'notFound2 - intercept[Highlighter.RefError]{
+        val (start, end, txt) = hl.referenceText(
+          wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala",
+          Nil,
+          "this string " + "doesn't exist either"
+        )
+
+      }
     }
     'Site{
       'simple {
