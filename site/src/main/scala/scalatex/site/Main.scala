@@ -26,7 +26,14 @@ class Main(url: String,
     )
   }
 
-  def main(args: Array[String]): Unit = renderTo(output)
+  def main(args: Array[String]): Unit = {
+    renderTo(output)
+    val unknownRefs = sect.usedRefs.filterNot(sect.headerSeq.contains)
+    assert(
+      unknownRefs.isEmpty,
+      s"Unknown sections referred to by your `sect.ref` calls: $unknownRefs"
+    )
+  }
   override def manualResources = super.manualResources ++ extraManualResources
   override def autoResources =
     super.autoResources ++
