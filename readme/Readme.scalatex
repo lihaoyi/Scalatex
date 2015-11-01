@@ -577,4 +577,10 @@
     @p
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
-
+@sect{Changelog}
+  @sect{0.3.2}
+    @ul
+      @li
+        Better error reporting for syntax errors; line-contents, caret and line/col number rather than just character-offset
+      @li
+        Trailing whitespace on a line no longer botches error messages after it
