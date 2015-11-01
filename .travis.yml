@@ -5,7 +5,7 @@ language: scala
 scala:
 - 2.11.6
 script:
-- sbt test
+- sbt test "readme/run --validate"
 jdk:
 - oraclejdk7
 - oraclejdk8
