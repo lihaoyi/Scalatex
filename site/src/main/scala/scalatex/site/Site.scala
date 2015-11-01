@@ -79,10 +79,16 @@ trait Site{
     frag
   )
 
+
+  type Body = Frag
+  /** Enable pages to specify multiple header entries */
+  type Header = Seq[Frag]
+  type Page = (Header, Body)
   /**
-   * The contents of this page
+   * The contents of the site.
+   * Maps String paths to the pages, to their actual content.
    */
-  def content: Map[String, (Seq[Frag], Frag)]
+  def content: Map[String, Page]
 
   def bundleResources(outputRoot: Path) = {
     for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
