@@ -340,20 +340,20 @@
     @hr
     @p
       In general, @hl.scala{Highlighter.ref} is very helpful to quickly grab snippets of code from your unit tests, examples, or other places to include in your document. Using @hl.scala{Highlighter.ref}, you should never need to copy & paste code from unit tests to your documentation: simply refer to it directly, and you are guaranteed that your documentation will always be compile-able and in sync with what your code actually does in its unit tests.
-    @sect{lnk}
-      @p
-        Scalatex provides the @hl.scala{lnk} function. This can be called with a single URL:
+  @sect{lnk}
+    @p
+      Scalatex provides the @hl.scala{lnk} function. This can be called with a single URL:
 
-      @hl.scala
-        @@lnk("http://www.google.com")
+    @hl.scala
+      @@lnk("http://www.google.com")
 
-      @p
-        Or with a custom name
+    @p
+      Or with a custom name
 
-      @hl.scala
-        @@lnk("Google", "http://www.google.com")
-      @p
-        And generates a link to that URL. @hl.scala{@@lnk} also keeps track of all the links you create, and you can validate them later by running @hl.scala{sbt "readme/run --validate"} on your Scalatex readme project. This will reach out to every link you use and fail with an error if any of them are broken.
+    @hl.scala
+      @@lnk("Google", "http://www.google.com")
+    @p
+      And generates a link to that URL. @hl.scala{@@lnk} also keeps track of all the links you create, and you can validate them later by running @hl.scala{sbt "readme/run --validate"} on your Scalatex readme project. This will reach out to every link you use and fail with an error if any of them are broken.
 
   @sect{Site}
     @p
