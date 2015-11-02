@@ -110,9 +110,7 @@ trait Highlighter{ hl =>
       )
 
     }else{
-      val minIndent = lines.map(_.takeWhile(_ == ' ').length)
-        .filter(_ > 0)
-        .min
+      val minIndent = lines.filter(_.trim != "").map(_.takeWhile(_ == ' ').length).min
       val stripped = lines.map(_.drop(minIndent))
         .dropWhile(_ == "")
         .mkString("\n")
@@ -151,14 +149,14 @@ trait Highlighter{ hl =>
 
     val linkData =
       pathMappings.iterator
-                  .find{case (prefix, path) => absPath > prefix}
+                  .find{case (prefix, path) => absPath startsWith prefix}
     val (startLine, endLine, blob) = referenceText(absPath, start, end)
     val link = linkData.map{ case (prefix, url) =>
       val hash =
         if (endLine == -1) ""
         else s"#L$startLine-L$endLine"
 
-      val linkUrl = s"$url/${absPath - prefix}$hash"
+      val linkUrl = s"$url/${absPath relativeTo prefix}$hash"
       a(
         css.headerLink,
         i(cls:="fa fa-link "),
@@ -180,33 +178,36 @@ trait Highlighter{ hl =>
   }
 
   def referenceText[S: RefPath, V: RefPath](filepath: Path, start: S, end: V) = {
-    val txt = read.lines! filepath
+    val fileLines = read.lines! filepath
     // Start from -1 so that searching for things on the first line of the file (-1 + 1 = 0)
-    var startIndex = -1
-    for(str <- implicitly[RefPath[S]].apply(start)){
-      startIndex = txt.indexWhere(_.contains(str), startIndex + 1)
+
+
+    def walk(query: Seq[String], start: Int) = {
+      var startIndex = start
+      for(str <- query){
+        startIndex = fileLines.indexWhere(_.contains(str), startIndex + 1)
+        if (startIndex == -1) throw new RefError(
+          s"Highlighter unable to resolve reference $str in selector $query"
+        )
+      }
+      startIndex
     }
     // But if there are no selectors, start from 0 and not -1
-    startIndex = startIndex max 0
-
-    val startIndent = txt(startIndex).takeWhile(_.isWhitespace).length
+    val startQuery = implicitly[RefPath[S]].apply(start)
+    val startIndex = if (startQuery == Nil) 0 else walk(startQuery, -1)
+    val startIndent = fileLines(startIndex).takeWhile(_.isWhitespace).length
     val endQuery = implicitly[RefPath[V]].apply(end)
     val endIndex = if (endQuery == Nil) {
-      val next = txt.drop(startIndex).takeWhile{ line =>
+      val next = fileLines.drop(startIndex).takeWhile{ line =>
         line.trim == "" || line.takeWhile(_.isWhitespace).length >= startIndent
       }
       startIndex + next.length
     } else {
-      var endIndex = startIndex
-      for (str <- endQuery) {
-        endIndex = txt.indexWhere(_.contains(str), endIndex + 1)
-      }
 
-      endIndex
+      walk(endQuery, startIndex)
     }
-
-    val margin = txt(startIndex).takeWhile(_.isWhitespace).length
-    val lines = txt.slice(startIndex, endIndex)
+    val margin = fileLines(startIndex).takeWhile(_.isWhitespace).length
+    val lines = fileLines.slice(startIndex, endIndex)
                    .map(_.drop(margin))
                    .reverse
                    .dropWhile(_.trim == "")
@@ -218,6 +219,7 @@ trait Highlighter{ hl =>
 }
 
 object Highlighter{
+  class RefError(msg: String) extends Exception(msg)
   def snippet = script(raw(s"""
     ['DOMContentLoaded', 'load'].forEach(function(ev){
       addEventListener(ev, function(){

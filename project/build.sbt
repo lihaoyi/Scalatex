@@ -3,4 +3,4 @@ unmanagedSources in Compile ++= {
   (root / "scalatexSbtPlugin" ** "*.scala").get
 }
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.2")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.5")

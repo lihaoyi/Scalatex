@@ -1,4 +1,4 @@
-@def lnk(url: String) = {
+@def autoLink(url: String) = {
   if(url.contains("://"))
     a(url, href:=url)
   else
@@ -7,6 +7,6 @@
 
 @p
   I always like going to either
-  @lnk{www.google.com} or
-  @lnk{https://www.facebook.com}
+  @autoLink{www.google.com} or
+  @autoLink{https://www.facebook.com}
   in order to look for things.

@@ -38,8 +38,8 @@ lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.3.0" % "test",
-      "com.lihaoyi" %% "scalaparse" % "0.2.0",
+      "com.lihaoyi" %% "utest" % "0.3.1" % "test",
+      "com.lihaoyi" %% "scalaparse" % "0.2.1",
       "com.lihaoyi" %% "scalatags" % "0.5.2",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),
@@ -64,12 +64,13 @@ lazy val site =
   name := "scalatex-site",
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "utest" % "0.3.1" % "test",
-    "com.lihaoyi" %% "ammonite-ops" % "0.2.4",
+    "com.lihaoyi" %% "ammonite-ops" % "0.4.8",
     "org.webjars" % "highlightjs" % "8.2-1",
     "org.webjars" % "font-awesome" % "4.2.0",
-    "com.lihaoyi" %% "scalatags" % "0.5.2",
+    "com.lihaoyi" %% "scalatags" % "0.5.3",
     "org.webjars" % "pure" % "0.5.0",
-    "com.lihaoyi" %% "upickle" % "0.2.7"
+    "com.lihaoyi" %% "upickle" % "0.3.6",
+    "org.scalaj" %% "scalaj-http" % "1.1.6"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
@@ -85,9 +86,9 @@ lazy val scrollspy = project
   .settings(
     scalaVersion := "2.11.6",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "upickle" % "0.2.7",
-      "org.scala-js" %%% "scalajs-dom" % "0.8.0",
-      "com.lihaoyi" %%% "scalatags" % "0.5.2"
+      "com.lihaoyi" %%% "upickle" % "0.3.6",
+      "org.scala-js" %%% "scalajs-dom" % "0.8.2",
+      "com.lihaoyi" %%% "scalatags" % "0.5.3"
     ),
     emitSourceMaps := false,
 

@@ -5,24 +5,21 @@ import scalaparse.Scala
 import scalaparse.Scala._
 import scalaparse.syntax._
 import fastparse.all._
-import fastparse.core.{Mutable, ParseCtx}
+import fastparse.core.{Result, Mutable, ParseCtx}
 /**
  * Parses the input text into a roughly-structured AST. This AST
  * is much simpler than the real Scala AST, but serves us well
  * enough until we stuff the code-strings into the real Scala
  * parser later
  */
-object Parser extends ((String, Int) => Ast.Block){
-  def apply(input: String, offset: Int = 0): Ast.Block = {
-    new Parser(offset).File.parse(input) match {
-      case s: Result.Success[Ast.Block] => s.value
-      case f: Result.Failure => throw new Exception(f.traced.trace)
-    }
+object Parser extends ((String, Int) => Result[Ast.Block]){
+  def apply(input: String, offset: Int = 0): Result[Ast.Block] = {
+    new Parser(offset).File.parse(input)
   }
-
 }
+
 class Parser(indent: Int = 0, offset: Int = 0) {
-  import Scala.{KeyWordOperators => K}
+  import scalaparse.syntax.{Key => K}
 
   /**
    * Wraps another parser, succeeding/failing identically

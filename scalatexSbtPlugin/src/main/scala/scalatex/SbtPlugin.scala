@@ -47,7 +47,7 @@ object SbtPlugin extends sbt.AutoPlugin {
   )
   override val projectSettings = inConfig(Test)(mySeq) ++ inConfig(Compile)(mySeq) ++ Seq(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatex-api" % scalatexVersion, "com.scalatags" %% "scalatags" % "0.4.2"
+      "com.lihaoyi" %% "scalatex-api" % scalatexVersion, "com.lihaoyi" %% "scalatags" % "0.5.3"
     ),
     watchSources ++= {
       for{

@@ -29,7 +29,7 @@ object BasicTests extends TestSuite{
             val omg = "omg"
             omg * 2
           }
-           """),
+        """),
         """
           lollollol
           omgomg

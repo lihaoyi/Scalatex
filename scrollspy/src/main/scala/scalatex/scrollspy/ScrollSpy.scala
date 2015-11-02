@@ -97,7 +97,15 @@ class ScrollSpy(structure: Seq[Tree[String]]){
    * Recurse over the navbar tree, opening and closing things as necessary
    */
   private[this] def start(force: Boolean = false) = {
-    val scrollTop = dom.document.body.scrollTop
+    val scrollTop = {
+      // Fix #21:
+      // document.documentElement.scrollTop is the correct cross-browser way to get main window scroll offset
+      // see discussion: https://groups.google.com/a/chromium.org/forum/#!msg/blink-dev/75hVThfrJ08/YD9kSgQljFEJ
+      // however it is broken in current Chrome: https://code.google.com/p/chromium/issues/detail?id=157855
+      // so the document.body workaround must be used for now
+      val docScrollTop = dom.document.documentElement.scrollTop
+      if (docScrollTop > 0) docScrollTop else dom.document.body.scrollTop
+    }
 
     def close(tree: Tree[MenuNode]): Unit = {
       if (!open) tree.value.list.style.maxHeight = "0px"

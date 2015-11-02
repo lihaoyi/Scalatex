@@ -1,8 +1,10 @@
+import fastparse.core.Result
+
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
 import scala.reflect.macros.{TypecheckException, Context}
 import scalatags.Text.all._
-import scalatex.stages.{Parser, Compiler}
+import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
 import acyclic.file
 
@@ -38,8 +40,8 @@ package object scalatex {
         new PlainFile(fileName),
         txt.toCharArray
       )
-
       compileThing(c)(txt, sourceFile, 0, runtimeErrors, false)
+
     }
     case class DebugFailure(msg: String, pos: String) extends Exception(msg)
 
@@ -79,8 +81,19 @@ package object scalatex {
       import c.universe._
       def compile(s: String): c.Tree = {
         val realPos = new OffsetPosition(source, point).asInstanceOf[c.universe.Position]
+        Parser.tupled(stages.Trim(s)) match {
+          case s: Result.Success[Ast.Block] => Compiler(c)(realPos, s.value)
+          case f: Result.Failure =>
+            val lines = f.input.take(f.index).lines.toVector
+            throw new TypecheckException(
+              new OffsetPosition(source, point + f.index).asInstanceOf[c.universe.Position],
+              "Syntax error, expected (" + f.traced.traceParsers.distinct.mkString(" | ") + ")"+
+              "\n at line " + lines.length +
+              " column " + lines.last.length +
+              " index " + f.index
+            )
+        }
 
-        Compiler(c)(realPos, Parser.tupled(stages.Trim(s)))
       }
 
       import c.Position
