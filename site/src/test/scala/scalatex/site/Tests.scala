@@ -283,21 +283,23 @@ object Tests extends TestSuite{
       }
       'customTitle {
         rm ! wd / 'site / 'target / 'output
-        val mooMarker = "Moooo"
         val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+
           def customHead = defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker))
           def content = Map("index.html" ->(customHead, Hello()))
         }
         site.renderTo(wd / 'site / 'target / 'output)
         val page1 = read! wd/'site/'target/'output/"index.html"
 
-        assert( page1.contains(s"<title>${mooMarker}</title>") )
+        assert( page1.contains(s"<title>${site.mooMarker}</title>") )
       }
       'differentTitles {
         rm ! wd / 'site / 'target / 'output
-        val mooMarker = "Moooo"
-        val bbqMarker = "Barbecue!"
         val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+          val bbqMarker = "Barbecue!"
+
           def content = Map(
             "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
             "page2.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(bbqMarker)), About())
@@ -308,16 +310,17 @@ object Tests extends TestSuite{
         val page2 = read! wd/'site/'target/'output/"page2.html"
 
         assert(
-          page1.contains(s"<title>${mooMarker}</title>"),
-          !page1.contains(s"<title>${bbqMarker}</title>"),
-          page2.contains(s"<title>${bbqMarker}</title>"),
-          !page2.contains(s"<title>${mooMarker}</title>")
+          page1.contains(s"<title>${site.mooMarker}</title>"),
+          !page1.contains(s"<title>${site.bbqMarker}</title>"),
+          page2.contains(s"<title>${site.bbqMarker}</title>"),
+          !page2.contains(s"<title>${site.mooMarker}</title>")
         )
       }
       'onlyOneCustom {
         rm ! wd / 'site / 'target / 'output
-        val mooMarker = "Moooo"
         val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+
           def content = Map(
             "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
             "page2.html" -> (defaultHeader, About())
@@ -328,7 +331,7 @@ object Tests extends TestSuite{
         val page2 = read! wd/'site/'target/'output/"page2.html"
 
         assert(
-          page1.contains(s"<title>${mooMarker}</title>"),
+          page1.contains(s"<title>${site.mooMarker}</title>"),
           !page2.contains(s"<title>")
         )
       }
