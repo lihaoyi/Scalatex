@@ -370,6 +370,12 @@
     @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
 
     @p
+      Similarly, you can choose to supplement the default settings with your own customization. The following example
+      specifies a different title for each of the two pages.
+
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'CustomHead", "'differentTitles", "val site"), "val page1")
+
+    @p
       There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
 
   @sect{Advanced Techniques}
