@@ -146,7 +146,7 @@
         Apart from splicing values into the document, you can also call functions, such as @hl.scala{math.sqrt} here.
 
     @sect{Interpolations}
-      @exampleRef("simple", "scala scala html")
+      @exampleRef("interpolation", "scala html")
 
       @p
         You can also splice the result of arbitrary chunks of code within a Scalatex document. Using parens @hl.scala{()} lets you splice a single expression, whereas using curlies @hl.scala{{}} lets you splice a block which can contain multiple statements.
