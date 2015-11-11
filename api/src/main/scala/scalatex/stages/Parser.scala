@@ -57,7 +57,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
   val BlankLine = P( "\n" ~ " ".rep ~ &("\n") )
 
-  val IndentSpaces = P( fastparse.parsers.Combinators.Repeat(" ", min = indent, delimiter = Pass) )
+  val IndentSpaces = P( " ".rep(min = indent, sep = Pass) )
   val Indent = P( "\n" ~ IndentSpaces )
   val IndentPrefix = P( Index ~ (Indent | Start).! ).map(Ast.Block.Text.tupled)
   val IndentScalaChain = P(ScalaChain ~ (IndentBlock | BraceBlock).?).map{
@@ -70,8 +70,8 @@ class Parser(indent: Int = 0, offset: Int = 0) {
       else new Parser(nextIndent.length, offsetIndex).Body
   }
 
-  val IfHead = P( (`if` ~! "(" ~ ExprCtx.Expr ~ ")").! )
-  val IfSuffix = P( BraceBlock ~ (K.W("else") ~! BraceBlock).?  )
+  val IfHead = P( (`if` ~/ "(" ~ ExprCtx.Expr ~ ")").! )
+  val IfSuffix = P( BraceBlock ~ (K.W("else") ~/ BraceBlock).?  )
   val IfElse = P( Index ~ IfHead ~ IfSuffix).map{ case (w, a, (b, c)) => Ast.Block.IfElse(w, a, b, c) }
 
   val IndentIfElse = {
@@ -83,8 +83,8 @@ class Parser(indent: Int = 0, offset: Int = 0) {
 
 
   val ForHead = {
-    val ForBody = P( "(" ~! ExprCtx.Enumerators ~ ")" | "{" ~! StatCtx.Enumerators ~ "}" )
-    P( Index ~ (`for` ~! ForBody).! )
+    val ForBody = P( "(" ~/ ExprCtx.Enumerators ~ ")" | "{" ~/ StatCtx.Enumerators ~ "}" )
+    P( Index ~ (`for` ~/ ForBody).! )
   }
   val ForLoop = P( ForHead ~ BraceBlock ).map(Ast.Block.For.tupled)
   val IndentForLoop = P(
@@ -104,14 +104,14 @@ class Parser(indent: Int = 0, offset: Int = 0) {
     BraceBlock
   )
 
-  val BraceBlock = P( "{" ~! BodyNoBrace  ~ "}" )
+  val BraceBlock = P( "{" ~/ BodyNoBrace  ~ "}" )
 
   val CtrlFlow = P( ForLoop | IfElse | ScalaChain | HeaderBlock | `@@` ).map(Seq(_))
 
   val CtrlFlowIndented = P( IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | `@@` )
 
   val IndentedExpr = P(
-    (IndentPrefix ~ "@" ~! CtrlFlowIndented).map{ case (a, b) => Seq(a, b) }
+    (IndentPrefix ~ "@" ~/ CtrlFlowIndented).map{ case (a, b) => Seq(a, b) }
   )
   def BodyText(exclusions: String) = P(
     TextNot(exclusions).map(Seq(_)) |
@@ -120,7 +120,7 @@ class Parser(indent: Int = 0, offset: Int = 0) {
   )
   def BodyItem(exclusions: String) : P[Seq[Ast.Block.Sub]]  = P(
     IndentedExpr |
-    "@" ~! CtrlFlow |
+    "@" ~/ CtrlFlow |
     BodyText(exclusions)
   )
   val Body = P( BodyEx("") )

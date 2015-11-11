@@ -23,49 +23,49 @@ object ParseErrors extends TestSuite{
     * - check(
       """@{)
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):2 ...")\n" """
+      """ (";" | Newline.rep(1) | "}" | `case`):1:3 ...")\n" """
     )
     * - check(
       """@({
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):4 ..."" """
+      """ (";" | Newline.rep(1) | "}" | `case`):1:3 ..."" """
     )
     * - check(
       """@for{;
         |""".stripMargin,
-      """(TypePattern | BindPattern):5 ...";\n""""
+      """(TypePattern | BindPattern):1:6 ...";\n""""
     )
     * - check(
       """@{ => x
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):3 ..."=> x\n" """
+      """ (";" | Newline.rep(1) | "}" | `case`):1:4 ..."=> x\n" """
     )
 
     * - check(
       """@( => x
         |""".stripMargin,
-      """ (If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda | ")"):3 ..."=> x\n" """
+      """ (If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda | ")"):1:4 ..."=> x\n" """
     )
     * - check(
       """@x{
         |""".stripMargin,
-      """ ("}" | IndentedExpr | "@" ~! CtrlFlow | BodyText):4 ..."" """
+      """ ("}" | IndentedExpr | "@" ~! CtrlFlow | BodyText):1:3 ..."" """
     )
     * - check(
       """@ """.stripMargin,
-      """(IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | @@):1 ..." """"
+      """(IndentForLoop | IndentScalaChain | IndentIfElse | HeaderBlock | @@):1:2 ..." """"
     )
 
     * - check(
       """@p
         |  @if(
         |""".stripMargin,
-      """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):9 ..."\n""""
+      """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):2:6 ..."\n""""
     )
     * - check(
       """@if(true){ 123 }else lol
         |""".stripMargin,
-      """"{":20 ..." lol\n""""
+      """"{":1:21 ..." lol\n""""
     )
   }
 }
