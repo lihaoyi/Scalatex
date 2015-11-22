@@ -19,7 +19,7 @@ object SbtPlugin extends sbt.AutoPlugin {
         val name = inFile.getName
         val objectName = name.slice(name.lastIndexOf('/') + 1, name.lastIndexOf('.'))
         val pkgName =
-          inFile.getAbsolutePath
+          fixPath(inFile)
             .drop(inputDir.getAbsolutePath.length + 1)
             .toString
             .split("/")
@@ -34,7 +34,7 @@ object SbtPlugin extends sbt.AutoPlugin {
             |import scalatags.Text.all._
             |
             |object $objectName{
-            |  def apply(): Frag = _root_.scalatex.twf("${inFile.getAbsolutePath}")
+            |  def apply(): Frag = _root_.scalatex.twf("${fixPath(inFile)}")
             |}
             |
             |${IO.readLines(inFile).map("//"+_).mkString("\n")}
@@ -56,8 +56,12 @@ object SbtPlugin extends sbt.AutoPlugin {
       } yield f
     }
   )
+  // fix backslash path separator
+  def fixPath(file:String) = file.replaceAll("\\\\","/")
+  def fixPath(file:sbt.File):String = fixPath(file.getAbsolutePath)
 }
 object ScalatexReadme{
+  import SbtPlugin.fixPath
   /**
    *
    * @param projectId The name this readme project will take,
@@ -86,7 +90,7 @@ object ScalatexReadme{
           f <- (file(projectId) / "resources" ** "*").get
           if f.isFile
           rel <- f.relativeTo(file(projectId) / "resources")
-        } yield rel.getPath
+        } yield fixPath(rel.getPath)
 
         val generated = dir / "scalatex" / "Main.scala"
 
@@ -97,7 +101,7 @@ object ScalatexReadme{
           package scalatex
           object Main extends scalatex.site.Main(
             url = "$url",
-            wd = ammonite.ops.Path("${wd.getAbsolutePath}"),
+            wd = ammonite.ops.Path("${fixPath(wd)}"),
             output = ammonite.ops.Path("${((target in Compile).value / "scalatex").getAbsolutePath}"),
             extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
             extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
