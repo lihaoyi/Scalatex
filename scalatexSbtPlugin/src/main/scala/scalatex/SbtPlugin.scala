@@ -102,7 +102,7 @@ object ScalatexReadme{
           object Main extends scalatex.site.Main(
             url = "$url",
             wd = ammonite.ops.Path("${fixPath(wd)}"),
-            output = ammonite.ops.Path("${((target in Compile).value / "scalatex").getAbsolutePath}"),
+            output = ammonite.ops.Path("${fixPath((target in Compile).value / "scalatex")}"),
             extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
             extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
             scalatex.$source()
