@@ -68,6 +68,7 @@ trait Site{
   def defaultHeader: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
+    link(rel:="shortcut icon", `type`:="image/png", href:="favicon.png"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
     tags2.style(raw(css.styleSheetText)),
     pageTitle.map(tags2.title(_)),
