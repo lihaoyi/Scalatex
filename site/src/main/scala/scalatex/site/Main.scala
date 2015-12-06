@@ -84,7 +84,7 @@ class Main(url: String,
   /**
     * Default
     */
-  def pageTitle = {
+  override def pageTitle = {
     println(sect.headerSeq.lift(1))
     sect.headerSeq.lift(1)
   }

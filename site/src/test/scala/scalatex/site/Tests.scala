@@ -267,7 +267,6 @@ object Tests extends TestSuite{
       'default {
         rm ! wd / 'site / 'target / 'output
         val site = new scalatex.site.Site {
-          def pageTitle = None
           def content = Map("index.html" ->(defaultHeader, Hello()))
         }
         site.renderTo(wd / 'site / 'target / 'output)

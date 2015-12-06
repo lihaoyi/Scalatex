@@ -61,7 +61,7 @@ trait Site{
    */
   def stylesName = "styles.css"
 
-  def pageTitle: Option[String]
+  def pageTitle: Option[String] = None
   /**
    * The header of this site's HTML page
    */
