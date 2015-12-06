@@ -88,7 +88,7 @@ class Main(url: String,
       Highlighter.snippet
     )
   }
-  def content = Map("index.html" -> frag)
+  def content = Map("index.html" -> (defaultHeader, frag))
 
   val usedLinks = collection.mutable.Buffer.empty[String]
   def lnk(name: String, customUrl: String = "") = {

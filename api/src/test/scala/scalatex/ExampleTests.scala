@@ -130,14 +130,11 @@ object ExampleTests extends TestSuite{
           @span
             1 + 2 is @(1 + 2)
         """),
-        tw("""
-          @span
-            1 + 2 is @{1 + 2}
-        """),
         """
           <span>1 + 2 is 3</span>
         """
       )
+
       'multiline - check(
         tw("""
           @div

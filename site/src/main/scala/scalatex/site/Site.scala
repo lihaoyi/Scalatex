@@ -1,14 +1,12 @@
 package scalatex.site
 
 import java.nio.CharBuffer
-import java.nio.file.{Paths, Files}
 
-import ammonite.ops.Path
-import ammonite.ops._
+import ammonite.ops.{Path, _}
+
 import scalatags.Text.all._
-import scalatags.Text.attrs
-import scalatags.Text.tags2
-import Styles.css
+import scalatags.Text.{attrs, tags2}
+import scalatex.site.Styles.css
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -66,7 +64,7 @@ trait Site{
   /**
    * The header of this site's HTML page
    */
-  def headFrags: Seq[Frag] = Seq(
+  def defaultHeader: Seq[Frag] = Seq(
     link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
@@ -81,10 +79,16 @@ trait Site{
     frag
   )
 
+
+  type Body = Frag
+  /** Enable pages to specify multiple header entries */
+  type Header = Seq[Frag]
+  type Page = (Header, Body)
   /**
-   * The contents of this page
+   * The contents of the site.
+   * Maps String paths to the pages, to their actual content.
    */
-  def content: Map[String, Frag]
+  def content: Map[String, Page]
 
   def bundleResources(outputRoot: Path) = {
     for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
@@ -97,10 +101,10 @@ trait Site{
   }
 
   def generateHtml(outputRoot: Path) = {
-    for((path, frag) <- content){
+    for((path, (pageHeaders, pageBody)) <- content){
       val txt = html(
-        head(headFrags),
-        body(bodyFrag(frag))
+        head(pageHeaders),
+        body(bodyFrag(pageBody))
       ).render
       val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
 

@@ -1,17 +1,11 @@
 package scalatex.site
 
-import java.nio.CharBuffer
-
-import scalatex.scalatex.site._
-import java.nio.file.{Paths, Files}
-
-import utest._
-import scala.collection.mutable
-import scalatags.Text.all
-import scalatags.Text.all._
-
-import scalatex.site.Tree
 import ammonite.ops._
+import utest._
+
+import scala.collection.mutable
+import scalatags.Text.all._
+import scalatex.scalatex.site._
 object Tests extends TestSuite{
 
   def cmp(s1: String, s2: String) = {
@@ -104,7 +98,6 @@ object Tests extends TestSuite{
       }
     }
     'Highlighter{
-      import scalatex.site.Highlighter
       object hl extends Highlighter {
       }
       'wholeFile {
@@ -213,7 +206,7 @@ object Tests extends TestSuite{
       'simple {
         rm! wd/'site/'target/'output
         val site = new scalatex.site.Site {
-          def content = Map("index.html" -> Hello())
+          def content = Map("index.html" -> (defaultHeader, Hello()))
         }
         site.renderTo(wd/'site/'target/'output)
 
@@ -243,14 +236,15 @@ object Tests extends TestSuite{
         rm! wd/'site/'target/'output2
         assert(!exists(wd/'site/'target/'output2))
         val site = new scalatex.site.Site {
-          def content = Map(
-            "page1.html" -> Hello(),
-            "page2.html" -> About()
-          )
           override def scriptName = "custom.js"
           override def stylesName = "custom.css"
-          override def headFrags = super.headFrags ++ Seq(
+          override def defaultHeader = super.defaultHeader ++ Seq(
             script("console.log('Hi!')")
+          )
+
+          def content = Map(
+            "page1.html" -> (defaultHeader, Hello()),
+            "page2.html" -> (defaultHeader, About())
           )
         }
         site.renderTo(wd/'site/'target/'output2)
@@ -265,6 +259,80 @@ object Tests extends TestSuite{
           page2.contains("Hear me moo"),
           exists(wd/'site/'target/'output2/"custom.js"),
           exists(wd/'site/'target/'output2/"custom.css")
+        )
+      }
+    }
+    'CustomHead {
+      // check that head remains unchanged
+      'default {
+        rm ! wd / 'site / 'target / 'output
+        val site = new scalatex.site.Site {
+          def content = Map("index.html" ->(defaultHeader, Hello()))
+        }
+        site.renderTo(wd / 'site / 'target / 'output)
+
+        def check() = {
+          val expected = site.defaultHeader map (_.render)
+          // return empty head if not found => problem
+          val results = site.content.getOrElse("index.html", (Seq(), Hello()))._1 map (_.render)
+          val ta = expected zip results map (t => t._1.equals(t._2))
+
+          assert( ta.reduce(_ && _) )
+        }
+        check()
+      }
+      'customTitle {
+        rm ! wd / 'site / 'target / 'output
+        val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+
+          def customHead = defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker))
+          def content = Map("index.html" ->(customHead, Hello()))
+        }
+        site.renderTo(wd / 'site / 'target / 'output)
+        val page1 = read! wd/'site/'target/'output/"index.html"
+
+        assert( page1.contains(s"<title>${site.mooMarker}</title>") )
+      }
+      'differentTitles {
+        rm ! wd / 'site / 'target / 'output
+        val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+          val bbqMarker = "Barbecue!"
+
+          def content = Map(
+            "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
+            "page2.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(bbqMarker)), About())
+          )
+        }
+        site.renderTo(wd / 'site / 'target / 'output)
+        val page1 = read! wd/'site/'target/'output/"page1.html"
+        val page2 = read! wd/'site/'target/'output/"page2.html"
+
+        assert(
+          page1.contains(s"<title>${site.mooMarker}</title>"),
+          !page1.contains(s"<title>${site.bbqMarker}</title>"),
+          page2.contains(s"<title>${site.bbqMarker}</title>"),
+          !page2.contains(s"<title>${site.mooMarker}</title>")
+        )
+      }
+      'onlyOneCustom {
+        rm ! wd / 'site / 'target / 'output
+        val site = new scalatex.site.Site {
+          val mooMarker = "Moooo"
+
+          def content = Map(
+            "page1.html" -> (defaultHeader ++ Seq(scalatags.Text.tags2.title(mooMarker)), Hello()),
+            "page2.html" -> (defaultHeader, About())
+          )
+        }
+        site.renderTo(wd / 'site / 'target / 'output)
+        val page1 = read! wd/'site/'target/'output/"page1.html"
+        val page2 = read! wd/'site/'target/'output/"page2.html"
+
+        assert(
+          page1.contains(s"<title>${site.mooMarker}</title>"),
+          !page2.contains(s"<title>")
         )
       }
     }

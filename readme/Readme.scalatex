@@ -146,7 +146,7 @@
         Apart from splicing values into the document, you can also call functions, such as @hl.scala{math.sqrt} here.
 
     @sect{Interpolations}
-      @exampleRef("simple", "scala scala html")
+      @exampleRef("interpolation", "scala html")
 
       @p
         You can also splice the result of arbitrary chunks of code within a Scalatex document. Using parens @hl.scala{()} lets you splice a single expression, whereas using curlies @hl.scala{{}} lets you splice a block which can contain multiple statements.
@@ -368,6 +368,12 @@
       Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
 
     @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
+
+    @p
+      Similarly, you can choose to supplement the default settings with your own customization. The following example
+      specifies a different title for each of the two pages.
+
+    @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'CustomHead", "'differentTitles", "val site"), "val page1")
 
     @p
       There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
