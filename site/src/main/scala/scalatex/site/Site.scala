@@ -61,6 +61,7 @@ trait Site{
    */
   def stylesName = "styles.css"
 
+  def pageTitle: Option[String]
   /**
    * The header of this site's HTML page
    */
@@ -69,6 +70,7 @@ trait Site{
     link(href:=stylesName, rel:="stylesheet"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
     tags2.style(raw(css.styleSheetText)),
+    pageTitle.map(tags2.title(_)),
     script(src:=scriptName)
   )
 

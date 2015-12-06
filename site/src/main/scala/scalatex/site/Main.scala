@@ -81,6 +81,13 @@ class Main(url: String,
 
   val sect = new site.Section{}
 
+  /**
+    * Default
+    */
+  def pageTitle = {
+    println(sect.headerSeq.lift(1))
+    sect.headerSeq.lift(1)
+  }
   override def bodyFrag(frag: Frag) = {
     Seq(
       super.bodyFrag(frag),
@@ -88,7 +95,14 @@ class Main(url: String,
       Highlighter.snippet
     )
   }
-  def content = Map("index.html" -> (defaultHeader, frag))
+  def content = {
+    /**
+      * Precompute so we have the set of headers ready, since we use the first
+      * header to use as the title of the page
+      */
+    val precalcFrag = frag
+    Map("index.html" -> (defaultHeader, precalcFrag))
+  }
 
   val usedLinks = collection.mutable.Buffer.empty[String]
   def lnk(name: String, customUrl: String = "") = {
