@@ -53,7 +53,7 @@
   @p
     Scalatex lets you write your HTML in a hierarchical structure which then gets compiled to HTML. In Scalatex, everything is part of the output document, except for tokens marked with an @hl.scala{@@} sign. These correspond to HTML tags (provided by @lnk("Scalatags", "https://github.com/lihaoyi/scalatags")), values you want to interpolate, control flow statements, function calls (or definitions!), basically anything that isn't plain text.
   @p
-    Scalatex is currently used to generate it's own readme (@lnk("here", "https://github.com/lihaoyi/scalatex/blob/master/readme/Readme.scalatex")) as well as the e-book @lnk("Hands-on Scala.js", "http://lihaoyi.github.io/hands-on-scala-js"). It is only published for Scala 2.11.x for the time being.
+    Scalatex is currently used to generate its own readme (@lnk("here", "https://github.com/lihaoyi/scalatex/blob/master/readme/Readme.scalatex")) as well as the e-book @lnk("Hands-on Scala.js", "http://lihaoyi.github.io/hands-on-scala-js"). It is only published for Scala 2.11.x for the time being.
 
   @sect{Getting Started}
     @p
@@ -114,7 +114,7 @@
         Everything outside of a set of parentheses, that isn't an @hl.scala{@@}-escape, is treated as a string.
 
     @p
-      This accounts for the variation in syntax that you see above. In general, you almost always want to use identation-based blocks to delimit large sections of the document, only falling back to curly braces for one-line or one-word tags like @hl.scala{@@h2} or @hl.scala{@@b} above.
+      This accounts for the variation in syntax that you see above. In general, you almost always want to use indentation-based blocks to delimit large sections of the document, only falling back to curly braces for one-line or one-word tags like @hl.scala{@@h2} or @hl.scala{@@b} above.
 
     @sect{Loops}
       @exampleRef("loops", "scala scala html")
@@ -362,10 +362,10 @@
     @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'simple", "val site"), "def check")
 
     @p
-      This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as .well as a the Javascript for @lnk("Highlight.js", "https://highlightjs.org/") and css for @lnk("Font Awesome", "http://fortawesome.github.io/Font-Awesome/") and @lnk("Less CSS", "http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
+      This will result in a single HTML file @code{index.html} in the @code{site/target/output/} folder, as well as the JavaScript for @lnk("Highlight.js", "https://highlightjs.org/") and CSS for @lnk("Font Awesome", "http://fortawesome.github.io/Font-Awesome/") and @lnk("Less CSS", "http://purecss.io/") bundled together into @code{scripts.js} and @code{styles.css}. From there, you can simply copy the whole folder and serve it on whatever static file hosting (Github Pages, S3, etc.).
 
     @p
-      Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and Javascript bundles.
+      Although @hl.scala{Site} provides reasonable defaults for all these things they are entirely customizable, and you just need to override various definitions when instantiating the @hl.scala{Site}. For example, here's a slightly more complex @hl.scala{Site} that generates multiple HTML pages (@code{page1.html} and @code{page2.html}) and generates them with custom names for the CSS and JavaScript bundles.
 
     @hl.ref(wd/'site/'src/'test/'scala/'scalatex/'site/"Tests.scala", Seq("'Site", "'overriding", "val site"), "val page1")
 
@@ -530,7 +530,7 @@
       However, it also has some downsides:
     @ul
       @li
-        @b{Completely non-customizable by default}: in Markdown, you have @code{`code`} for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have @code{[link](url)} for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: @hl.scala("@hl.scala{code}") to highlight Scala code, @hl.scala("@hl.javascript{code}") for Javascript, @hl.scala("@hl.html{code}") to highlight HTML. Similarly, you can easily define a @sect.ref{Custom Tags} that distinguish internal links from external links, giving them different CSS, markup of assertions.
+        @b{Completely non-customizable by default}: in Markdown, you have @code{`code`} for specifying code. But what if you want to specify the language which you want your code to be highlighted? Impossible, without special extensions. Similarly, you have @code{[link](url)} for specifying links. But what if you want to treat external links differently from internal links? Again, impossible. With Scalatex, you can easily define different tags for each one: @hl.scala("@hl.scala{code}") to highlight Scala code, @hl.scala("@hl.javascript{code}") for JavaScript, @hl.scala("@hl.html{code}") to highlight HTML. Similarly, you can easily define @sect.ref{Custom Tags} that distinguish internal links from external links, giving them different CSS, markup of assertions.
       @li
         @b{Messy, ad-hoc extensions}: @lnk("Python Markdown", "http://pythonhosted.org/Markdown/extensions/") provides a list of extensions. @lnk("CommonMark.org", "http://commonmark.org") does too. How do these extensions interact with other extensions? How do you implement your own? The answer to the first question is "Who knows?" and to the second "Regexes". Naturally, this makes people hesitant to implement extensions: they'd rather C&P markup than deal with crazy regex transforms. Is highlight code done using @code{```scala} or @code("{% highlight scala %}")? With Scalatex, defining @sect.ref{Custom Tags} is so easy that it's the natural thing to do, so you never need to worry about weird interactions between weird custom syntaxes.
       @li
@@ -538,7 +538,7 @@
       @li
         @b{Unsafe}: What happens if you fat-finger some special characters in Markdown? You get another, perfectly valid markdown document, that you did not want. If you fat-finger a tag in Scalatex, you get a compilation error telling you where you made a mistake.
     @p
-      In general, Markdown is far more concise than Scalatex, and probably better for writing small documents like comments or chat boxes. For anything larger, you probaby do want to define larger, re-usable components to deal with, rather than working directly with the fixed set of primitives markdown provides. Instead of working with fenced-code-snippets, links, and headers, you're working with references to your unit test code, or document sections that automatically provide the correct sized headers.
+      In general, Markdown is far more concise than Scalatex, and probably better for writing small documents like comments or chat boxes. For anything larger, you probably do want to define larger, re-usable components to deal with, rather than working directly with the fixed set of primitives markdown provides. Instead of working with fenced-code-snippets, links, and headers, you're working with references to your unit test code, or document sections that automatically provide the correct sized headers.
 
     @p
       This makes large-scale documents much more pleasant, to the extent that you can perform large-scale refactorings of your Scalatex document without worrying about broken intra-document links or a stale table-of-contents.
@@ -566,7 +566,7 @@
       @li
         Being able to define @hl.scala{def}s using Scalatex syntax; Scalatex @hl.scala{def}s have to be defined using Scala syntax
     @p
-      In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to it's excess of curlies and XML, whereas with Scalatex you can (and @lnk("I have", "http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
+      In general, Scalatex aims to be much more regular and lighter weight than Twirl. You probably wouldn't want to use Twirl to write a book due to its excess of curlies and XML, whereas with Scalatex you can (and @lnk("I have", "http://lihaoyi.github.io/hands-on-scala-js/#Hands-onScala.js")). At the same time, Scalatex keeps the best part of Twirl - the abilities to eliminate repetition using plain Scala - and extends to to work more regularly.
     @p
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
