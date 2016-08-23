@@ -1,9 +1,9 @@
 package scalatex.site
 import scalatags.Text.all._
-import scalatags.stylesheet.{CascadingStyleSheet, Sheet}
+import scalatags.stylesheet.{CascadingStyleSheet, SourceClasses}
 
 object Styles{
-  val css = Sheet[Styles]
+  val css = new Styles {}
 }
 trait Styles extends CascadingStyleSheet {
 
@@ -65,7 +65,7 @@ trait Styles extends CascadingStyleSheet {
     )
 
   )
-  override def styleSheetText = super.styleSheetText +
+  override def styleSheetText(implicit sourceClasses: SourceClasses[this.type]) = super.styleSheetText +
     """
       |/*Workaround for bug in highlight.js IDEA theme*/
       |span.hljs-tag, span.hljs-symbol{

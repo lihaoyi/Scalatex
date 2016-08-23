@@ -1,12 +1,12 @@
 package scalatex.scrollspy
 
 import scalatags.JsDom.all._
-import scalatags.stylesheet.{Sheet, StyleSheet}
+import scalatags.stylesheet.{SourceClasses, StyleSheet}
 
 object Styles{
   val itemHeight = 44
   val selectedColor = "#1f8dd6"
-  val css = Sheet[Styles]
+  val css = new Styles {}
   val menuBackground = "#191818"
 }
 trait Styles extends StyleSheet{
@@ -49,8 +49,8 @@ trait Styles extends StyleSheet{
     height := Styles.itemHeight,
     width := Styles.itemHeight,
     display := "flex",
-    "align-items".style := "center",
-    "justify-content".style := "center",
+    alignItems := "center",
+    justifyContent := "center",
     textDecoration.none,
     selected.splice
   )

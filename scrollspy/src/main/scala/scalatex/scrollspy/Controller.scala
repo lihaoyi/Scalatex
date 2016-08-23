@@ -53,7 +53,7 @@ class Controller(data: js.Any){
     cls := "menu-item-list",
     margin := 0,
     padding := 0,
-    "flex".style := 10000,
+    flex := 10000,
     scrollSpy.domTrees.map(_.value.frag)
   ).render
 
@@ -84,7 +84,7 @@ class Controller(data: js.Any){
     right := Styles.itemHeight
   ).render
 
-  val initiallyOpen = dom.innerWidth > 800
+  val initiallyOpen = dom.window.innerWidth > 800
   val toggler = new Toggler(initiallyOpen, menu, dom.document.body, all)
 
   val openLink = {
@@ -105,7 +105,7 @@ class Controller(data: js.Any){
     toggler.apply()
     dom.document.body.appendChild(menu)
 
-    dom.addEventListener("scroll", (e: dom.UIEvent) => updateScroll())
+    dom.window.addEventListener("scroll", (e: dom.UIEvent) => updateScroll())
   }
 
   val footer = div(
@@ -118,7 +118,7 @@ class Controller(data: js.Any){
   )
   val all = div(
     display := "flex",
-    "flex-direction".style := "column",
+    flexDirection := "column",
     minHeight := "100%",
     transition := "opacity 0.2s ease-out",
     list,
