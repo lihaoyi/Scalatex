@@ -4,7 +4,6 @@ import org.scalajs.dom
 import org.scalajs.dom.ext._
 import org.scalajs.dom.html
 import scalatags.JsDom.all._
-import Styles.css
 
 case class Tree[T](value: T, children: Vector[Tree[T]])
 
@@ -29,13 +28,13 @@ class ScrollSpy(structure: Seq[Tree[String]]){
         t.value,
         href:="#"+Controller.munge(t.value),
         cls:="menu-item",
-        css.menuItem
+        Styles.menuItem
       ).render
       val originalI = i
       val children = t.children.map(recurse(_, depth + 1))
 
       val list = ul(
-        css.menuList,
+        Styles.menuList,
         children.map(_.value.frag)
       ).render
 
@@ -110,11 +109,11 @@ class ScrollSpy(structure: Seq[Tree[String]]){
     def close(tree: Tree[MenuNode]): Unit = {
       if (!open) tree.value.list.style.maxHeight = "0px"
       else setFullHeight(tree.value)
-      tree.value.frag.classList.remove(css.pathed.name)
+      tree.value.frag.classList.remove(Styles.pathed.name)
 
       tree.children.foreach(close)
-      tree.value.link.classList.add(css.closed.name)
-      tree.value.link.classList.remove(css.selected.name)
+      tree.value.link.classList.add(Styles.closed.name)
+      tree.value.link.classList.remove(Styles.selected.name)
     }
     def walk(tree: Tree[MenuNode]): Unit = {
       setFullHeight(tree.value)
@@ -126,17 +125,17 @@ class ScrollSpy(structure: Seq[Tree[String]]){
       for((child, idx) <- children.zipWithIndex) {
         if(offset(child.value.header) <= scrollTop + epsilon) {
           if (idx+1 >= children.length || offset(children(idx+1).value.header) > scrollTop + epsilon) {
-            child.value.link.classList.remove(css.closed.name)
-            child.value.link.classList.add(css.selected.name)
+            child.value.link.classList.remove(Styles.closed.name)
+            child.value.link.classList.add(Styles.selected.name)
             walk(child)
-            child.value.frag.classList.remove(css.pathed.name)
+            child.value.frag.classList.remove(Styles.pathed.name)
           }else {
 
             close(child)
-            child.value.frag.classList.add(css.pathed.name)
+            child.value.frag.classList.add(Styles.pathed.name)
           }
         }else{
-          child.value.frag.classList.remove(css.pathed.name)
+          child.value.frag.classList.remove(Styles.pathed.name)
           close(child)
         }
       }
@@ -146,9 +145,9 @@ class ScrollSpy(structure: Seq[Tree[String]]){
     for(t <- domTrees){
       val cl = t.value.link.classList
       setFullHeight(t.value)
-      cl.remove(css.closed.name)
-      t.value.frag.classList.remove(css.pathed.name)
-      cl.add(css.selected.name)
+      cl.remove(Styles.closed.name)
+      t.value.frag.classList.remove(Styles.pathed.name)
+      cl.add(Styles.selected.name)
     }
   }
 }

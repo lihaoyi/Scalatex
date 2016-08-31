@@ -571,12 +571,18 @@
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
 @sect{Changelog}
+  @sect{0.3.6}
+    @ul
+      @li
+        Bump Scalatags version to 0.6.0
+
   @sect{0.3.5}
     @ul
       @li
         Scalatex sites now support favicons! Place @code{favicon.png} in the @code{resources/} folder of your Scalatex subproject and it should get picked up automatically.
       @li
         Scalatex sites now set the HTML page-title using the first header on the page.
+
   @sect{0.3.4}
     @ul
       @li

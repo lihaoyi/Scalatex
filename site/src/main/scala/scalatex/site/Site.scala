@@ -6,7 +6,6 @@ import ammonite.ops.{Path, _}
 
 import scalatags.Text.all._
 import scalatags.Text.{attrs, tags2}
-import scalatex.site.Styles.css
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -70,7 +69,7 @@ trait Site{
     link(href:=stylesName, rel:="stylesheet"),
     link(rel:="shortcut icon", `type`:="image/png", href:="favicon.png"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
-    tags2.style(raw(css.styleSheetText)),
+    tags2.style(raw(Styles.styleSheetText)),
     pageTitle.map(tags2.title(_)),
     script(src:=scriptName)
   )

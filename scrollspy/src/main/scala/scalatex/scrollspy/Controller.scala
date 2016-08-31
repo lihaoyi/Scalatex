@@ -8,7 +8,6 @@ import scalajs.js
 import scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
 import scalatags.JsDom.tags2
-import Styles.css
 
 class Toggler(var open: Boolean,
               menu: => html.Element,
@@ -30,7 +29,7 @@ class Toggler(var open: Boolean,
 object Controller{
   lazy val styleTag = tags2.style.render
   dom.document.head.appendChild(styleTag)
-  styleTag.textContent += css.styleSheetText
+  styleTag.textContent += Styles.styleSheetText
 
   def munge(name: String) = {
     name.replace(" ", "")
@@ -67,7 +66,7 @@ class Controller(data: js.Any){
     val link = a(
       icon,
       href := "javascript:",
-      Styles.css.menuLink,
+      Styles.menuLink,
       onclick := { (e: dom.Event) =>
         icon.classList.toggle(clsA)
         icon.classList.toggle(clsB)
@@ -109,11 +108,11 @@ class Controller(data: js.Any){
   }
 
   val footer = div(
-    Styles.css.noteBox,
+    Styles.noteBox,
     a(
       "Published using Scalatex",
       href:="https://lihaoyi.github.io/Scalatex",
-      Styles.css.note
+      Styles.note
     )
   )
   val all = div(
@@ -127,7 +126,7 @@ class Controller(data: js.Any){
   ).render
 
   val menu: html.Element = div(
-    Styles.css.menu,
+    Styles.menu,
     all,
     openLink
   ).render

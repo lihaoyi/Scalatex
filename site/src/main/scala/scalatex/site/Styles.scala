@@ -2,10 +2,7 @@ package scalatex.site
 import scalatags.Text.all._
 import scalatags.stylesheet.{CascadingStyleSheet, SourceClasses}
 
-object Styles{
-  val css = new Styles {}
-}
-trait Styles extends CascadingStyleSheet {
+object Styles extends CascadingStyleSheet {
 
   def highlightMe = cls()
 

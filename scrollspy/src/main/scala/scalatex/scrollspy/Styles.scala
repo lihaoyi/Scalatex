@@ -3,13 +3,10 @@ package scalatex.scrollspy
 import scalatags.JsDom.all._
 import scalatags.stylesheet.{SourceClasses, StyleSheet}
 
-object Styles{
+object Styles extends StyleSheet{
   val itemHeight = 44
   val selectedColor = "#1f8dd6"
-  val css = new Styles {}
   val menuBackground = "#191818"
-}
-trait Styles extends StyleSheet{
 
   def noteBox = cls(
     height := "14px",

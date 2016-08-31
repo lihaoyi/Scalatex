@@ -4,7 +4,6 @@ import ammonite.ops.{RelPath, Path}
 
 import scalatags.Text.all._
 import ammonite.ops._
-import Styles.css
 /**
  * Lets you instantiate a Highlighter object. This can be used to reference
  * snippets of code from files within your project via the `.ref` method, often
@@ -102,7 +101,7 @@ trait Highlighter{ hl =>
     val lines = string.split("\n", -1)
     if (lines.length == 1){
       code(
-        cls:=lang + " " + Styles.css.highlightMe.name,
+        cls:=lang + " " + Styles.highlightMe.name,
         display:="inline",
         padding:=0,
         margin:=0,
@@ -115,7 +114,7 @@ trait Highlighter{ hl =>
         .dropWhile(_ == "")
         .mkString("\n")
 
-      pre(code(cls:=lang + " " + Styles.css.highlightMe.name, stripped))
+      pre(code(cls:=lang + " " + Styles.highlightMe.name, stripped))
     }
   }
   import Highlighter._
@@ -158,7 +157,7 @@ trait Highlighter{ hl =>
 
       val linkUrl = s"$url/${absPath relativeTo prefix}$hash"
       a(
-        css.headerLink,
+        Styles.headerLink,
         i(cls:="fa fa-link "),
         position.absolute,
         right:="0.5em",
@@ -171,8 +170,8 @@ trait Highlighter{ hl =>
     }
 
     pre(
-      css.hoverContainer,
-      code(cls:=lang + " " + Styles.css.highlightMe.name, blob),
+      Styles.hoverContainer,
+      code(cls:=lang + " " + Styles.highlightMe.name, blob),
       link
     )
   }
@@ -224,7 +223,7 @@ object Highlighter{
     ['DOMContentLoaded', 'load'].forEach(function(ev){
       addEventListener(ev, function(){
         Array.prototype.forEach.call(
-          document.getElementsByClassName('${Styles.css.highlightMe.name}'),
+          document.getElementsByClassName('${Styles.highlightMe.name}'),
           hljs.highlightBlock
         );
       })

@@ -171,7 +171,7 @@ object Tests extends TestSuite{
           // Shouldn't crash when no lines are indented
           val text = "{\ntest\n}"
           val expectedLines = text
-          val expected = pre(code(cls:=lang + " " + Styles.css.highlightMe.name, expectedLines))
+          val expected = pre(code(cls:=lang + " " + Styles.highlightMe.name, expectedLines))
           val actual = hl.highlight(text, lang)
           assert(actual == expected)
         }
@@ -180,7 +180,7 @@ object Tests extends TestSuite{
           val lang = "js"
           val text = "{\n  test\n}"
           val expectedLines = text
-          val expected = pre(code(cls:=lang + " " + Styles.css.highlightMe.name, expectedLines))
+          val expected = pre(code(cls:=lang + " " + Styles.highlightMe.name, expectedLines))
           val actual = hl.highlight(text, lang)
           assert(actual == expected)
         }
