@@ -1,4 +1,4 @@
-import fastparse.core.Result
+
 
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
@@ -7,14 +7,14 @@ import scalatags.Text.all._
 import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
 import acyclic.file
-
+import fastparse.all._
 package object scalatex {
   /**
    * Converts the given string literal into a Scalatex fragment.
    */
   def tw(expr: String): Frag = macro Internals.applyMacro
   /**
-   * Converts the given file into a Scalatex fragment.
+   * Converts the given file into Pa Scalatex fragment.
    */
   def twf(expr: String): Frag = macro Internals.applyMacroFile
   object Internals {
@@ -81,13 +81,14 @@ package object scalatex {
       import c.universe._
       def compile(s: String): c.Tree = {
         val realPos = new OffsetPosition(source, point).asInstanceOf[c.universe.Position]
-        Parser.tupled(stages.Trim(s)) match {
-          case s: Result.Success[Ast.Block] => Compiler(c)(realPos, s.value)
-          case f: Result.Failure =>
-            val lines = f.input.take(f.index).lines.toVector
+        val input = stages.Trim(s)
+        Parser.tupled(input) match {
+          case s: Parsed.Success[Ast.Block] => Compiler(c)(realPos, s.value)
+          case f: Parsed.Failure =>
+            val lines = input._1.take(f.index).lines.toVector
             throw new TypecheckException(
               new OffsetPosition(source, point + f.index).asInstanceOf[c.universe.Position],
-              "Syntax error, expected (" + f.traced.traceParsers.distinct.mkString(" | ") + ")"+
+              "Syntax error, expected (" + f.extra.traced.traceParsers.mkString(" | ") + ")"+
               "\n at line " + lines.length +
               " column " + lines.last.length +
               " index " + f.index

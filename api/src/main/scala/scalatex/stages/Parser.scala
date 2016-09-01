@@ -1,19 +1,20 @@
 package scalatex
 package stages
 import acyclic.file
+
 import scalaparse.Scala
 import scalaparse.Scala._
 import scalaparse.syntax._
 import fastparse.all._
-import fastparse.core.{Result, Mutable, ParseCtx}
+
 /**
  * Parses the input text into a roughly-structured AST. This AST
  * is much simpler than the real Scala AST, but serves us well
  * enough until we stuff the code-strings into the real Scala
  * parser later
  */
-object Parser extends ((String, Int) => Result[Ast.Block]){
-  def apply(input: String, offset: Int = 0): Result[Ast.Block] = {
+object Parser extends ((String, Int) => Parsed[Ast.Block]){
+  def apply(input: String, offset: Int = 0): Parsed[Ast.Block] = {
     new Parser(offset).File.parse(input)
   }
 }
@@ -26,9 +27,9 @@ class Parser(indent: Int = 0, offset: Int = 0) {
    * but consuming no input
    */
   case class LookaheadValue[T](p: P[T]) extends P[T]{
-    def parseRec(cfg: ParseCtx, index: Int) = {
+    def parseRec(cfg: fastparse.core.ParseCtx[Char, String], index: Int) = {
       p.parseRec(cfg, index) match{
-        case s: Mutable.Success[T] => success(cfg.success, s.value, index, Nil, false)
+        case s: Mutable.Success[T] => success(cfg.success, s.value, index, Set.empty, false)
         case f: Mutable.Failure => failMore(f, index, cfg.logDepth)
       }
     }

@@ -9,12 +9,12 @@ import Ast.Chain.Args
 object ParserTests extends utest.TestSuite{
   import Ast._
   import utest._
-  def check[T](input: String, parser: Parser => fastparse.core.Parser[T], expected: T) = {
+  def check[T](input: String, parser: Parser => fastparse.all.Parser[T], expected: T) = {
     parser(new Parser()).parse(input) match{
-      case s: fastparse.core.Result.Success[T] =>
+      case s: fastparse.all.Parsed.Success[T] =>
         val result = s.value
         assert(result == expected)
-      case f: fastparse.core.Result.Failure => throw new Exception(f.traced.trace)
+      case f: fastparse.all.Parsed.Failure => throw new Exception(f.extra.traced.trace)
     }
   }
   def tests = TestSuite{

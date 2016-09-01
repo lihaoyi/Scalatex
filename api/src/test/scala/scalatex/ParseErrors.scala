@@ -13,9 +13,9 @@ object ParseErrors extends TestSuite{
     val failure = new stages.Parser()
       .File
       .parse(input)
-      .asInstanceOf[fastparse.core.Result.Failure]
+      .asInstanceOf[fastparse.all.Parsed.Failure]
 
-    val parsedTrace = failure.traced.copy(fullStack = Nil).trace
+    val parsedTrace = failure.extra.traced.copy(fullStack = Vector.empty).trace
     assert(parsedTrace == expectedTrace.trim)
   }
 
