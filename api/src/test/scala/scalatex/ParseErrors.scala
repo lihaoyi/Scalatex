@@ -28,7 +28,7 @@ object ParseErrors extends TestSuite{
     * - check(
       """@({
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):1:3 ..."" """
+      """ (";" | Newline.rep(1) | "}" | `case`):2:1 ..."" """
     )
     * - check(
       """@for{;
@@ -49,7 +49,7 @@ object ParseErrors extends TestSuite{
     * - check(
       """@x{
         |""".stripMargin,
-      """ ("}" | IndentedExpr | "@" ~! CtrlFlow | BodyText):1:3 ..."" """
+      """ ("}" | IndentedExpr | "@" ~/ CtrlFlow | BodyText):2:1 ..."" """
     )
     * - check(
       """@ """.stripMargin,
@@ -60,7 +60,7 @@ object ParseErrors extends TestSuite{
       """@p
         |  @if(
         |""".stripMargin,
-      """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):2:6 ..."\n""""
+      """(If | While | Try | DoWhile | For | Throw | Return | ImplicitLambda | SmallerExprOrLambda):2:7 ..."\n""""
     )
     * - check(
       """@if(true){ 123 }else lol
