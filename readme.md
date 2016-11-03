@@ -4,4 +4,4 @@
 [travis-badge]: https://travis-ci.org/lihaoyi/Scalatex.svg?branch=master
 [travis-link]: https://travis-ci.org/lihaoyi/Scalatex
 [appveyor-badge]: https://ci.appveyor.com/api/projects/status/github/lihaoyi/Scalatex
-[appveyor-link]: https://ci.appveyor.com/project/lihaoyi/ammonite
+[appveyor-link]: https://ci.appveyor.com/project/lihaoyi/scalatex
