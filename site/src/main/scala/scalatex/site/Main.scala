@@ -101,7 +101,7 @@ class Main(url: String,
       * header to use as the title of the page
       */
     val precalcFrag = frag
-    Map("index.html" -> (defaultHeader, precalcFrag))
+    Map("index.html" -> ((defaultHeader, precalcFrag)))
   }
 
   val usedLinks = collection.mutable.Buffer.empty[String]
