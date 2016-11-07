@@ -1,6 +1,7 @@
 package scalatex.site
 
 import scala.collection.mutable
+import scala.language.implicitConversions
 import scalatags.Text.all
 import scalatags.Text.all._
 import scalatags.text.Builder
