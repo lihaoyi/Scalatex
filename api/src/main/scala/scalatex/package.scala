@@ -102,7 +102,7 @@ package object scalatex {
       try {
         val compiled = compile(scalatexSource)
         if (debug) println(compiled)
-        c.Expr[Frag](c.typeCheck(compiled))
+        c.Expr[Frag](c.typecheck(compiled))
       } catch {
         case e@TypecheckException(pos: Position, msg) =>
           if (!runtimeErrors) c.abort(pos, msg)

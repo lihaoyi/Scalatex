@@ -104,7 +104,7 @@ object Compiler{
           res
 
         case Ast.Block.For(offset1, generators, Ast.Block(offset2, parts2)) =>
-          val fresh = c.fresh()
+          val fresh = c.freshName
 
           val tree = incPosRec(c.parse(s"$generators yield $fresh"), offset1)
 
@@ -113,7 +113,7 @@ object Compiler{
               val f2 = Function(vparams, rec(body))
               val a2 = Apply(fun, List(f2))
               a2
-            case Ident(x: TermName) if x.decoded == fresh =>
+            case Ident(x: TermName) if x.decodedName.toString == fresh =>
               compileBlockWrapped(parts2, offset2)
           }
 
