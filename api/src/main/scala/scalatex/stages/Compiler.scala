@@ -18,7 +18,7 @@ object Compiler{
 
     def incPosRec(trees: c.Tree, offset: Int): trees.type = {
 
-      trees.foreach(incPos(_, offset))
+      trees.foreach { t => incPos(t, offset); () }
       trees
     }
     def incPos(tree: c.Tree, offset: Int): tree.type = {
