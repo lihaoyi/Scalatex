@@ -138,7 +138,7 @@ trait Highlighter{ hl =>
           className: String = null) = {
     val absPath = filePath match{
       case p: Path => p
-      case p: RelPath => cwd/p
+      case p: RelPath => pwd/p
     }
 
     val ext = filePath.last.split('.').last
