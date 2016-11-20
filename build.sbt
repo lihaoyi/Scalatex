@@ -6,7 +6,7 @@ publishTo := Some(Resolver.file("Unused transient repository", file("target/unus
 
 lazy val Version = new {
   def scalaTags = "0.6.2"
-  def upickle = "0.3.9"
+  def upickle = "0.4.4"
 }
 
 val sharedSettings = Seq(
