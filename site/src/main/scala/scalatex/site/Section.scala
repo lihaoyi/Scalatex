@@ -28,7 +28,7 @@ object Section{
 }
 
 /**
- * Lets you instantiate an object used to delimit secitons of your document.
+ * Lets you instantiate an object used to delimit sections of your document.
  *
  * This lets you determine a sequence of headers used
  */
