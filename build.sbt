@@ -7,10 +7,10 @@ publishTo := Some(Resolver.file("Unused transient repository", file("target/unus
 val sharedSettings = Seq(
   version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq("2.10.4", "2.11.6"),
-  scalaVersion := "2.11.6",
-  libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.2" % "provided",
-  addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.2"),
+  crossScalaVersions:= Seq("2.10.4", "2.11.8"),
+  scalaVersion := "2.11.8",
+  libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.5" % "provided",
+  addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.5"),
   autoCompilerPlugins := true,
   publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
   pomExtra :=
