@@ -94,11 +94,11 @@ trait Site{
 
   def bundleResources(outputRoot: Path) = {
     for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
-      autoResources |? (_.ext == ext) | read.resource |> write.over! outputRoot/dest
+      autoResources |? (_.ext == ext) | read |> write.over! outputRoot/dest
     }
 
     for(res <- manualResources) {
-      read.resource.bytes! res |> write.over! outputRoot/(res relativeTo root)
+      read.bytes! res |> write.over! outputRoot/(res relativeTo root)
     }
   }
 

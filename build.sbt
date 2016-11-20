@@ -4,6 +4,11 @@ publishArtifact := false
 
 publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 
+lazy val Version = new {
+  def scalaTags = "0.6.2"
+  def upickle = "0.3.9"
+}
+
 val sharedSettings = Seq(
   version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
@@ -38,9 +43,9 @@ lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.3.1" % "test",
-      "com.lihaoyi" %% "scalaparse" % "0.4.1",
-      "com.lihaoyi" %% "scalatags" % "0.6.0",
+      "com.lihaoyi" %% "utest" % "0.4.4" % "test",
+      "com.lihaoyi" %% "scalaparse" % "0.4.2",
+      "com.lihaoyi" %% "scalatags" % Version.scalaTags,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),
     testFrameworks += new TestFramework("utest.runner.Framework")
@@ -63,14 +68,14 @@ lazy val site =
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "utest" % "0.3.1" % "test",
-    "com.lihaoyi" %% "ammonite-ops" % "0.4.8",
-    "org.webjars" % "highlightjs" % "8.2-1",
-    "org.webjars" % "font-awesome" % "4.2.0",
-    "com.lihaoyi" %% "scalatags" % "0.6.0",
-    "org.webjars" % "pure" % "0.5.0",
-    "com.lihaoyi" %% "upickle" % "0.3.6",
-    "org.scalaj" %% "scalaj-http" % "1.1.6"
+    "com.lihaoyi" %% "utest" % "0.4.4" % "test",
+    "com.lihaoyi" %% "ammonite-ops" % "0.8.0",
+    "org.webjars" % "highlightjs" % "9.7.0",
+    "org.webjars" % "font-awesome" % "4.7.0",
+    "com.lihaoyi" %% "scalatags" % Version.scalaTags,
+    "org.webjars" % "pure" % "2.83",
+    "com.lihaoyi" %% "upickle" % Version.upickle,
+    "org.scalaj" %% "scalaj-http" % "2.3.0"
   ),
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
@@ -86,9 +91,9 @@ lazy val scrollspy = project
   .settings(
     scalaVersion := "2.11.6",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "upickle" % "0.3.6",
-      "org.scala-js" %%% "scalajs-dom" % "0.8.2",
-      "com.lihaoyi" %%% "scalatags" % "0.6.0"
+      "com.lihaoyi" %%% "upickle" % Version.upickle,
+      "org.scala-js" %%% "scalajs-dom" % "0.9.1",
+      "com.lihaoyi" %%% "scalatags" % Version.scalaTags
     ),
     emitSourceMaps := false,
 

@@ -132,7 +132,7 @@ trait Highlighter{ hl =>
    *                  [[suffixMappings]]
    */
   def ref[S: RefPath, V: RefPath]
-         (filePath: ammonite.ops.BasePath[_],
+         (filePath: ammonite.ops.FilePath,
           start: S = Nil,
           end: V = Nil,
           className: String = null) = {
