@@ -73,7 +73,7 @@ lazy val site =
     "org.webjars" % "highlightjs" % "9.7.0",
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Version.scalaTags,
-    "org.webjars" % "pure" % "2.83",
+    "org.webjars" % "pure" % "0.6.0",
     "com.lihaoyi" %% "upickle" % Version.upickle,
     "org.scalaj" %% "scalaj-http" % "2.3.0"
   ),

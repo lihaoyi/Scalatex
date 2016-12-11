@@ -16,13 +16,13 @@ trait Site{
 
   def webjars = root/"META-INF"/'resources/'webjars
 
-  def fontAwesome = webjars/"font-awesome"/"4.2.0"
+  def fontAwesome = webjars/"font-awesome"/"4.7.0"
 
   /**
    * Resources related to the pure-css library
    */
   def pureCss = Seq(
-    webjars/'pure/"0.5.0"/"pure-min.css"
+    webjars/'pure/"0.6.0"/"pure-min.css"
   )
   /**
    * Resources related to the font awesome library
@@ -65,7 +65,7 @@ trait Site{
    * The header of this site's HTML page
    */
   def defaultHeader: Seq[Frag] = Seq(
-    link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
+    link(href:="META-INF/resources/webjars/font-awesome/4.7.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     link(rel:="shortcut icon", `type`:="image/png", href:="favicon.png"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
