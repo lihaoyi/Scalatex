@@ -11,7 +11,7 @@ import ammonite.ops._
  */
 trait Highlighter{ hl =>
   val languages = mutable.Set.empty[String]
-  def webjars = root/"META-INF"/'resources/'webjars
+  def webjars = resource/"META-INF"/'resources/'webjars
   def highlightJs = webjars/'highlightjs/"9.7.0"
   def style: String = "idea"
 
@@ -132,7 +132,7 @@ trait Highlighter{ hl =>
    *                  [[suffixMappings]]
    */
   def ref[S: RefPath, V: RefPath]
-         (filePath: ammonite.ops.FilePath,
+         (filePath: ammonite.ops.BasePath,
           start: S = Nil,
           end: V = Nil,
           className: String = null) = {

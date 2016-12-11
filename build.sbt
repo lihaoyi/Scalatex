@@ -69,7 +69,7 @@ lazy val site =
   name := "scalatex-site",
   libraryDependencies ++= Seq(
     "com.lihaoyi" %% "utest" % "0.4.4" % "test",
-    "com.lihaoyi" %% "ammonite-ops" % "0.8.0",
+    "com.lihaoyi" %% "ammonite-ops" % "0.8.1",
     "org.webjars" % "highlightjs" % "9.7.0",
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Version.scalaTags,

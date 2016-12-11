@@ -6,6 +6,7 @@ import ammonite.ops.{Path, _}
 
 import scalatags.Text.all._
 import scalatags.Text.{attrs, tags2}
+
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -14,7 +15,7 @@ import scalatags.Text.{attrs, tags2}
  */
 trait Site{
 
-  def webjars = root/"META-INF"/'resources/'webjars
+  def webjars = resource/"META-INF"/'resources/'webjars
 
   def fontAwesome = webjars/"font-awesome"/"4.7.0"
 
@@ -39,7 +40,7 @@ trait Site{
    * Resources custom-provided for this particular site
    */
   def siteCss = Set(
-    root/'scalatex/'site/"styles.css"
+    resource/'scalatex/'site/"styles.css"
   )
 
   /**
@@ -98,7 +99,7 @@ trait Site{
     }
 
     for(res <- manualResources) {
-      read.bytes! res |> write.over! outputRoot/(res relativeTo root)
+      read.bytes! res |> write.over! outputRoot/(res relativeTo resource)
     }
   }
 
