@@ -12,8 +12,8 @@ lazy val Version = new {
 val sharedSettings = Seq(
   version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq("2.10.4", "2.11.8"),
-  scalaVersion := "2.11.8",
+  crossScalaVersions:= Seq("2.11.8", "2.12.1"),
+  scalaVersion := "2.12.1",
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.5" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.5"),
   autoCompilerPlugins := true,
@@ -54,7 +54,7 @@ lazy val api = project.settings(sharedSettings:_*)
 lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
-  scalaVersion := "2.10.4",
+  scalaVersion := "2.10.6",
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
 )
@@ -89,7 +89,8 @@ lazy val site =
 lazy val scrollspy = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    scalaVersion := "2.11.6",
+    scalaVersion := "2.12.1",
+    crossScalaVersions:= Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % Version.upickle,
       "org.scala-js" %%% "scalajs-dom" % "0.9.1",
