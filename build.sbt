@@ -4,6 +4,8 @@ publishArtifact := false
 
 publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 
+crossScalaVersions:= Seq("2.11.8", "2.12.1")
+
 lazy val Version = new {
   def scalaTags = "0.6.2"
   def upickle = "0.4.4"

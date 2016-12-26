@@ -571,6 +571,11 @@
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
 @sect{Changelog}
+  @sect{0.3.7}
+    @ul
+      @li
+        Update to Scala 2.12.x
+
   @sect{0.3.6}
     @ul
       @li
