@@ -47,7 +47,7 @@ object SbtPlugin extends sbt.AutoPlugin {
   )
   override val projectSettings = inConfig(Test)(mySeq) ++ inConfig(Compile)(mySeq) ++ Seq(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "scalatex-api" % scalatexVersion, "com.lihaoyi" %% "scalatags" % "0.5.3"
+      "com.lihaoyi" %% "scalatex-api" % scalatexVersion
     ),
     watchSources ++= {
       for{
@@ -103,8 +103,8 @@ object ScalatexReadme{
             url = "$url",
             wd = ammonite.ops.Path("${fixPath(wd)}"),
             output = ammonite.ops.Path("${fixPath((target in Compile).value / "scalatex")}"),
-            extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
-            extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.root/ammonite.ops.RelPath(_)),
+            extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_)),
+            extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_)),
             scalatex.$source()
           )
         """)
@@ -112,7 +112,7 @@ object ScalatexReadme{
       },
       (SbtPlugin.scalatexDirectory in Compile) := file(projectId),
       libraryDependencies += "com.lihaoyi" %% "scalatex-site" % SbtPlugin.scalatexVersion,
-      scalaVersion := "2.11.6"
+      scalaVersion := "2.12.1"
     )
   ).enablePlugins(SbtPlugin)
 }

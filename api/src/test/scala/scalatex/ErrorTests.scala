@@ -203,38 +203,19 @@ object ErrorTests extends TestSuite{
       }
       'curlies{
         * - check(
-          twRuntimeErrors("@p{@Seq(1, 2, 3).foldLeft(0)}"),
-          "missing arguments for method foldLeft",
-          """
-          twRuntimeErrors("@p{@Seq(1, 2, 3).foldLeft(0)}"),
-                                                    ^
-          """
-        )
-
-        * - check(
           twRuntimeErrors("@Nil.foldLeft{XY}"),
-          "missing arguments for method foldLeft",
+          "missing argument list for method foldLeft",
           """
           twRuntimeErrors("@Nil.foldLeft{XY}"),
                                         ^
           """
         )
-
-
         * - check(
           twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
             "type mismatch",
             """
           twRuntimeErrors("@Seq(1).map{(y: String) => omg}"),
                                       ^
-          """
-        )
-        * - check(
-          twRuntimeErrors("@Nil.map{ @omg}"),
-          "too many arguments for method map",
-          """
-          twRuntimeErrors("@Nil.map{ @omg}"),
-                                   ^
           """
         )
       }
@@ -275,14 +256,6 @@ object ErrorTests extends TestSuite{
           """
           twRuntimeErrors("@if(true){ (@math.pow(10)) * 10  }else{ 2 }"),
                                                 ^
-          """
-        )
-        * - check(
-          twRuntimeErrors("@if(true){ * 10  }else{ @math.sin(3, 4, 5) }"),
-          "too many arguments for method sin: (x: Double)Double",
-          """
-          twRuntimeErrors("@if(true){ * 10  }else{ @math.sin(3, 4, 5) }"),
-                                                            ^
           """
         )
       }
@@ -345,15 +318,6 @@ object ErrorTests extends TestSuite{
           """
           twRuntimeErrors("omg @for(x <- (0 + 1 + 2) omglolol (10 + 11 + 2)){ hello }"),
                                                      ^
-          """
-        )
-
-        'body - check(
-          twRuntimeErrors("omg @for(x <- 0 until 10){ @((x, 2) + (1, 2)) }"),
-          """too many arguments for method +""",
-          """
-          twRuntimeErrors("omg @for(x <- 0 until 10){ @((x, 2) + (1, 2)) }"),
-                                                               ^
           """
         )
       }

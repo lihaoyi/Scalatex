@@ -9,5 +9,5 @@ object Sidebar {
     scalatex.scrollspy.Controller().main(
       ${upickle.default.write(tree)}
   )"""))
-  def autoResources = Seq(root/'scalatex/'scrollspy/"scrollspy.js")
+  def autoResources = Seq(resource/'scalatex/'scrollspy/"scrollspy.js")
 }

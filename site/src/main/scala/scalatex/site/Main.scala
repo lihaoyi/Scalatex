@@ -2,10 +2,11 @@ package scalatex.site
 
 import java.util.concurrent.Executors
 
-import ammonite.ops.{cwd, RelPath, Path}
+import ammonite.ops.{Path, ResourcePath}
+
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future, ExecutionContext}
-import scala.util.{Success, Failure, Try}
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 import scalaj.http._
 import scalatags.Text.all._
 import scalatex.site
@@ -21,8 +22,8 @@ import scalatex.site
 class Main(url: String,
            val wd: Path,
            output: Path,
-           extraAutoResources: Seq[Path],
-           extraManualResources: Seq[Path],
+           extraAutoResources: Seq[ResourcePath],
+           extraManualResources: Seq[ResourcePath],
            frag: => Frag) extends scalatex.site.Site{
 
   lazy val hl = new Highlighter {

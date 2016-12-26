@@ -6,6 +6,7 @@ import ammonite.ops.{Path, _}
 
 import scalatags.Text.all._
 import scalatags.Text.{attrs, tags2}
+
 /**
  * A semi-abstract trait that encapsulates everything necessary to generate
  * a Scalatex site. Only `content` is left abstract (and needs to be filled
@@ -14,15 +15,15 @@ import scalatags.Text.{attrs, tags2}
  */
 trait Site{
 
-  def webjars = root/"META-INF"/'resources/'webjars
+  def webjars = resource/"META-INF"/'resources/'webjars
 
-  def fontAwesome = webjars/"font-awesome"/"4.2.0"
+  def fontAwesome = webjars/"font-awesome"/"4.7.0"
 
   /**
    * Resources related to the pure-css library
    */
   def pureCss = Seq(
-    webjars/'pure/"0.5.0"/"pure-min.css"
+    webjars/'pure/"0.6.0"/"pure-min.css"
   )
   /**
    * Resources related to the font awesome library
@@ -39,7 +40,7 @@ trait Site{
    * Resources custom-provided for this particular site
    */
   def siteCss = Set(
-    root/'scalatex/'site/"styles.css"
+    resource/'scalatex/'site/"styles.css"
   )
 
   /**
@@ -65,7 +66,7 @@ trait Site{
    * The header of this site's HTML page
    */
   def defaultHeader: Seq[Frag] = Seq(
-    link(href:="META-INF/resources/webjars/font-awesome/4.2.0/css/font-awesome.min.css", rel:="stylesheet"),
+    link(href:="META-INF/resources/webjars/font-awesome/4.7.0/css/font-awesome.min.css", rel:="stylesheet"),
     link(href:=stylesName, rel:="stylesheet"),
     link(rel:="shortcut icon", `type`:="image/png", href:="favicon.png"),
     meta(httpEquiv:="Content-Type", attrs.content:="text/html; charset=UTF-8"),
@@ -98,7 +99,7 @@ trait Site{
     }
 
     for(res <- manualResources) {
-      read.bytes! res |> write.over! outputRoot/(res relativeTo root)
+      read.bytes! res |> write.over! outputRoot/(res relativeTo resource)
     }
   }
 
