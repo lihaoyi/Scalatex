@@ -63,7 +63,6 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
 
 lazy val site =
   project
-    .enablePlugins(ScalaJSPlugin)
     .dependsOn(api)
     .settings(scalatex.SbtPlugin.projectSettings:_*)
     .settings(sharedSettings:_*)
