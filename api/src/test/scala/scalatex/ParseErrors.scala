@@ -23,12 +23,12 @@ object ParseErrors extends TestSuite{
     * - check(
       """@{)
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):1:3 ...")\n" """
+      """ (";" | Newline.rep(1) | "}"):1:3 ...")\n" """
     )
     * - check(
       """@({
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):2:1 ..."" """
+      """ (";" | Newline.rep(1) | "}"):2:1 ..."" """
     )
     * - check(
       """@for{;
@@ -38,7 +38,7 @@ object ParseErrors extends TestSuite{
     * - check(
       """@{ => x
         |""".stripMargin,
-      """ (";" | Newline.rep(1) | "}" | `case`):1:4 ..."=> x\n" """
+      """ (";" | Newline.rep(1) | "}"):1:4 ..."=> x\n" """
     )
 
     * - check(
