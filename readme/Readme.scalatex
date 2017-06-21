@@ -105,7 +105,7 @@
 
     @ul
       @li
-        @hl.scala{@@}-escapes followed by identation (like @hl.scala{@@div} above) are passed all the subsequently-indented lines as children.
+        @hl.scala{@@}-escapes followed by indentation (like @hl.scala{@@div} above) are passed all the subsequently-indented lines as children.
       @li
         @hl.scala{@@}-escapes followed by curly braces (like @hl.scala{@@h2} above) are passed everything inside the curly braces as children
       @li
@@ -220,7 +220,7 @@
 
   @sect{Section}
     @p
-      One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatext provides the @hl.scala{scalatex.site.Section} helper that lets you do this easily:
+      One concern common to almost all documents is the idea of a section hierarchy: a tree of document sections where each section has a header and some contents, potentially containing more (smaller) sections. Scalatex provides the @hl.scala{scalatex.site.Section} helper that lets you do this easily:
 
     @pairs
       @half
@@ -524,7 +524,7 @@
       @li
         @b{Much more lightweight than Scalatex}: @code{`hello`} rather than @code{@@code{hello}}, @code{[link](url)} rather than @code{@@lnk("link", "url")}
       @li
-        @b{Be much more popularly supported}: @lnk("Github", "https://help.github.com/articles/github-flavored-markdown/"), @lnk("Stackoverflow", "http://stackoverflow.com/editing-help") and many others already use semi-compatible implementations of it
+        @b{Much more popularly supported}: @lnk("Github", "https://help.github.com/articles/github-flavored-markdown/"), @lnk("Stackoverflow", "http://stackoverflow.com/editing-help") and many others already use semi-compatible implementations of it
 
     @p
       However, it also has some downsides:
