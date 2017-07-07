@@ -1,17 +1,12 @@
-
-
-publishArtifact := false
-
-publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
-
-crossScalaVersions:= Seq("2.11.8", "2.12.1")
+sharedSettings
+noPublish
 
 lazy val Version = new {
   def scalaTags = "0.6.2"
   def upickle = "0.4.4"
 }
 
-val sharedSettings = Seq(
+lazy val sharedSettings = Seq(
   version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
   crossScalaVersions:= Seq("2.11.8", "2.12.1"),
@@ -39,6 +34,12 @@ val sharedSettings = Seq(
           <url>https://github.com/lihaoyi</url>
         </developer>
       </developers>
+)
+
+lazy val noPublish = Seq(
+  publishArtifact := false,
+  publishLocal := {},
+  publish := {}
 )
 
 lazy val api = project.settings(sharedSettings:_*)
@@ -99,9 +100,7 @@ lazy val scrollspy = project
       "com.lihaoyi" %%% "scalatags" % Version.scalaTags
     ),
     emitSourceMaps := false,
-
-    publishArtifact := false,
-    publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
+    noPublish
   )
 
 lazy val readme = scalatex.ScalatexReadme(
@@ -113,8 +112,7 @@ lazy val readme = scalatex.ScalatexReadme(
 .settings(
   libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala",
-  publishArtifact := false,
-  publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
+  noPublish
 )
 .dependsOn(
   site

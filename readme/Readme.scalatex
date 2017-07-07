@@ -571,6 +571,14 @@
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
 @sect{Changelog}
+  @sect{0.3.9}
+    @ul
+      @li
+        Upgrade fastparse dependency to 0.4.3.
+      @li
+        Note. This release was signed with @lnk("@olafurpg", "https://github.com/olafurpg")'s
+        @lnk("PGP key", "https://gist.github.com/olafurpg/078d1f2a58490ccaeebd7d3f6cde00fc").
+
   @sect{0.3.7}
     @ul
       @li
