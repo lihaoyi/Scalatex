@@ -378,6 +378,25 @@
     @p
       There are several other things you to can override, for a full list, look at the source code of @hl.scala{Site} to see what's available.
 
+  @sect{GitHub pages}
+    @p
+      To publish a Scalateχ site to GitHub pages, it's possible to use
+      @lnk("sbt-ghpages", "https://github.com/sbt/sbt-ghpages").
+
+    @hl.scala
+      // project/plugins.sbt
+      addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.0")
+      // build.sbt
+      lazy val readme = scalatex
+        .ScalatexReadme(/* ... */)
+        .settings(
+          // ...
+          siteSourceDirectory := target.value / "scalatex",
+          git.remoteRepo := "git@@github.com:org/repo.git"
+        )
+        .enablePlugins(GhpagesPlugin)
+    Once setup, publish your site with @code{sbt readme/ghpagesPushSite}.
+
   @sect{Advanced Techniques}
     @p
       This section goes through a number of things which are not part of Scalatex by default, but are easily doable by extending Scalatex with snippets of Scala code. In general, all of these are probably sufficiently ad-hoc that the exact implementation would vary from project to project and so a built-in implementation wouldn't make sense.
