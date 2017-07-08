@@ -110,6 +110,8 @@ lazy val readme = scalatex.ScalatexReadme(
   source = "Readme"
 )
 .settings(
+  siteSourceDirectory := target.value / "scalatex",
+  git.remoteRepo := "git@github.com:lihaoyi/scalatex.git",
   libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala",
   noPublish
@@ -117,3 +119,4 @@ lazy val readme = scalatex.ScalatexReadme(
 .dependsOn(
   site
 )
+.enablePlugins(GhpagesPlugin)
