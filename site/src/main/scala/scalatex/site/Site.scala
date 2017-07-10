@@ -121,4 +121,3 @@ trait Site{
     bundleResources(outputRoot)
   }
 }
-
