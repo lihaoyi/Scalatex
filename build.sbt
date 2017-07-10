@@ -4,13 +4,17 @@ noPublish
 lazy val Version = new {
   def scalaTags = "0.6.2"
   def upickle = "0.4.4"
+  def scala210 = "2.10.6"
+  def scala211 = "2.11.11"
+  def scala212 = "2.12.2"
 }
+
 
 lazy val sharedSettings = Seq(
   version := _root_.scalatex.Constants.version,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq("2.11.8", "2.12.1"),
-  scalaVersion := "2.12.1",
+  crossScalaVersions:= Seq(Version.scala211, Version.scala212),
+  scalaVersion := Version.scala212,
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.5" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.5"),
   autoCompilerPlugins := true,
@@ -46,7 +50,7 @@ lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.4.4" % "test",
+      "com.lihaoyi" %% "utest" % "0.4.8" % "test",
       "com.lihaoyi" %% "scalaparse" % "0.4.3",
       "com.lihaoyi" %% "scalatags" % Version.scalaTags,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
@@ -57,7 +61,8 @@ lazy val api = project.settings(sharedSettings:_*)
 lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
-  scalaVersion := "2.10.6",
+  scalaVersion := Version.scala210,
+  crossScalaVersions := List(Version.scala210),
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
 )
