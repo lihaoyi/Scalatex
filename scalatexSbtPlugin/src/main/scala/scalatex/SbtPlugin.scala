@@ -5,6 +5,7 @@ import sbt._
 object SbtPlugin extends sbt.AutoPlugin {
   val scalatexVersion = scalatex.Constants.version
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
+  val scalatexGenerateMain = settingKey[Boolean]("Generate main function for scalatex site.")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",
     managedSources ++= {
@@ -84,7 +85,9 @@ object ScalatexReadme{
     base = file(projectId),
     settings = scalatex.SbtPlugin.projectSettings ++ Seq(
       resourceDirectory in Compile := file(projectId) / "resources",
+      SbtPlugin.scalatexGenerateMain := true,
       sourceGenerators in Compile += task{
+        val generateMain = SbtPlugin.scalatexGenerateMain.value
         val dir = (sourceManaged in Compile).value
         val manualResources: Seq[String] = for{
           f <- (file(projectId) / "resources" ** "*").get
@@ -95,19 +98,32 @@ object ScalatexReadme{
         val generated = dir / "scalatex" / "Main.scala"
 
         val autoResourcesStrings = autoResources.map('"' + _ + '"').mkString(",")
+        val mainObject =
+          if (generateMain)
+            """|
+               |object Main extends scalatex.site.Main(
+               |  url = MainInfo.url,
+               |  wd = MainInfo.wd,
+               |  output = MainInfo.output,
+               |  extraAutoResources = MainInfo.extraAutoResources,
+               |  extraManualResources = MainInfo.extraManualResources,
+               |  MainInfo.source
+               |)
+               |""".stripMargin
+          else ""
 
         val manualResourceStrings = manualResources.map('"' + _ + '"').mkString(",")
-        IO.write(generated, s"""
-          package scalatex
-          object Main extends scalatex.site.Main(
-            url = "$url",
-            wd = ammonite.ops.Path("${fixPath(wd)}"),
-            output = ammonite.ops.Path("${fixPath((target in Compile).value / "scalatex")}"),
-            extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_)),
-            extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_)),
-            scalatex.$source()
-          )
-        """)
+        IO.write(generated, s"""package scalatex
+          |
+          |object MainInfo {
+          |  def url = "$url"
+          |  def wd = ammonite.ops.Path("${fixPath(wd)}")
+          |  def output = ammonite.ops.Path("${fixPath((target in Compile).value / "scalatex")}")
+          |  def extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_))
+          |  def extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_))
+          |  def source = scalatex.$source()
+          |}
+          |$mainObject""".stripMargin)
         Seq(generated)
       },
       (SbtPlugin.scalatexDirectory in Compile) := file(projectId),
