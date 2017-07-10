@@ -4,7 +4,7 @@ import sbt.Keys._
 import sbt._
 object SbtPlugin extends sbt.AutoPlugin {
   val scalatexVersion = scalatex.Constants.version
-  val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
+  val scalatexDirectory = settingKey[sbt.File]("Clone stuff from github")
   val scalatexGenerateMain = settingKey[Boolean]("Generate main function for scalatex site.")
   val mySeq = Seq(
     scalatexDirectory := sourceDirectory.value / "scalatex",
@@ -95,6 +95,16 @@ object ScalatexReadme{
           rel <- f.relativeTo(file(projectId) / "resources")
         } yield fixPath(rel.getPath)
 
+
+        val scalatexDirectory = SbtPlugin.scalatexDirectory.in(Compile).value
+        val scalatexFiles = for {
+          f <- (scalatexDirectory ** "*.scalatex").get
+          if f.isFile
+          rel <- f.relativeTo(scalatexDirectory)
+          string = fixPath(rel.getPath).stripSuffix(".scalatex")
+        } yield s"""    "$string" -> ${string.replace('/', '.')}()"""
+        val scalatexFilesStrings = scalatexFiles.mkString("\n", ",\n", "  \n")
+
         val generated = dir / "scalatex" / "Main.scala"
 
         val autoResourcesStrings = autoResources.map('"' + _ + '"').mkString(",")
@@ -107,7 +117,7 @@ object ScalatexReadme{
                |  output = MainInfo.output,
                |  extraAutoResources = MainInfo.extraAutoResources,
                |  extraManualResources = MainInfo.extraManualResources,
-               |  MainInfo.source
+               |  frag = MainInfo.source
                |)
                |""".stripMargin
           else ""
@@ -121,7 +131,8 @@ object ScalatexReadme{
           |  def output = ammonite.ops.Path("${fixPath((target in Compile).value / "scalatex")}")
           |  def extraAutoResources = Seq[String]($autoResourcesStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_))
           |  def extraManualResources = Seq[String]($manualResourceStrings).map(ammonite.ops.resource/ammonite.ops.RelPath(_))
-          |  def source = scalatex.$source()
+          |  def scalatexFiles: Map[String, scalatags.Text.all.Frag] = Map($scalatexFilesStrings)
+          |  def source = scalatexFiles("$source")
           |}
           |$mainObject""".stripMargin)
         Seq(generated)
