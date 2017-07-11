@@ -590,6 +590,15 @@
       The limitations are not fundamental, but purely a matter of how Scalatex is being used now: static documents, rather than dynamic pages. If there's interest removing them would not be hard.
 
 @sect{Changelog}
+  @sect{0.3.10}
+    @ul
+      @li
+        Scalatex site now generates a @code{scalatex.MainInfo} object, which
+        exposes helper methods to build a custom @code{scalatex.Main}.
+      @li
+        Scalatex site now supports a setting @code{scalatex.SbtPlugin.scalatexGenerateMain},
+        which can be set to @code{false} to skip generating @code{scalatex.Main}.
+
   @sect{0.3.9}
     @ul
       @li
