@@ -19,10 +19,6 @@ lazy val sharedSettings = Seq(
           <url>http://www.opensource.org/licenses/mit-license.php</url>
         </license>
       </licenses>
-      <scm>
-        <url>git://github.com/lihaoyi/Scalatex.git</url>
-        <connection>scm:git://github.com/lihaoyi/Scalatex.git</connection>
-      </scm>
       <developers>
         <developer>
           <id>lihaoyi</id>
@@ -57,6 +53,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
     if (sbtVersion.in(pluginCrossBuild).value.startsWith("0.13")) Constants.scala210
     else Constants.scala212
   },
+  crossScalaVersions := List(Constants.scala212),
   // scalatexSbtPlugin/publish uses sbt 1.0 by default. To publish for 0.13, run
   // ^^ 0.13.16 # similar as ++2.12.3 but for sbtVersion instead.
   // scalatexSbtPlugin/publish
@@ -95,6 +92,7 @@ lazy val site =
 lazy val scrollspy = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
+    sharedSettings,
     scalaVersion := Constants.scala212,
     crossScalaVersions:= Seq(Constants.scala211, Constants.scala212),
     scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
@@ -114,6 +112,7 @@ lazy val readme = scalatex.ScalatexReadme(
   source = "Readme"
 )
 .settings(
+  sharedSettings,
   siteSourceDirectory := target.value / "scalatex",
   git.remoteRepo := "git@github.com:lihaoyi/scalatex.git",
   libraryDependencies := libraryDependencies.value.filter(_.name == "scalatex-site"),
