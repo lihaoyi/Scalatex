@@ -2,6 +2,8 @@ package scalatex
 
 import sbt.Keys._
 import sbt._
+import PluginCompat._
+
 object SbtPlugin extends sbt.AutoPlugin {
   val scalatexVersion = scalatex.Constants.version
   val scalatexDirectory = taskKey[sbt.File]("Clone stuff from github")
@@ -50,9 +52,10 @@ object SbtPlugin extends sbt.AutoPlugin {
       "com.lihaoyi" %% "scalatex-api" % scalatexVersion
     ),
     watchSources ++= {
+      val compileTarget = (target in Compile).value
       for{
         f <- (scalatexDirectory in Compile).value.get
-        if f.relativeTo((target in Compile).value).isEmpty
+        if f.relativeTo(compileTarget).isEmpty
       } yield f
     }
   )
@@ -79,10 +82,8 @@ object ScalatexReadme{
             wd: java.io.File,
             source: String,
             url: String,
-            autoResources: Seq[String] = Nil) = Project(
-    id = projectId,
-    base = file(projectId),
-    settings = scalatex.SbtPlugin.projectSettings ++ Seq(
+            autoResources: Seq[String] = Nil) =
+    Project(id = projectId, base = file(projectId)).settings(
       resourceDirectory in Compile := file(projectId) / "resources",
       sourceGenerators in Compile += task{
         val dir = (sourceManaged in Compile).value
@@ -112,7 +113,6 @@ object ScalatexReadme{
       },
       (SbtPlugin.scalatexDirectory in Compile) := file(projectId),
       libraryDependencies += "com.lihaoyi" %% "scalatex-site" % SbtPlugin.scalatexVersion,
-      scalaVersion := "2.12.1"
-    )
-  ).enablePlugins(SbtPlugin)
+      scalaVersion := _root_.scalatex.Constants.scala212
+    ).enablePlugins(SbtPlugin)
 }

@@ -3,7 +3,7 @@ language: scala
 # ignored, because if we do the ++ thing it uses the wrong
 # scalaVersion to compile the sbt plugin which blows up
 scala:
-- 2.12.1
+- 2.12.3
 script:
 - sbt test "readme/run --validate"
 jdk:

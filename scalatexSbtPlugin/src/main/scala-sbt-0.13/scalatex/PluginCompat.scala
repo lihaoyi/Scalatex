@@ -1,0 +1,4 @@
+package scalatex
+
+object PluginCompat {
+}
