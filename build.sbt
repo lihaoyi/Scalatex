@@ -97,8 +97,9 @@ lazy val site =
 lazy val scrollspy = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    scalaVersion := "2.12.1",
-    crossScalaVersions:= Seq("2.11.8", "2.12.1"),
+    scalaVersion := Constants.scala212,
+    crossScalaVersions:= Seq(Constants.scala211, Constants.scala212),
+    scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "upickle" % Version.upickle,
       "org.scala-js" %%% "scalajs-dom" % "0.9.1",
