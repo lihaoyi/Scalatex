@@ -60,7 +60,11 @@
       To get started with Scalatex, add the following to your @code{project/build.sbt}:
 
     @hl.scala
+      // sbt 1.0
       addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "@scalatex.Constants.version")
+
+      // sbt 0.13
+      addSbtPlugin("com.lihaoyi" % "scalatex-sbt-plugin" % "0.3.9")
 
     @p
       And the following to your project in your @code{build.sbt}:
