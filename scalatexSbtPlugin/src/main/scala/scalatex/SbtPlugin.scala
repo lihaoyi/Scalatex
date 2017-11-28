@@ -1,7 +1,10 @@
 package scalatex
 
+import java.nio.file.Paths
+
 import sbt.Keys._
 import sbt._
+
 import PluginCompat._
 
 object SbtPlugin extends sbt.AutoPlugin {
@@ -15,6 +18,7 @@ object SbtPlugin extends sbt.AutoPlugin {
       val inputFiles = (inputDir ** "*.scalatex").get
       println("Generating Scalatex Sources...")
       val outputFiles = for (inFile <- inputFiles) yield {
+        val relativeInputFile = inputDir.toPath.relativize(inFile.toPath)
         val outFile = new sbt.File(
           outputDir.getAbsolutePath + inFile.getAbsolutePath.drop(inputDir.getAbsolutePath.length).dropRight(3)
         )
@@ -37,6 +41,7 @@ object SbtPlugin extends sbt.AutoPlugin {
             |
             |object $objectName{
             |  def apply(): Frag = _root_.scalatex.twf("${fixPath(inFile)}")
+            |  def sourcePath = "$relativeInputFile"
             |}
             |
             |${IO.readLines(inFile).map("//"+_).mkString("\n")}
