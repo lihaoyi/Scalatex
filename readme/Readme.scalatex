@@ -576,7 +576,7 @@
       @li
         @b{Scalatex has made indentation significant}, thus greatly reducing the need for curly brackets in large documents.
       @li
-        @b{Scalatex has a greatly simplified implementation} that gives you incremental compilation, proper error messages, etc. all for free without the @lnk("crazy contortions", "https://github.com/playframework/twirl/blob/master/sbt-twirl/src/main/scala/play/twirl/sbt/TemplateProblem.scala") that the Play team have gone through to get them working with their source-generation model.
+        @b{Scalatex has a greatly simplified implementation} that gives you incremental compilation, proper error messages, etc. all for free without the crazy contortions that the Play team have gone through to get them working with their source-generation model.
     @p
       Scalatex is still missing a few features:
     @ul
