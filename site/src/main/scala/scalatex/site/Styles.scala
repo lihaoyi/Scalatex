@@ -4,6 +4,8 @@ import scalatags.stylesheet.{CascadingStyleSheet, SourceClasses}
 
 object Styles extends CascadingStyleSheet {
 
+  initStyleSheet()
+
   def highlightMe = cls()
 
   def headerLink = cls(

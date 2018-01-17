@@ -9,10 +9,14 @@ unmanagedSources in Compile ++= {
     .get
 }
 
-addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0-M1")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.21")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-ghpages" % "0.6.2")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.9.3")
+
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.6")
+
+

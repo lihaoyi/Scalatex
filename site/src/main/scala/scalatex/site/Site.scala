@@ -23,7 +23,7 @@ trait Site{
    * Resources related to the pure-css library
    */
   def pureCss = Seq(
-    webjars/'pure/"0.6.0"/"pure-min.css"
+    webjars/'pure/"0.6.2"/"pure-min.css"
   )
   /**
    * Resources related to the font awesome library

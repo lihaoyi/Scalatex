@@ -12,7 +12,7 @@ import ammonite.ops._
 trait Highlighter{ hl =>
   val languages = mutable.Set.empty[String]
   def webjars = resource/"META-INF"/'resources/'webjars
-  def highlightJs = webjars/'highlightjs/"9.7.0"
+  def highlightJs = webjars/'highlightjs/"9.12.0"
   def style: String = "idea"
 
   case class lang(name: String){
