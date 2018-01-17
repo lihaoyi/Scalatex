@@ -7,6 +7,7 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseVersionBump := sbtrelease.Version.Bump.Minor
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
+sonatypeProfileName := "lihaoyi"
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
