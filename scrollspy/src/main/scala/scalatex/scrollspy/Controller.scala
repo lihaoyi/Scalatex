@@ -8,6 +8,7 @@ import scalajs.js
 import scalajs.js.annotation.JSExport
 import scalatags.JsDom.all._
 import scalatags.JsDom.tags2
+import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
 class Toggler(var open: Boolean,
               menu: => html.Element,
@@ -45,7 +46,8 @@ class Controller(data: js.Any){
 
 
   val scrollSpy = new ScrollSpy(
-    upickle.default.readJs[Seq[Tree[String]]](upickle.json.readJs(data))
+    // upickle.default.readJs[Seq[Tree[String]]](upickle.json.readJs(data))
+    decode[Seq[Tree[String]]](js.JSON.stringify(data)).right.get
   )
 
   val list = ul(

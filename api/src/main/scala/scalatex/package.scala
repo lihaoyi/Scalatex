@@ -8,6 +8,7 @@ import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
 import acyclic.file
 import fastparse.all._
+
 package object scalatex {
   /**
    * Converts the given string literal into a Scalatex fragment.

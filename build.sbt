@@ -34,6 +34,13 @@ lazy val noPublish = Seq(
   publish := {}
 )
 
+lazy val circe =
+  Seq(
+    "io.circe" %% "circe-core",
+    "io.circe" %% "circe-generic",
+    "io.circe" %% "circe-parser"
+  ).map(_ % Constants.circe)
+
 lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
@@ -77,9 +84,8 @@ lazy val site =
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
     "org.webjars" % "pure" % "0.6.0",
-    "com.lihaoyi" %% "upickle" % Constants.upickle,
     "org.scalaj" %% "scalaj-http" % "2.3.0"
-  ),
+  ) ++ circe,
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
     val file = (resourceManaged in Compile).value/"scalatex"/"scrollspy"/"scrollspy.js"
@@ -97,9 +103,11 @@ lazy val scrollspy = project
     crossScalaVersions:= Seq(Constants.scala211, Constants.scala212),
     scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "upickle" % Constants.upickle,
       "org.scala-js" %%% "scalajs-dom" % "0.9.1",
-      "com.lihaoyi" %%% "scalatags" % Constants.scalaTags
+      "com.lihaoyi" %%% "scalatags" % Constants.scalaTags,
+      "io.circe" %%% "circe-core" % Constants.circe,
+      "io.circe" %%% "circe-generic" % Constants.circe,
+      "io.circe" %%% "circe-parser" % Constants.circe
     ),
     emitSourceMaps := false,
     noPublish
