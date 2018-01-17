@@ -62,7 +62,7 @@ object Styles extends CascadingStyleSheet {
     )
 
   )
-  override def styleSheetText(implicit sourceClasses: SourceClasses[this.type]) = super.styleSheetText +
+  override def styleSheetText = super.styleSheetText +
     """
       |/*Workaround for bug in highlight.js IDEA theme*/
       |span.hljs-tag, span.hljs-symbol{
