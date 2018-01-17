@@ -2,6 +2,7 @@ lazy val Constants = _root_.scalatex.Constants
 sharedSettings
 noPublish
 
+version in ThisBuild := Constants.version
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseVersionBump := sbtrelease.Version.Bump.Minor
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
@@ -11,12 +12,12 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
-  //inquireVersions,
+  inquireVersions,
   runClean,
   runTest,
   //setReleaseVersion,
   tagRelease,
-  releaseStepCommand("+publishSigned"),
+  releaseStepCommand("publishSigned"),
   setNextVersion,
   commitNextVersion,
   releaseStepCommand("sonatypeReleaseAll"),
