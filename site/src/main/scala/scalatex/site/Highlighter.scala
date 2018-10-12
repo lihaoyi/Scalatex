@@ -38,7 +38,7 @@ trait Highlighter{ hl =>
   def xml = lang("xml")
   def diff = lang("diff")
   def autoResources = {
-    Seq(highlightJs/"highlight.min.js") ++
+    Seq(highlightJs/"highlight.pack.min.js") ++
     Seq(highlightJs/'styles/s"$style.min.css") ++
     languages.map(x => highlightJs/'languages/s"$x.min.js")
   }
