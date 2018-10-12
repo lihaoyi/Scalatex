@@ -13,6 +13,7 @@ trait Highlighter{ hl =>
   val languages = mutable.Set.empty[String]
   def webjars = resource/"META-INF"/'resources/'webjars
   def highlightJs = webjars/'highlightjs/"9.12.0"
+  def highlightJsSource = webjars/"highlight.js"/"9.12.0"
   def style: String = "idea"
 
   case class lang(name: String){
@@ -40,7 +41,7 @@ trait Highlighter{ hl =>
   def autoResources = {
     Seq(highlightJs/"highlight.pack.min.js") ++
     Seq(highlightJs/'styles/s"$style.min.css") ++
-    languages.map(x => highlightJs/'languages/s"$x.min.js")
+    languages.map(x => highlightJsSource/'src/'languages/s"$x.js")
   }
   /**
    * A mapping of file-path-prefixes to URLs where the source

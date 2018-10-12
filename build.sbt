@@ -105,6 +105,7 @@ lazy val site =
     "com.lihaoyi" %% "utest" % "0.4.4" % "test",
     "com.lihaoyi" %% "ammonite-ops" % "0.8.1",
     "org.webjars.bower" % "highlightjs" % "9.12.0",
+    "org.webjars.bowergithub.highlightjs" % "highlight.js" % "9.12.0", 
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
     "org.webjars" % "pure" % "0.6.2",
