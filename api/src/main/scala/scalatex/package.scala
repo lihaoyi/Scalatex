@@ -86,7 +86,7 @@ package object scalatex {
         Parser.tupled(input) match {
           case s: Parsed.Success[Ast.Block] => Compiler(c)(realPos, s.value)
           case f: Parsed.Failure =>
-            val lines = input._1.take(f.index).lines.toVector
+            val lines = Predef.augmentString(input._1.take(f.index)).lines.toVector
             throw new TypecheckException(
               new OffsetPosition(source, point + f.index).asInstanceOf[c.universe.Position],
               "Syntax error, expected (" + f.extra.traced.traceParsers.mkString(" | ") + ")"+
