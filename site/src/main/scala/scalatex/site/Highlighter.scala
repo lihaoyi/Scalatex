@@ -13,7 +13,7 @@ trait Highlighter{ hl =>
   val languages = mutable.Set.empty[String]
   def webjars = resource/"META-INF"/'resources/'webjars
   def highlightJs = webjars/'highlightjs/"9.12.0"
-  def highlightJsSource = webjars/"highlight.js"/"9.12.0"
+  def highlightJsSource = webjars/"highlight.js"
   def style: String = "idea"
 
   case class lang(name: String){
