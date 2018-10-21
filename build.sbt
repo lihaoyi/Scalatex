@@ -88,7 +88,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   // scalatexSbtPlugin/publish uses sbt 1.0 by default. To publish for 0.13, run
   // ^^ 0.13.16 # similar as ++2.12.3 but for sbtVersion instead.
   // scalatexSbtPlugin/publish
-  crossSbtVersions := List("1.1.0", "0.13.16"),
+  crossSbtVersions := List("1.2.4", "0.13.17"),
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
 )
@@ -105,6 +105,7 @@ lazy val site =
     "com.lihaoyi" %% "utest" % "0.4.4" % "test",
     "com.lihaoyi" %% "ammonite-ops" % "0.8.1",
     "org.webjars.bower" % "highlightjs" % "9.12.0",
+    "org.webjars.bowergithub.highlightjs" % "highlight.js" % "9.12.0", 
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
     "org.webjars" % "pure" % "0.6.2",
