@@ -69,7 +69,7 @@ lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.4.8" % "test",
+      "com.lihaoyi" %% "utest" % "0.6.6" % "test",
       "com.lihaoyi" %% "scalaparse" % "1.0.0",
       "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
@@ -102,7 +102,7 @@ lazy val site =
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "utest" % "0.4.4" % "test",
+    "com.lihaoyi" %% "utest" % "0.6.6" % "test",
     "com.lihaoyi" %% "ammonite-ops" % "0.8.1",
     "org.webjars.bower" % "highlightjs" % "9.12.0",
     "org.webjars.bowergithub.highlightjs" % "highlight.js" % "9.12.0", 
