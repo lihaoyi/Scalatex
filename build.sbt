@@ -19,7 +19,7 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,                      
   commitReleaseVersion,                 
   tagRelease,                             
-  +publishArtifacts,                       
+  publishArtifacts.copy(enableCrossBuild = true),
   setNextVersion,                         
   commitNextVersion,                  
   releaseStepCommand("sonatypeReleaseAll"),
