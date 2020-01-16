@@ -204,21 +204,21 @@ object Tests extends TestSuite{
     }
     'Site{
       'simple {
-        rm! wd/'site/'target/'output
+        rm! wd / "site" / "target"/ "output"
         val site = new scalatex.site.Site {
           def content = Map("index.html" -> (defaultHeader, Hello()))
         }
-        site.renderTo(wd/'site/'target/'output)
+        site.renderTo(wd/ "site" / "target" / "output")
 
         def check() = {
-          val readText = read! wd/'site/'target/'output/"index.html"
+          val readText = read! wd / "site" / "target" / "output" /"index.html"
           assert(
             readText.contains("Hello World"),
             readText.contains("I am a cow!"),
             readText.contains("<div>"),
             readText.contains("<h1>"),
-            exists(wd/'site/'target/'output/"scripts.js"),
-            exists(wd/'site/'target/'output/"styles.css")
+            exists(wd / "site" / "target" / "output" / "scripts.js"),
+            exists(wd/ "site" / "target" / "output" / "styles.css")
           )
         }
         check()

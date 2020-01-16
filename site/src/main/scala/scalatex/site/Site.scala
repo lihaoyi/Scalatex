@@ -1,9 +1,11 @@
 package scalatex.site
 
+import java.io.FileOutputStream
 import java.nio.CharBuffer
-import java.nio.file.{Files, StandardCopyOption}
+import java.nio.file.{Files, StandardCopyOption, StandardOpenOption}
 
 import ammonite.ops.{Path, _}
+import os.SubProcess.{InputStream, OutputStream}
 import scalatags.Text.all._
 import scalatags.Text.{attrs, tags2}
 
@@ -95,26 +97,28 @@ trait Site{
 
   def bundleResources(outputRoot: Path) = {
     for {
+      dest <- Seq(scriptName, stylesName)
+      path = outputRoot / dest
+    } new FileOutputStream(path.toIO, true).close()
+
+    for {
       (ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)
+      path = outputRoot / dest
       res <- autoResources |? (_.ext == ext)
     } {
-      val is = res.getInputStream
-      val path = outputRoot / dest
-      try {
-        path.toIO.mkdirs()
-        Files.copy(is, path.wrapped, StandardCopyOption.REPLACE_EXISTING)
-      } finally is.close()
+      val content = read(res)
+
+      path.toIO.getParentFile.mkdirs()
+      Files.writeString(path.wrapped, content, StandardOpenOption.CREATE)
     }
 
     for {
       res <- manualResources
     } {
-      val is = res.getInputStream
+      val content = read(res)
       val path = outputRoot/(res relativeTo resource)
-      try {
-        path.toIO.mkdirs()
-        Files.copy(is, path.wrapped, StandardCopyOption.REPLACE_EXISTING)
-      } finally is.close()
+      path.toIO.getParentFile.mkdirs()
+      Files.writeString(path.wrapped, content, StandardOpenOption.CREATE)
     }
   }
 
