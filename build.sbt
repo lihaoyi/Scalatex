@@ -84,7 +84,7 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
   scalaVersion := Constants.scala212,
-  (skip in (Compile, publish)) := {
+  (skip in Compile) := {
     scalaBinaryVersion.value match {
       case "2.12" => false
       case _ => true
