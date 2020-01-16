@@ -7,10 +7,10 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 releaseVersionBump := sbtrelease.Version.Bump.Minor
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
-sonatypeProfileName := "com.lihaoyi"
+sonatypeProfileName := "lihaoyi"
 releaseCrossBuild := true
 publishMavenStyle := true
-publishTo in ThisBuild := sonatypePublishToBundle.value
+//publishTo in ThisBuild := sonatypePublishToBundle.value
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
@@ -26,9 +26,10 @@ releaseProcess := Seq[ReleaseStep](
   //publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
+  //releaseStepCommand("+publishSigned"),
+  //releaseStepCommand("sonatypeBundleRelease"),
   releaseStepCommand("+publishSigned"),
-  releaseStepCommand("sonatypeBundleRelease"),
-  //releaseStepCommand("sonatypeReleaseAll"),
+  releaseStepCommand("sonatypeReleaseAll"),
   pushChanges               
 )
 
@@ -42,7 +43,7 @@ lazy val sharedSettings = Seq(
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.2.0"),
   autoCompilerPlugins := true,
-  //publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
+  publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
   pomExtra :=
     <url>https://github.com/lihaoyi/Scalatex</url>
       <licenses>
@@ -97,8 +98,8 @@ lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   scalaVersion := Constants.scala212,
   skip in Compile := isScala12(scalaBinaryVersion.value),
   sources in (Compile, doc) := Nil,
-  publishArtifact := isScala12(scalaBinaryVersion.value),
-  publishArtifact in (Compile, packageDoc) := isScala12(scalaBinaryVersion.value),
+  publishArtifact := !isScala12(scalaBinaryVersion.value),
+  publishArtifact in (Compile, packageDoc) := !isScala12(scalaBinaryVersion.value),
   crossSbtVersions := List("1.3.7"),
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
