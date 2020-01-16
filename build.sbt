@@ -22,9 +22,10 @@ releaseProcess := Seq[ReleaseStep](
   //setReleaseVersion,                      
   //commitReleaseVersion,                 
   tagRelease,                             
-  publishArtifacts,
+  //publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
+  releaseStepCommand("publishSigned"),
   releaseStepCommand("sonatypeBundleRelease"),
   //releaseStepCommand("sonatypeReleaseAll"),
   pushChanges               
