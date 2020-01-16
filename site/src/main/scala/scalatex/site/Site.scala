@@ -125,10 +125,9 @@ trait Site{
         body(bodyFrag(pageBody))
       ).render
       val cb = CharBuffer.wrap("<!DOCTYPE html>" + txt)
-
       val bytes = scala.io.Codec.UTF8.encoder.encode(cb)
 
-      write.over(outputRoot/path, bytes.array())
+      write.over(outputRoot/path, bytes.array(), createFolders = true)
     }
   }
   def renderTo(outputRoot: Path) = {
