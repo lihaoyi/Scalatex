@@ -13,15 +13,15 @@ import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,              
-  inquireVersions,                        
+  //inquireVersions,                        
   runClean,                           
   runTest,                            
   setReleaseVersion,                      
   commitReleaseVersion,                 
   tagRelease,                             
   publishArtifacts.copy(enableCrossBuild = true),
-  setNextVersion,                         
-  commitNextVersion,                  
+  //setNextVersion,                         
+  //commitNextVersion,                  
   releaseStepCommand("sonatypeReleaseAll"),
   pushChanges               
 )
