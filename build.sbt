@@ -32,6 +32,7 @@ lazy val sharedSettings = Seq(
   version := Constants.version,
   organization := "com.lihaoyi",
   scalaVersion := Constants.scala213,
+  crossScalaVersions := supportedScalaVersion,
   libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",
   addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.2.0"),
   autoCompilerPlugins := true,
@@ -69,7 +70,6 @@ lazy val circe =
 lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
-    crossScalaVersions := supportedScalaVersion,
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "utest" % Constants.uTest % "test",
       "com.lihaoyi" %% "scalaparse" % "2.2.3",
