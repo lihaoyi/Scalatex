@@ -12,19 +12,19 @@ sonatypeProfileName := "lihaoyi"
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
 releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  //setReleaseVersion,
-  tagRelease,
-  releaseStepCommand("publishSigned"),
-  setNextVersion,
-  commitNextVersion,
+  checkSnapshotDependencies,              
+  inquireVersions,                        
+  runClean,                           
+  runTest,                            
+  setReleaseVersion,                      
+  commitReleaseVersion,                 
+  tagRelease,                             
+  +publishArtifacts,                       
+  setNextVersion,                         
+  commitNextVersion,                  
   releaseStepCommand("sonatypeReleaseAll"),
-  pushChanges
+  pushChanges               
 )
-
 
 def supportedScalaVersion = Seq(Constants.scala212, Constants.scala213)
 
