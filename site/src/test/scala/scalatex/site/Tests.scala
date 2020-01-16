@@ -13,8 +13,8 @@ object Tests extends TestSuite{
     val f2 = s2.filter(!_.isWhitespace)
     assert(f1 == f2)
   }
-  val wd = ammonite.ops.cwd
-  val tests = TestSuite{
+  val wd = ammonite.ops.pwd
+  val tests = Tests {
     'Hello{
       cmp(
         Hello().render
