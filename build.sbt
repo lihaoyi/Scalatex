@@ -80,16 +80,18 @@ lazy val api = project.settings(sharedSettings:_*)
     testFrameworks += new TestFramework("utest.runner.Framework")
   )
 
+def isScala12(v: String) =
+  v match {
+    case "2.12" => false
+    case _ => true
+  }
+
 lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
   scalaVersion := Constants.scala212,
-  (skip in Compile) := {
-    scalaBinaryVersion.value match {
-      case "2.12" => false
-      case _ => true
-    }
-  },
+  skip in Compile := isScala12(scalaBinaryVersion.value),
+  publishArtifact := isScala12(scalaBinaryVersion.value),
   crossSbtVersions := List("1.3.7"),
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
