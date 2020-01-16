@@ -26,13 +26,14 @@ releaseProcess := Seq[ReleaseStep](
 )
 
 
+def supportedScalaVersion = Seq(Constants.scala212, Constants.scala213)
+
 lazy val sharedSettings = Seq(
   version := Constants.version,
   organization := "com.lihaoyi",
-  crossScalaVersions:= Seq(Constants.scala211, Constants.scala212),
-  scalaVersion := Constants.scala212,
-  libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.5" % "provided",
-  addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.5"),
+  scalaVersion := Constants.scala213,
+  libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.0" % "provided",
+  addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.2.0"),
   autoCompilerPlugins := true,
   publishTo := Some("releases"  at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
   pomExtra :=
@@ -68,9 +69,10 @@ lazy val circe =
 lazy val api = project.settings(sharedSettings:_*)
   .settings(
     name := "scalatex-api",
+    crossScalaVersions := supportedScalaVersion,
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "utest" % "0.6.6" % "test",
-      "com.lihaoyi" %% "scalaparse" % "1.0.0",
+      "com.lihaoyi" %% "utest" % Constants.uTest % "test",
+      "com.lihaoyi" %% "scalaparse" % "2.2.3",
       "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
     ),
@@ -80,15 +82,14 @@ lazy val api = project.settings(sharedSettings:_*)
 lazy val scalatexSbtPlugin = project.settings(sharedSettings:_*)
   .settings(
   name := "scalatex-sbt-plugin",
-  scalaVersion := {
-    if (sbtVersion.in(pluginCrossBuild).value.startsWith("0.13")) Constants.scala210
-    else Constants.scala212
+  scalaVersion := Constants.scala212,
+  skip := {
+    scalaBinaryVersion.value match {
+      case "2.12" => false
+      case _ => true
+    }
   },
-  crossScalaVersions := List(Constants.scala212),
-  // scalatexSbtPlugin/publish uses sbt 1.0 by default. To publish for 0.13, run
-  // ^^ 0.13.16 # similar as ++2.12.3 but for sbtVersion instead.
-  // scalatexSbtPlugin/publish
-  crossSbtVersions := List("1.2.4", "0.13.17"),
+  crossSbtVersions := List("1.3.7"),
   sbtPlugin := true,
   (unmanagedSources in Compile) += baseDirectory.value/".."/"project"/"Constants.scala"
 )
@@ -101,15 +102,16 @@ lazy val site =
     .settings(
   libraryDependencies := libraryDependencies.value.filter(!_.toString.contains("scalatex-api")),
   name := "scalatex-site",
+  crossScalaVersions := supportedScalaVersion,
   libraryDependencies ++= Seq(
-    "com.lihaoyi" %% "utest" % "0.6.6" % "test",
-    "com.lihaoyi" %% "ammonite-ops" % "0.8.1",
+    "com.lihaoyi" %% "utest" % Constants.uTest % "test",
+    "com.lihaoyi" %% "ammonite-ops" % "2.0.4",
     "org.webjars.bower" % "highlightjs" % "9.12.0",
     "org.webjars.bowergithub.highlightjs" % "highlight.js" % "9.12.0", 
     "org.webjars" % "font-awesome" % "4.7.0",
     "com.lihaoyi" %% "scalatags" % Constants.scalaTags,
     "org.webjars" % "pure" % "0.6.2",
-    "org.scalaj" %% "scalaj-http" % "2.3.0"
+    "org.scalaj" %% "scalaj-http" % "2.4.2"
   ) ++ circe,
   testFrameworks += new TestFramework("utest.runner.Framework"),
   (managedResources in Compile) += {
@@ -124,11 +126,11 @@ lazy val scrollspy = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     sharedSettings,
-    scalaVersion := Constants.scala212,
-    crossScalaVersions:= Seq(Constants.scala211, Constants.scala212),
+    scalaVersion := Constants.scala213,
+    crossScalaVersions := supportedScalaVersion,
     scalacOptions += "-P:scalajs:suppressExportDeprecations", // see https://github.com/scala-js/scala-js/issues/3092
     libraryDependencies ++= Seq(
-      "org.scala-js" %%% "scalajs-dom" % "0.9.1",
+      "org.scala-js" %%% "scalajs-dom" % "0.9.8",
       "com.lihaoyi" %%% "scalatags" % Constants.scalaTags,
       "io.circe" %%% "circe-core" % Constants.circe,
       "io.circe" %%% "circe-generic" % Constants.circe,

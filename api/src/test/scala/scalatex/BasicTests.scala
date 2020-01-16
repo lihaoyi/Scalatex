@@ -11,7 +11,7 @@ import scalatags.Text.all._
 object BasicTests extends TestSuite{
   import TestUtil._
 
-  val tests = TestSuite{
+  val tests = Tests {
 
     'interpolation{
       'chained-check(

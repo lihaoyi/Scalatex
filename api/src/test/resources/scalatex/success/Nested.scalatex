@@ -6,7 +6,6 @@
     @h1
         I am a cow
     @for(x <- Seq(1, 2, 3))
-
         @p
             And so are you: @x
             @img

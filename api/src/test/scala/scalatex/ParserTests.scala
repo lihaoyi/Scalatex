@@ -3,21 +3,26 @@ package scalatex
 
 
 import scalatex.stages.{Trim, Parser, Ast}
-import scalatex.stages.Ast.Block.{IfElse, For, Text}
 import Ast.Chain.Args
+import Ast._
+import utest._
+import fastparse._
 
 object ParserTests extends utest.TestSuite{
-  import Ast._
-  import utest._
-  def check[T](input: String, parser: Parser => fastparse.all.Parser[T], expected: T) = {
-    parser(new Parser()).parse(input) match{
-      case s: fastparse.all.Parsed.Success[T] =>
+
+  def check[T](input: String, parser: P[_] => P[T], expected: T) = {
+    parse(input, parser) match{
+      case s: fastparse.Parsed.Success[T] =>
         val result = s.value
         assert(result == expected)
-      case f: fastparse.all.Parsed.Failure => throw new Exception(f.extra.traced.trace)
+      case f: fastparse.Parsed.Failure => throw new Exception(f.extra.trace(true).longAggregateMsg)
     }
   }
-  def tests = TestSuite{
+
+  def tests = Tests {
+    val p = new Parser()
+    import p._
+
     'Trim{
       def wrap(s: String) = "|" + s + "|"
       * - {
@@ -32,7 +37,6 @@ object ParserTests extends utest.TestSuite{
                          |    i weigh twice as much as you
                          |""".stripMargin)
          assert(trimmed == expected)
-
       }
 
       * - {
@@ -77,23 +81,23 @@ object ParserTests extends utest.TestSuite{
     }
     'Text {
       println("Checking...")
-      * - check("i am a cow", _.Text, Block.Text(0, "i am a cow"))
-      * - check("i am a @cow", _.Text, Block.Text(0, "i am a "))
-      * - check("i am a @@cow", _.Text, Block.Text(0, "i am a "))
-      * - check("i am a @@@cow", _.Text, Block.Text(0, "i am a "))
-      * - check("i am a @@@@cow", _.Text, Block.Text(0, "i am a "))
+      * - check("i am a cow", Text(_), Block.Text(0, "i am a cow"))
+      * - check("i am a @cow", Text(_), Block.Text(0, "i am a "))
+      * - check("i am a @@cow", Text(_), Block.Text(0, "i am a "))
+      * - check("i am a @@@cow", Text(_), Block.Text(0, "i am a "))
+      * - check("i am a @@@@cow", Text(_), Block.Text(0, "i am a "))
     }
     'Code{
-      'identifier - check("gggg  ", _.Code, "gggg")
-      'parens - check("(1 + 1)lolsss\n", _.Code,  "(1 + 1)")
-      'curlies - check("{{1} + (1)}  ", _.Code, "{{1} + (1)}")
-      'blocks - check("{val x = 1; 1} ", _.Code, "{val x = 1; 1}")
-      'weirdBackticks - check("{`{}}{()@`}\n", _.Code, "{`{}}{()@`}")
+      'identifier - check("gggg  ", Code(_), "gggg")
+      'parens - check("(1 + 1)lolsss\n", Code(_),  "(1 + 1)")
+      'curlies - check("{{1} + (1)}  ", Code(_), "{{1} + (1)}")
+      'blocks - check("{val x = 1; 1} ", Code(_), "{val x = 1; 1}")
+      'weirdBackticks - check("{`{}}{()@`}\n", Code(_), "{`{}}{()@`}")
      }
     'MiscCode{
       'imports{
-        * - check("import math.abs", _.Header, "import math.abs")
-        * - check("import math.{abs, sin}", _.Header, "import math.{abs, sin}")
+        * - check("import math.abs", Header(_), "import math.abs")
+        * - check("import math.{abs, sin}", Header(_), "import math.{abs, sin}")
       }
       'headerblocks{
         check(
@@ -102,12 +106,12 @@ object ParserTests extends utest.TestSuite{
             |
             |hello world
             |""".stripMargin,
-          _.HeaderBlock,
+          HeaderBlock(_),
           Ast.Header(
             0,
             "import math.abs\nimport math.sin",
-            Ast.Block(32,
-              Seq(Text(32, "\n\nhello world\n"))
+            Block(32,
+              Seq(Block.Text(32, "\n\nhello world\n"))
             )
           )
         )
@@ -115,15 +119,15 @@ object ParserTests extends utest.TestSuite{
       'caseclass{
         check(
           """case class Foo(i: Int, s: String)""".stripMargin,
-          _.Header,
+          Header(_),
           "case class Foo(i: Int, s: String)"
         )
       }
 
     }
     'Block{
-      * - check("{i am a cow}", _.BraceBlock, Block(1, Seq(Block.Text(1, "i am a cow"))))
-      * - check("{i @am a @cow}", _.BraceBlock,
+      * - check("{i am a cow}", BraceBlock(_), Block(1, Seq(Block.Text(1, "i am a cow"))))
+      * - check("{i @am a @cow}", BraceBlock(_),
         Block(1, Seq(
           Block.Text(1, "i "),
           Chain(4, "am",Seq()),
@@ -133,7 +137,7 @@ object ParserTests extends utest.TestSuite{
       )
     }
     'Chain{
-      * - check("omg.bbq[omg].fff[fff](123)  ", _.ScalaChain,
+      * - check("omg.bbq[omg].fff[fff](123)  ", ScalaChain(_),
         Chain(0, "omg",Seq(
           Chain.Prop(3, "bbq"),
           Chain.TypeArgs(7, "[omg]"),
@@ -142,12 +146,12 @@ object ParserTests extends utest.TestSuite{
           Chain.Args(21, "(123)")
         ))
       )
-      * - check("omg{bbq}.cow(moo){a @b}\n", _.ScalaChain,
+      * - check("omg{bbq}.cow(moo){a @b}\n", ScalaChain(_),
         Chain(0, "omg",Seq(
-          Block(4, Seq(Text(4, "bbq"))),
+          Block(4, Seq(Block.Text(4, "bbq"))),
           Chain.Prop(8, "cow"),
           Chain.Args(12, "(moo)"),
-          Block(18, Seq(Text(18, "a "), Chain(21, "b", Nil)))
+          Block(18, Seq(Block.Text(18, "a "), Chain(21, "b", Nil)))
         ))
       )
     }
@@ -155,9 +159,9 @@ object ParserTests extends utest.TestSuite{
       check(
         """
           |haoyi@@gmail.com""".stripMargin,
-        _.File,
+        File(_),
         Block(0, Seq(
-          Text(0, "\nhaoyi@gmail.com")
+          Block.Text(0, "\nhaoyi@gmail.com")
         ))
       )
     }
@@ -165,20 +169,20 @@ object ParserTests extends utest.TestSuite{
       'for {
         'for - check(
           "for(x <- 0 until 3){lol}",
-          _.ForLoop,
-          For(0, "for(x <- 0 until 3)", Block(20, Seq(Text(20, "lol"))))
+          ForLoop(_),
+          Block.For(0, "for(x <- 0 until 3)", Block(20, Seq(Block.Text(20, "lol"))))
         )
         'forBlock - check(
           """
             |@for(x <- 0 until 3)
             |  lol""".stripMargin,
-          _.File,
+          File(_),
           Block(0, Seq(
-            Text(0, "\n"),
-            For(
+            Block.Text(0, "\n"),
+            Block.For(
               2,
               "for(x <- 0 until 3)",
-              Block(21, Seq(Text(21, "\n  lol")))
+              Block(21, Seq(Block.Text(21, "\n  lol")))
             )
           ))
         )
@@ -187,13 +191,13 @@ object ParserTests extends utest.TestSuite{
             |@for(x <- 0 until 3){
             |  lol
             |}""".stripMargin,
-          _.File,
+          File(_),
           Block(0, Seq(
-            Text(0, "\n"),
-            For(
+            Block.Text(0, "\n"),
+            Block.For(
               2,
               "for(x <- 0 until 3)",
-              Block(22, Seq(Text(22, "\n  lol\n")))
+              Block(22, Seq(Block.Text(22, "\n  lol\n")))
             )
           ))
         )
@@ -201,31 +205,32 @@ object ParserTests extends utest.TestSuite{
       'ifElse {
         'if - check(
           "if(true){lol}",
-          _.IfElse,
-          IfElse(0, "if(true)", Block(9, Seq(Text(9, "lol"))), None)
+          IfElse(_),
+          Block.IfElse(0, "if(true)", Block(9, Seq(Block.Text(9, "lol"))), None)
         )
         'ifElse - check(
           "if(true){lol}else{ omg }",
-          _.IfElse,
-          IfElse(0, "if(true)", Block(9, Seq(Text(9, "lol"))), Some(Block(18, Seq(Text(18, " omg ")))))
+          IfElse(_),
+          Block.IfElse(0, "if(true)", Block(9, Seq(Block.Text(9, "lol"))), Some(Block(18, Seq(Block.Text(18, " omg ")))))
         )
         'ifBlock - check(
           """if(true)
             |  omg""".stripMargin,
-          _.IndentIfElse,
-          IfElse(0, "if(true)", Block(8, Seq(Text(8, "\n  omg"))), None)
+          IndentIfElse(_),
+          Block.IfElse(0, "if(true)", Block(8, Seq(Block.Text(8, "\n  omg"))), None)
         )
+
         'ifBlockElseBlock - check(
           """if(true)
             |  omg
             |@else
             |  wtf""".stripMargin,
-          _.IndentIfElse,
-          IfElse(
+          TTTT(_),
+          Block.IfElse(
             0,
             "if(true)",
-            Block(8, Seq(Text(8, "\n  omg"))),
-            Some(Block(20, Seq(Text(20, "\n  wtf"))))
+            Block(8, Seq(Block.Text(8, "\n  omg"))),
+            Some(Block(20, Seq(Block.Text(20, "\n  wtf"))))
           )
         )
         'ifBlockElseBraceBlock - check(
@@ -234,12 +239,12 @@ object ParserTests extends utest.TestSuite{
             |}else{
             |  wtf
             |}""".stripMargin,
-          _.IfElse,
-          IfElse(
+          IfElse(_),
+          Block.IfElse(
             0,
             "if(true)",
-            Block(9, Seq(Text(9, "\n  omg\n"))),
-            Some(Block(22, Seq(Text(22, "\n  wtf\n"))))
+            Block(9, Seq(Block.Text(9, "\n  omg\n"))),
+            Some(Block(22, Seq(Block.Text(22, "\n  wtf\n"))))
           )
         )
         'ifBlockElseBraceBlockNested - {
@@ -254,18 +259,18 @@ object ParserTests extends utest.TestSuite{
             """)).get.value
           val expected =
             Block(0, Vector(
-              Text(0, "\n"),
+              Block.Text(0, "\n"),
               Chain(2, "p",Vector(Block(3, Vector(
-                Text(3, "\n  "),
-                IfElse(7, "if(true)",
+                Block.Text(3, "\n  "),
+                Block.IfElse(7, "if(true)",
                   Block(16, Vector(
-                    Text(16, "\n    Hello\n  ")
+                    Block.Text(16, "\n    Hello\n  ")
                   )),
                   Some(Block(35, Vector(
-                    Text(35, "\n    lols\n  ")
+                    Block.Text(35, "\n    lols\n  ")
                   )))
                 ))))),
-              Text(48, "\n")
+              Block.Text(48, "\n")
             ))
           assert(res == expected)
         }
@@ -279,15 +284,15 @@ object ParserTests extends utest.TestSuite{
           |  @wtf
           |    @bbq
           |      @lol""".stripMargin,
-        _.File,
+        File(_),
         Block(0, Seq(
-          Text(0, "\n"),
+          Block.Text(0, "\n"),
           Chain(2, "omg",Seq(Block(5, Seq(
-            Text(5, "\n  "),
+            Block.Text(5, "\n  "),
             Chain(9, "wtf",Seq(Block(12, Seq(
-              Text(12, "\n    "),
+              Block.Text(12, "\n    "),
               Chain(18, "bbq",Seq(Block(21, Seq(
-                Text(21, "\n      "),
+                Block.Text(21, "\n      "),
                 Chain(29, "lol",Seq())
               ))))
             ))))
@@ -299,17 +304,17 @@ object ParserTests extends utest.TestSuite{
           |@omg
           |  @wtf
           |@bbq""".stripMargin,
-        _.File,
+        File(_),
         Block(0,
           Seq(
-          Text(0, "\n"),
+          Block.Text(0, "\n"),
           Chain(2, "omg",Seq(Block(5,
             Seq(
-              Text(5, "\n  "),
+              Block.Text(5, "\n  "),
               Chain(9, "wtf",Seq())
             )
           ))),
-          Text(12, "\n"),
+          Block.Text(12, "\n"),
           Chain(14, "bbq", Seq())
         ))
       )
@@ -319,17 +324,17 @@ object ParserTests extends utest.TestSuite{
           |  @wtf
           |}
           |@bbq""".stripMargin,
-        _.File,
+        File(_),
         Block(0, Seq(
-          Text(0, "\n"),
+          Block.Text(0, "\n"),
           Chain(2, "omg",Seq(Block(6,
             Seq(
-              Text(6, "\n  "),
+              Block.Text(6, "\n  "),
               Chain(10, "wtf",Seq()),
-              Text(13, "\n")
+              Block.Text(13, "\n")
             )
           ))),
-          Text(15, "\n"),
+          Block.Text(15, "\n"),
           Chain(17, "bbq", Seq())
         ))
       )
@@ -338,17 +343,17 @@ object ParserTests extends utest.TestSuite{
           |@omg("lol", 1, 2)
           |  @wtf
           |bbq""".stripMargin,
-        _.File,
+        File(_),
         Block(0, Seq(
-          Text(0, "\n"),
+          Block.Text(0, "\n"),
           Chain(2, "omg",Seq(
             Args(5, """("lol", 1, 2)"""),
             Block(18, Seq(
-              Text(18, "\n  "),
+              Block.Text(18, "\n  "),
               Chain(22, "wtf",Seq())
             ))
           )),
-          Text(25, "\nbbq")
+          Block.Text(25, "\nbbq")
         ))
       )
 //      'weird - check(
@@ -377,7 +382,7 @@ object ParserTests extends utest.TestSuite{
           |  val omg = "omg"
           |  omg * 2
           |}""".stripMargin,
-        _.Code,
+        Code(_),
         """{
         |  val omg = "omg"
         |  omg * 2
@@ -390,11 +395,11 @@ object ParserTests extends utest.TestSuite{
           |  val omg = "omg"
           |  omg * 2
           |}""".stripMargin,
-        _.File,
+        File(_),
         Block(0, Seq(
-          Text(0, "\n"),
+          Block.Text(0, "\n"),
           Chain(2, "{\"lol\" * 3}", Seq()),
-          Text(13, "\n"),
+          Block.Text(13, "\n"),
           Chain(15, """{
             |  val omg = "omg"
             |  omg * 2
@@ -413,26 +418,26 @@ object ParserTests extends utest.TestSuite{
           |  @div
           |    @span
           |      @lol""".stripMargin,
-        _.File,
+        File(_),
         Block(0,List(
-          Text(0,"\nlol\nomg\nwtf\nbbq\n"),
+          Block.Text(0,"\nlol\nomg\nwtf\nbbq\n"),
           Chain(18,"body",Vector(
-            Block(22,List(Text(22,"\n  "),
-              Chain(26,"div",Vector(Block(29,List(Text(29, "\n    "),
-                Chain(35,"span",Vector(Block(39,List(Text(39, "\n      "),
+            Block(22,List(Block.Text(22,"\n  "),
+              Chain(26,"div",Vector(Block(29,List(Block.Text(29, "\n    "),
+                Chain(35,"span",Vector(Block(39,List(Block.Text(39, "\n      "),
                   Chain(47,"lol",Vector())))
                 ))
               ))
               ))))))))
       )
     }
-//    'Test{
-//      check(
-//        "@{() => ()}",
-//        _.Code,
-//        ""
-//      )
-//    }
+////    'Test{
+////      check(
+////        "@{() => ()}",
+////        _.Code,
+////        ""
+////      )
+////    }
   }
 }
 

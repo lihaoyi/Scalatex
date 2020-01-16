@@ -29,10 +29,10 @@
       "#" + sect.munge(t.value)
     div(
       a(t.value, href:=id),
-      ul(t.children.map(
+      ul(t.children.toSeq.map(
         c => li(rec(c))
       ))
     )
   }
-  sect.structure.children.map(rec)
+  sect.structure.children.toSeq.map(rec)
 }

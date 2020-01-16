@@ -8,7 +8,7 @@ import scalatex.Internals.{DebugFailure, twRuntimeErrors, twfRuntimeErrors}
 /**
 * Created by haoyi on 7/14/14.
 */
-object ErrorTests extends TestSuite{
+object ErrorTests extends TestSuite {
   def check(x: => Unit, expectedMsg: String, expectedError: String) = {
     val DebugFailure(msg, pos) = intercept[DebugFailure](x)
     def format(str: String) = {

@@ -1,9 +1,9 @@
 package scalatex.site
 
 import java.nio.CharBuffer
+import java.nio.file.{Files, StandardCopyOption}
 
 import ammonite.ops.{Path, _}
-
 import scalatags.Text.all._
 import scalatags.Text.{attrs, tags2}
 
@@ -94,12 +94,27 @@ trait Site{
   def content: Map[String, Page]
 
   def bundleResources(outputRoot: Path) = {
-    for((ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)) {
-      autoResources |? (_.ext == ext) | read |> write.over! outputRoot/dest
+    for {
+      (ext, dest) <- Seq("js" -> scriptName, "css" -> stylesName)
+      res <- autoResources |? (_.ext == ext)
+    } {
+      val is = res.getInputStream
+      val path = outputRoot / dest
+      try {
+        path.toIO.mkdirs()
+        Files.copy(is, path.wrapped, StandardCopyOption.REPLACE_EXISTING)
+      } finally is.close()
     }
 
-    for(res <- manualResources) {
-      read.bytes! res |> write.over! outputRoot/(res relativeTo resource)
+    for {
+      res <- manualResources
+    } {
+      val is = res.getInputStream
+      val path = outputRoot/(res relativeTo resource)
+      try {
+        path.toIO.mkdirs()
+        Files.copy(is, path.wrapped, StandardCopyOption.REPLACE_EXISTING)
+      } finally is.close()
     }
   }
 

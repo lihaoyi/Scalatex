@@ -2,7 +2,8 @@ package scalatex.site
 
 import java.util.concurrent.Executors
 
-import ammonite.ops.{Path, ResourcePath}
+import ammonite.ops.{Path }
+import os.ResourcePath
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -92,7 +93,7 @@ class Main(url: String,
   override def bodyFrag(frag: Frag) = {
     Seq(
       super.bodyFrag(frag),
-      site.Sidebar.snippet(sect.structure.children),
+      site.Sidebar.snippet(sect.structure.children.toSeq),
       Highlighter.snippet
     )
   }

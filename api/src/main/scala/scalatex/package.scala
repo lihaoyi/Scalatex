@@ -7,7 +7,7 @@ import scalatags.Text.all._
 import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
 import acyclic.file
-import fastparse.all._
+import fastparse._
 
 package object scalatex {
   /**
@@ -89,7 +89,7 @@ package object scalatex {
             val lines = Predef.augmentString(input._1.take(f.index)).lines.toVector
             throw new TypecheckException(
               new OffsetPosition(source, point + f.index).asInstanceOf[c.universe.Position],
-              "Syntax error, expected (" + f.extra.traced.traceParsers.mkString(" | ") + ")"+
+              "Syntax error, expected (" + f.extra.trace().msg + ")" +
               "\n at line " + lines.length +
               " column " + lines.last.length +
               " index " + f.index

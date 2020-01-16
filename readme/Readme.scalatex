@@ -32,7 +32,6 @@
   )
 )
 @sect("Scalateχ ", scalatex.Constants.version)
-
   @exampleRef("helloWorld", "scala html")
 
   @p
@@ -90,7 +89,6 @@
       There we have it, your first Scalatex document! You can put this on gh-pages, use it on a website, or where-ever you want.
 
   @sect{What Scalatex Does}
-
     @p
       Scalatex converts every @code{.scalatex} file in its source folder into a corresponding Scala @code{object}. These objects have an @hl.scala{apply} method which returns a Scalatags @hl.scala{Frag}, which you can then call @hl.scala{.render} on to give you a HTML string. You can also do other things with the Scalatags @hl.scala{Frag}, but to learn more about it and Scalatags in general take a look at the Scalatags documentation.
 
@@ -169,7 +167,6 @@
       @exampleRef("externalDefinitions2", "scala html")
 
     @sect{Internal Definitions}
-
       @p
         You can also define things anywhere @i{inside} your Scalatex document. These definitions are only visible within the same document, and are scoped to any blocks they're defined within:
 
