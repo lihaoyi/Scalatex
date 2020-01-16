@@ -8,6 +8,7 @@ releaseVersionBump := sbtrelease.Version.Bump.Minor
 releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
 sonatypeProfileName := "lihaoyi"
+releaseCrossBuild := true
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
@@ -19,7 +20,7 @@ releaseProcess := Seq[ReleaseStep](
   //setReleaseVersion,                      
   //commitReleaseVersion,                 
   tagRelease,                             
-  publishArtifacts.copy(enableCrossBuild = true),
+  publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
   releaseStepCommand("sonatypeReleaseAll"),
