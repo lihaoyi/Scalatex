@@ -10,6 +10,7 @@ releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
 sonatypeProfileName := "lihaoyi"
 releaseCrossBuild := true
 publishTo in ThisBuild := sonatypePublishToBundle.value
+publishConfiguration := publishConfiguration.value.withOverwrite(true)
 
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
 
