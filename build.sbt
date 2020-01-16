@@ -9,6 +9,7 @@ releaseTagComment    := s"Releasing ${(version in ThisBuild).value}"
 releaseCommitMessage := s"Bump version to ${(version in ThisBuild).value}"
 sonatypeProfileName := "lihaoyi"
 releaseCrossBuild := true
+publishMavenStyle := true
 publishTo in ThisBuild := sonatypePublishToBundle.value
 publishConfiguration := publishConfiguration.value.withOverwrite(true)
 
@@ -25,7 +26,7 @@ releaseProcess := Seq[ReleaseStep](
   //publishArtifacts,
   //setNextVersion,                         
   //commitNextVersion,                  
-  releaseStepCommand("publishSigned"),
+  releaseStepCommand("+publishSigned"),
   releaseStepCommand("sonatypeBundleRelease"),
   //releaseStepCommand("sonatypeReleaseAll"),
   pushChanges               
