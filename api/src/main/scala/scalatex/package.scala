@@ -2,7 +2,8 @@
 
 import scala.reflect.internal.util.{BatchSourceFile, SourceFile, OffsetPosition}
 import scala.reflect.io.{PlainFile, AbstractFile}
-import scala.reflect.macros.{TypecheckException, Context}
+import scala.reflect.macros.TypecheckException
+import scala.reflect.macros.whitebox.Context
 import scalatags.Text.all._
 import scalatex.stages.{Ast, Parser, Compiler}
 import scala.language.experimental.macros
@@ -102,7 +103,7 @@ package object scalatex {
       try {
         val compiled = compile(scalatexSource)
         if (debug) println(compiled)
-        c.Expr[Frag](c.typeCheck(compiled))
+        c.Expr[Frag](c.typecheck(compiled))
       } catch {
         case e@TypecheckException(pos: Position, msg) =>
           if (!runtimeErrors) c.abort(pos, msg)
