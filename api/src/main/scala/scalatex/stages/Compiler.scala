@@ -18,7 +18,7 @@ object Compiler{
 
     def incPosRec(trees: c.Tree, offset: Int): trees.type = {
 
-      trees.foreach(incPos(_, offset))
+      trees.foreach { t => incPos(t, offset); () }
       trees
     }
     def incPos(tree: c.Tree, offset: Int): tree.type = {
@@ -53,14 +53,14 @@ object Compiler{
           incPos(q"$curr.${TermName(str)}", offset2)
 
         case (curr, Ast.Chain.Args(offset2, str)) =>
-          val t @ Apply(fun, args) = c.parse(s"$prefix$str")
+          val t @ Apply(_, args) = c.parse(s"$prefix$str")
 //          println(s"Args $str $offset2 ${t.pos.point}" )
           val offset3 = offset2 - prefix.length
           incPos(Apply(curr, args.map(incPosRec(_, offset3))), offset3 + t.pos.point)
 
         case (curr, Ast.Chain.TypeArgs(offset2, str)) =>
 //          println(s"TypeArgs $str $offset2")
-          val t @ TypeApply(fun, args) = c.parse(s"$prefix$str")
+          val t @ TypeApply(_, args) = c.parse(s"$prefix$str")
           val offset3 = offset2 - prefix.length
           incPos(TypeApply(curr, args.map(incPosRec(_, offset3))), offset3 + t.pos.point)
 
@@ -125,7 +125,7 @@ object Compiler{
       incPos(q"Seq[$fragType](..${compileBlock(parts, offset)})", offset)
     }
     def compileHeader(header: String, block: Ast.Block, offset: Int): c.Tree = {
-      val Block(stmts, expr) = c.parse(s"{$header\n ()}")
+      val Block(stmts, _) = c.parse(s"{$header\n ()}")
       Block(stmts.map(incPosRec(_, offset)), compileBlockWrapped(block.parts, block.offset))
     }
 
